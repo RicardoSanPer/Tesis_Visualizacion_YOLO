@@ -91,7 +91,7 @@ Pruebas unitarias.
 ## Prueba de Ambiente
 Para comprobar la correcta configuración del ambiente de desarrollo, ejecutar el script ```scripts/check_env.py``` desde el directorio raíz.
 
-Si el ambiente esta correctamente configurado debería descargar el archivo ```yolov8m.pt``` al directorio ```src\yolo\modelos\preentrenados``` (si no existe ya), imprimir información del modelo, y finalmente imprimir "Check OK" en la consola.
+Si el ambiente esta correctamente configurado debería descargar el archivo ```yolov8m.pt``` al directorio ```modelos\preentrenados``` (si no existe ya), imprimir información del modelo, y finalmente imprimir "Check OK" en la consola.
 
 ### Sobre modelos preentrenados
 Ultralytics ofrece archivos de pesos preentrenados ```.pt``` para los modelos. No se incluyen en el repositorio, pero se pueden descargar del sitio oficial de Ultralytics:

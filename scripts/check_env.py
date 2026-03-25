@@ -14,6 +14,6 @@ Notas:
 
 from ultralytics import YOLO
 
-model = YOLO("src/yolo/modelos/preentrenados/yolov8n.pt")
+model = YOLO("modelos/preentrenados/yolov8n.pt")
 model.info()
 print("Check OK")

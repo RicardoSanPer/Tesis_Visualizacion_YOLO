@@ -561,4 +561,4 @@ TSWLatexianTemp*
 #*Notes.bib
 
 # Adicionales
-src/yolo/modelos/preentrenados/*.pt
+modelos/preentrenados/*.pt
