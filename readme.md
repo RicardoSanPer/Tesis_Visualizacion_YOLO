@@ -12,7 +12,6 @@ El repositorio esta estructurado de la siguiente forma:
 
 - ```data``` Contiene los datos a usar por el pipeline, como datasets de YOLO.
 - ```docs``` Contiene la documentación del codigo fuente y archivos auxiliares relacionados al desarrollo e implementació del software.
-- ```experimentos``` Contiene resultados significativos de experimentos realizados, como mapas de activacion y pesos obtenidos del modelo YOLO, escenas de Blender, metricas de rendimiento, etc.
 - ```resultados``` Contiene los resultados más significativos del proyecto para su presentación.
 - ```scripts``` Contiene scripts de python para ejecutar el pipeline.
 - ```src``` Contiene el codigo fuente de los modulos a desarrollar para YOLO, Blender, y el pipeline.
@@ -87,3 +86,15 @@ Ambientes virtuales de desarrollo.
 **pytest**
 
 Pruebas unitarias.
+
+## Prueba de Ambiente
+Para comprobar la correcta configuración del ambiente de desarrollo, ejecutar el script ```scripts/check_env.py``` desde el directorio raíz.
+
+Si el ambiente esta correctamente configurado debería descargar el archivo ```yolov8n.pt``` al directorio ```modelos\preentrenados``` (si no existe ya), imprimir información del modelo, y finalmente imprimir "Check OK" en la consola.
+
+### Sobre modelos preentrenados
+Ultralytics ofrece archivos de pesos preentrenados ```.pt``` para los modelos. No se incluyen en el repositorio, pero se pueden descargar del sitio oficial de Ultralytics:
+
+[Explore Ultralytics YOLOv8 - Performance Metrics](https://docs.ultralytics.com/models/yolov8/#performance-metrics)
+
+Adicionalmente, la libreria de Ultralytics los descarga de forma automatica si se especifica un archivo de modelo que no se encuentra descargado.
