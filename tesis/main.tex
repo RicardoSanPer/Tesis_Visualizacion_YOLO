@@ -1,0 +1,43 @@
+\documentclass[12pt, letterpaper, twoside, final]{book}
+
+\usepackage{fontspec}
+\usepackage{amsmath}
+
+% Imagenes
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+% Lenguaje
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+\setotherlanguage{english}
+\usepackage{csquotes}
+
+% Biblatex
+\usepackage[style=apa,backend=biber, language=spanish]{biblatex}
+\addbibresource{bibliografia.bib}
+
+
+\title{
+{Thesis Title}\\
+{\large Institution Name}\\
+%{\includegraphics{university.jpg}}
+}
+\author{Author Name}
+\date{Day Month Year}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\chapter{Introducción}
+\input{chapters/chapter1.tex}
+
+\chapter{Marco Teórico}
+\input{chapters/chapter2.tex}
+
+\nocite{*}
+\printbibliography
+
+\end{document}

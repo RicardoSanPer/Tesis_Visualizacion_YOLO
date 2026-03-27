@@ -1,0 +1,63 @@
+\section{Redes Neuronales Artificiales}
+Una red neuronal artificial es un modelo de computación basado en las redes neuronales biológicas.
+
+\subsection{Neurona Artificial}
+Una red neuronal está compuesta por neuronas, que de manera similar a sus análogos biológicos forman
+conexiones con otras neuronas transmitiendo activaciones a través de dichas conexiones. 
+Una neurona realiza dos funciones fundamentales:
+
+\begin{description}
+    \item[Función de propagación] Recibe los valores de salida de otras neuronas y los combina 
+    considerando el peso de sus conexiones para obtener la entrada neta de la neurona.
+    Una de las funciones más utilizadas es la suma ponderada, en la que se suman los productos 
+    del valor de salida de cada neurona de entrada y el peso de su conexión, dada por:
+    \begin{equation}
+        \text{net} = \sum_{i=1}^{n}\left(x_{i}\cdot w_{i}\right)
+    \end{equation}
+    donde
+    \begin{description}
+        \item[$x_{i}$] es el valor de salida de la $i$-ésima neurona de entrada.
+        \item[$w_{i}$] es el peso asociado a la conexión de la $i$-ésima neurona de entrada.
+        \item[$n$] es el número total de neuronas de entrada.
+    \end{description}
+    \item[Función de activación] Transforma la entrada neta en un valor de activación.
+\end{description}
+%% Mencionar bias
+
+Estas dos funciones permiten modelar el comportamiento básico de una neurona artificial dentro de una red neuronal.
+%% Agregar diagrama de una neurona
+
+\subsection{Funciones de Activación}
+La elección de la función de activación en una red neuronal es un aspecto fundamental, 
+ya que influye directamente en la capacidad del modelo para representar y aproximar funciones complejas. En particular, estas funciones introducen no linealidad en la red, lo cual es esencial para modelar relaciones no lineales entre los datos de entrada.
+
+Entre las funciones de activación más utilizadas se encuentran las funciones sigmoides y 
+las funciones lineales por partes.
+
+% Mencionar linearidad y no-linearidad
+% Ejemplos: Sigmoide, ReLU, tanh
+
+
+\subsection{Arquitectura de Redes Neuronales}
+
+% Capas: entrada, oculta, salida
+% Feedforward flow
+% Diagrama
+
+\subsection{Proceso de aprendizaje}
+% Funcion de perdida
+% Backpropagation
+% Descenso de gradiente
+
+
+\subsection{Limitaciones de Redes Totalmente Conectadas}
+% Muchos parametros
+% Falta de espacialidad
+% Escalabilidad pobre para imagenes
+
+\section{Redes Neuronales Convolucionales}
+\section{Técnicas de detección de objetos}
+\section{YOLOv8}
+\section{Interpretabilidad}
+\section{Visualización}
+\section{Blender}
