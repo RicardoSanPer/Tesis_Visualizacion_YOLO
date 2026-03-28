@@ -12,15 +12,20 @@ Una neurona realiza dos funciones fundamentales:
     Una de las funciones más utilizadas es la suma ponderada, en la que se suman los productos 
     del valor de salida de cada neurona de entrada y el peso de su conexión, dada por:
     \begin{equation}
-        \text{net} = \sum_{i=1}^{n}\left(x_{i}\cdot w_{i}\right)
+        \text{z} = \sum_{i=1}^{n}x_{i} w_{i} + b
     \end{equation}
-    donde
+    Donde:
     \begin{description}
         \item[$x_{i}$] es el valor de salida de la $i$-ésima neurona de entrada.
         \item[$w_{i}$] es el peso asociado a la conexión de la $i$-ésima neurona de entrada.
+        \item[$b$] es el valor del sesgo.
         \item[$n$] es el número total de neuronas de entrada.
     \end{description}
-    \item[Función de activación] Transforma la entrada neta en un valor de activación.
+    \item[Función de activación] Transforma la entrada neta $z$ en un valor de activación
+    $a$ mediante una función no lineal:
+    \begin{equation}
+        a = f(z)
+    \end{equation}
 \end{description}
 %% Mencionar bias
 
@@ -31,9 +36,69 @@ Estas dos funciones permiten modelar el comportamiento básico de una neurona ar
 La elección de la función de activación en una red neuronal es un aspecto fundamental, 
 ya que influye directamente en la capacidad del modelo para representar y aproximar funciones complejas. En particular, estas funciones introducen no linealidad en la red, lo cual es esencial para modelar relaciones no lineales entre los datos de entrada.
 
-Entre las funciones de activación más utilizadas se encuentran las funciones sigmoides y 
-las funciones lineales por partes.
+%Entre las funciones de activación más utilizadas se encuentran las funciones sigmoides y 
+%las funciones lineales por partes.
 
+\subsubsection{Funcion Escalonada}
+También conocida como \textit{función escalonada binaria}, es una función en la que la neurona 
+es activada si la entrada de la neurona supera un umbral. La función escalonada está dada por:
+\begin{equation}
+    f(z) = \begin{cases}
+        1 & \text{si } z \ge \theta \\
+        0 & \text{si } z < \theta
+    \end{cases}
+\end{equation}
+Donde $\theta$ es el valor del umbral, comúnmente igual a $0$.
+\medskip
+
+La función escalonada es una de las funciones de activación más simples y puede ser 
+utilizada en problemas de clasificación binaria. Sin embargo, presenta limitaciones 
+importantes, ya que no es diferenciable y su gradiente es nulo en casi todo su dominio. 
+Esto dificulta el uso de algoritmos de retropropagación durante el proceso de aprendizaje, lo que limita su aplicación en redes neuronales modernas.
+
+\subsection{Función Lineal}
+En el contexto de redes neuronales, la función lineal utilizada como función de activación 
+corresponde típicamente a la función identidad:
+\begin{equation}
+    f(z) = z
+\end{equation}
+A diferencia de la función escalonada, esta función es diferenciable y su gradiente es 
+constante, por lo que los pesos pueden ser actualizados mediante algoritmos de 
+retropropagación.
+
+Sin embargo, presenta una limitación importante: si todas las funciones de activación de 
+una red son lineales, entonces la red es equivalente a una única transformación lineal, 
+lo que impide modelar relaciones no lineales y reconocer patrones complejos.
+
+Por esta razón, la función lineal se utiliza típicamente en la capa de salida de modelos 
+de regresión.
+
+\subsection{Función ReLU}
+La función ReLU, por sus siglas en inglés \textit{Rectified Linear Unit}, es una función 
+de activación que coincide con la función identidad para valores positivos y toma el 
+valor de cero en cualquier otro caso. También conocida como la función rampa, se define como:
+\begin{equation}
+    f(z) = \max(0,z)
+\end{equation}
+Una de sus principales ventajas es su simplicidad computacional, ya que su derivada toma valores constantes 
+(0 o 1 para $z \neq 0$), lo que facilita el cálculo durante el entrenamiento.
+Esto ha contribuido a su amplio uso en redes neuronales profundas.
+\medskip
+
+Sin embargo, presenta una desventaja importante: cuando el gradiente es igual a cero, 
+los pesos y sesgos no se actualizan durante la retropropagación. Este fenómeno se conoce 
+como \guillemotleft ReLU moribundo\guillemotright.
+
+\subsection{Función Leaky ReLU}
+La función leaky ReLU busca resolver el problema de ReLU moribundo presente en la función ReLU
+al reducir la probabilidad de obtener cero como salida de la función. Lo logra al aplicar
+un multiplicador pequeño $\alpha$, como $0.01$, para los valores por debajo de cero:
+\begin{equation}
+    f(z) = \begin{cases}
+        z & \text{si } z \ge 0\\
+        \alpha z & \text{si } z < 0
+    \end{cases}
+\end{equation}
 % Mencionar linearidad y no-linearidad
 % Ejemplos: Sigmoide, ReLU, tanh
 
