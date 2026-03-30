@@ -2,13 +2,14 @@
 Una red neuronal artificial es un modelo de computación basado en las redes neuronales biológicas.
 
 \subsection{Neurona Artificial}
-Una red neuronal está compuesta por neuronas, que de manera similar a sus análogos biológicos forman
-conexiones con otras neuronas transmitiendo activaciones a través de dichas conexiones. 
-Una neurona realiza dos funciones fundamentales:
+Una red neuronal está compuesta por neuronas artificiales que, inspiradas en las
+neuronas biológicas, reciben señales de entrada, las combinan mediante una función
+y producen un valor de salida. Las dos funciones principales de una neurona artificial
+son la función de propagación y la función de activación.
 
 \begin{description}
     \item[Función de propagación] Recibe los valores de salida de otras neuronas y los combina 
-    considerando el peso de sus conexiones para obtener la entrada neta de la neurona.
+    considerando el peso de sus conexiones para obtener la entrada neta $z$ de la neurona.
     Una de las funciones más utilizadas es la suma ponderada, en la que se suman los productos 
     del valor de salida de cada neurona de entrada y el peso de su conexión, dada por:
     \begin{equation}
@@ -33,8 +34,12 @@ Estas dos funciones permiten modelar el comportamiento básico de una neurona ar
 %% Agregar diagrama de una neurona
 
 \subsection{Funciones de Activación}
-La elección de la función de activación en una red neuronal es un aspecto fundamental, 
-ya que influye directamente en la capacidad del modelo para representar y aproximar funciones complejas. En particular, estas funciones introducen no linealidad en la red, lo cual es esencial para modelar relaciones no lineales entre los datos de entrada.
+Como se mencionó previamente, la neurona artificial transforma la entrada neta mediante
+una función de activación. Estas funciones son fundamentales en las redes neuronales,
+ya que introducen no linealidad en el modelo, permitiendo la representación de relaciones
+complejas entre las variables de entrada y salida. En ausencia de funciones de activación
+no lineales, la red se comportaría como una transformación lineal, independientemente del
+número de capas.
 
 %Entre las funciones de activación más utilizadas se encuentran las funciones sigmoides y 
 %las funciones lineales por partes.
@@ -48,7 +53,7 @@ es activada si la entrada de la neurona supera un umbral. La función escalonada
         0 & \text{si } z < \theta
     \end{cases}
 \end{equation}
-Donde $\theta$ es el valor del umbral, comúnmente igual a $0$.
+donde $\theta$ es el valor del umbral, comúnmente igual a $0$.
 \medskip
 
 La función escalonada es una de las funciones de activación más simples y puede ser 
@@ -73,46 +78,215 @@ lo que impide modelar relaciones no lineales y reconocer patrones complejos.
 Por esta razón, la función lineal se utiliza típicamente en la capa de salida de modelos 
 de regresión.
 
+\subsubsection{Función Sigmoide}
+La función sigmoide logística es una función no lineal que transforma la entrada en un valor
+dentro del intervalo $(0,1)$, definida como:
+\begin{equation}
+    f(z)=\frac{1}{1+e^{-z}}
+\end{equation}
+Es una de las funciones de activación más utilizadas ya que mapea valores al rango $(0,1)$
+al prevenir valores de activación muy altos. Presenta una limitación importante conocida
+como \guillemotleft gradiente desvanescente\guillemotright, en la que valores hacia ambos
+extremos de la función producen gradientes muy pequeños, lo que produce cambios poco significativos
+que dificultan la retropropagación.
+\medskip
+
+Adicionalmente, al no estar centrada en cero, las activaciones de la función sigmoide 
+son siempre positivas, lo que puede generar actualizaciones correlacionadas (los gradientes
+tienen el mismo signo) en los pesos y ralentizar el proceso de optimización.
+\medskip
+
+La función sigmoide se utiliza comúnmente en la capa de salida de redes neuronales
+para problemas de clasificación binaria, ya que transforma la salida en un valor
+en el intervalo $(0,1)$, el cual puede interpretarse como una probabilidad de
+pertenencia a una clase.
+
+\subsubsection{Función Tangente Hiperbólica}
+La función hiperbólica tangente, también conocida solo como función $\tanh$, es una
+función de activación no lineal similar a la función sigmoide. 
+Sin embargo, a diferencia de esta, la función tangente es simétrica respecto al origen.
+Está definida como:
+\begin{equation}
+    f(z) = \tanh{z} = \frac{e^{z}-e^{-z}}{e^{z}+e^{-z}}
+\end{equation}
+La función tangente hiperbólica produce valores en el rango $(-1,1)$, por lo que suele ser
+preferida frente a la función sigmoide, ya que sus salidas están centradas en
+cero, lo que permite obtener derivadas derivadas de mayor magnitud en la región cercana 
+a cero.
+Sin embargo, aún presenta el problema del desvanecimiento del gradiente debido a la
+saturación de la función para valores grandes de la entrada.
+
 \subsection{Función ReLU}
 La función ReLU, por sus siglas en inglés \textit{Rectified Linear Unit}, es una función 
-de activación que coincide con la función identidad para valores positivos y toma el 
+de activación lineal por partes que coincide con la función identidad para valores positivos y toma el 
 valor de cero en cualquier otro caso. También conocida como la función rampa, se define como:
 \begin{equation}
     f(z) = \max(0,z)
 \end{equation}
-Una de sus principales ventajas es su simplicidad computacional, ya que su derivada toma valores constantes 
-(0 o 1 para $z \neq 0$), lo que facilita el cálculo durante el entrenamiento.
+Una de sus principales ventajas es su simplicidad computacional, ya que su gradiente toma valores constantes 
+$0$ o $1$, lo que facilita el cálculo durante la retropropagación
 Esto ha contribuido a su amplio uso en redes neuronales profundas.
 \medskip
 
 Sin embargo, presenta una desventaja importante: cuando el gradiente es igual a cero, 
 los pesos y sesgos no se actualizan durante la retropropagación. Este fenómeno se conoce 
 como \guillemotleft ReLU moribundo\guillemotright.
+\medskip
 
-\subsection{Función Leaky ReLU}
-La función leaky ReLU busca resolver el problema de ReLU moribundo presente en la función ReLU
-al reducir la probabilidad de obtener cero como salida de la función. Lo logra al aplicar
-un multiplicador pequeño $\alpha$, como $0.01$, para los valores por debajo de cero:
+Este problema puede mitigarse mediante la función de activación Leaky ReLU, la cual 
+permite mantener un gradiente distinto de cero para valores negativos al aplicar 
+un factor pequeño $\alpha$, típicamente cercano a $0.01$, a dichos valores. La función Leaky
+ReLU está dada por:
 \begin{equation}
     f(z) = \begin{cases}
         z & \text{si } z \ge 0\\
         \alpha z & \text{si } z < 0
     \end{cases}
 \end{equation}
+
+\subsubsection{Función Softmax}
+La función softmax es una generalización de la función sigmoide para problemas de
+clasificación multiclase, y se utiliza típicamente en la capa de salida de redes neuronales.
+\medskip
+
+La función softmax toma como entrada un vector de valores reales
+$z=\langle z_{1}, z_{2}, \dots, z_{n}\rangle$ y los transforma en un vector de
+probabilidades $p=\langle p_{1}, p_{2}, \dots, p_{n}\rangle$ para $n$ clases, definido como:
+\begin{equation}
+    p_{i} = \frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}
+\end{equation}
+donde $z_i$ corresponde a la entrada neta (pre-activación) de la $i$-ésima neurona en la capa de salida.
+\medskip
+
+De esta forma, cada $p_i$ representa la probabilidad de pertenencia a la clase $i$, y la suma
+de todas las probabilidades es igual a 1.
+\medskip
+
+A diferencia de otras funciones de activación, la función softmax no opera de manera
+independiente sobre cada neurona, sino que se aplica al vector completo de salidas de
+la capa, ya que cada valor de salida depende de todas las entradas.
 % Mencionar linearidad y no-linearidad
 % Ejemplos: Sigmoide, ReLU, tanh
+\medskip
 
+En conjunto, las funciones de activación desempeñan un papel fundamental en las redes neuronales,
+ya que introducen no linealidad en el modelo, permitiendo la representación y el aprendizaje de
+patrones complejos. A lo largo de su evolución, se han propuesto distintas funciones con el objetivo
+de mejorar la capacidad de entrenamiento y mitigar problemas como el desvanecimiento del gradiente.
+En la práctica, funciones como ReLU y sus variantes se emplean comúnmente en las capas ocultas,
+mientras que funciones como la sigmoide o softmax se utilizan en la capa de salida dependiendo del
+tipo de problema. La elección adecuada de estas funciones influye directamente en el comportamiento
+y desempeño de la red, lo cual motiva el estudio de la estructura y organización de las neuronas
+dentro de una arquitectura de red neuronal.
 
 \subsection{Arquitectura de Redes Neuronales}
+Las redes neuronales artificiales se organizan típicamente en una estructura por capas,
+donde cada capa está compuesta por un conjunto de neuronas que procesan la información
+de manera conjunta. En este esquema, la salida de una capa sirve como entrada para la
+siguiente, formando una composición de transformaciones sucesivas.
+\medskip
 
+Generalmente, una red neuronal se divide en tres tipos de capas:
+\begin{description}
+    \item[Capa de entrada] Esta capa es responsable de recibir los datos o señales de entrada,
+    usualmente preprocesarlos (por ejemplo, mediante normalización), y distribuirlos a las
+    capas subsecuentes.
+    
+    \item[Capas ocultas] Estas capas están compuestas por neuronas encargadas de extraer
+    características y patrones, y realizan la mayor parte del procesamiento interno de la red.
+    
+    \item[Capa de salida] Esta capa también está compuesta por neuronas y es responsable
+    de producir la salida final de la red con base en el procesamiento realizado por las
+    capas anteriores.
+\end{description}
+\medskip
+
+Las redes neuronales pueden clasificarse en distintas arquitecturas de acuerdo con la
+disposición de las neuronas y sus interconexiones.
+\medskip
+
+Las redes \textit{feedforward} son aquellas en las que la información fluye en una sola
+dirección, desde la capa de entrada hasta la capa de salida, sin ciclos ni retroalimentación.
+En este tipo de redes, las neuronas de una capa se conectan típicamente con las neuronas
+de la siguiente. Sin embargo, algunas arquitecturas permiten \textit{conexiones de atajo},
+en las que las conexiones pueden saltarse una o más capas. Adicionalmente, es común que
+las neuronas de una capa se conecten con todas las neuronas de la siguiente, en cuyo caso
+se denomina \textit{capa totalmente conectada}.
+\medskip
+
+Una red neuronal feedforward puede estar compuesta por una sola capa (sin capas ocultas),
+lo que se conoce como arquitectura de una sola capa. Un ejemplo de esta arquitectura es
+el perceptrón, uno de los primeros modelos de redes neuronales.
+\medskip
+
+Por otro lado, las redes recurrentes son aquellas en las que existen conexiones cíclicas,
+permitiendo que la información se retroalimente dentro de la red. Esto posibilita modelar
+dependencias temporales o secuenciales. La recurrencia puede presentarse de forma directa,
+cuando una neurona se conecta consigo misma, o de forma indirecta, mediante conexiones
+a través de otras neuronas.
+\medskip
+
+Existen también arquitecturas con patrones de conexión más complejos, como aquellas que
+incluyen conexiones densas o parcialmente conectadas. Estas variaciones permiten adaptar
+la estructura de la red a distintos tipos de problemas y datos.
 % Capas: entrada, oculta, salida
 % Feedforward flow
 % Diagrama
 
 \subsection{Proceso de aprendizaje}
+Una de las características más importantes de las redes neuronales es su capacidad
+de generalizar, es decir, de resolver problemas a partir del aprendizaje de patrones
+que describen el comportamiento de los datos. Estos patrones se obtienen a partir
+de un \textit{conjunto de entrenamiento}.
+
+El proceso de aprendizaje consiste en la aplicación de un algoritmo que ajusta los
+pesos de las conexiones neuronales y los sesgos de las neuronas.
+
+Existen tres paradigmas de aprendizaje principales que definen el proceso general
+de aprendizaje: supervisado, no supervisado y por refuerzo.
+
+\begin{description}
+    \item[Aprendizaje supervisado] Consiste en el uso de un conjunto de entrenamiento
+    en el cual cada patrón de entrada está asociado a una salida correcta. El entrenamiento
+    ajusta los pesos de la red considerando la discrepancia entre la salida producida
+    por la red y el valor deseado. Se considera que la red ha sido entrenada cuando
+    dicha discrepancia se encuentra dentro de un rango aceptable.
+
+    \item[Aprendizaje no supervisado] Este paradigma no requiere conocimiento de las
+    salidas deseadas. En su lugar, la red se ajusta en función de similitudes y estructuras
+    presentes en los datos de entrada, descubriendo patrones de manera autónoma para
+    tareas como agrupamiento o reducción de dimensionalidad.
+
+    \item[Aprendizaje por refuerzo] En este paradigma, un agente interactúa con un entorno
+    y recibe señales de recompensa en función de sus acciones. A diferencia del aprendizaje
+    supervisado, no se dispone de una salida correcta explícita. En su lugar, el modelo
+    aprende a tomar decisiones que maximizan la recompensa acumulada, reforzando
+    comportamientos deseables y penalizando aquellos que no lo son.
+\end{description}
+
+En adición a los paradigmas de aprendizaje, el proceso de entrenamiento también
+puede clasificarse en función de cómo se procesa el conjunto de entrenamiento.
+En \textit{offline learning}, también conocido como aprendizaje por lotes, el
+ajuste de los pesos se realiza después de procesar un conjunto de muestras de
+entrenamiento.
+\medskip
+
+Por otro lado, en \textit{online learning}, el ajuste de los pesos se realiza
+después de procesar cada muestra de entrenamiento.
+\medskip
+
+Finalmente, a cada iteración completa sobre el conjunto de entrenamiento se le
+denomina \textit{epoch}.
+% Aprendizaje supervisado vs no supervisado
+% Descenso de gradiente
 % Funcion de perdida
 % Backpropagation
-% Descenso de gradiente
+\medskip
+
+El proceso de entrenamiento consiste de dos etapas. En la primera etapa, conocida como
+\textit{forward propagation}, se alimentan las señales de una muestra de entrenamiento
+a la red, propagandose capa a capa hasta producir una salida. La salida producida se
+compara con el 
 
 
 \subsection{Limitaciones de Redes Totalmente Conectadas}
