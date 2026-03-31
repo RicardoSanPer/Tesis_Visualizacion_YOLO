@@ -283,10 +283,74 @@ denomina \textit{epoch}.
 % Backpropagation
 \medskip
 
-El proceso de entrenamiento consiste de dos etapas. En la primera etapa, conocida como
-\textit{forward propagation}, se alimentan las señales de una muestra de entrenamiento
-a la red, propagandose capa a capa hasta producir una salida. La salida producida se
-compara con el 
+El proceso de entrenamiento en el aprendizaje supervisado puede describirse en dos
+etapas principales. En la primera etapa, conocida como \textit{forward propagation},
+las señales correspondientes a una muestra de entrenamiento se introducen en la red
+y se propagan capa a capa hasta producir una salida.
+\medskip
+
+A partir de esta salida, se calcula un error al compararla con el resultado deseado
+mediante una función de pérdida, la cual cuantifica el error para una muestra
+individual. Una de las funciones de pérdida más utilizadas es la función del error cuadrado,
+definida como:
+\begin{equation}
+    E(k)=\frac{1}{2}\sum_{j=1}^{n}(t_{j}(k)-a_{j}(k))^{2}
+\end{equation}
+donde:
+\begin{description}
+    \item[$k$] es la $k$-ésima muestra de entrenamiento.
+    \item[$n$] es el número de neuronas en la capa de salida.
+    \item[$t_{j}(k)$] es el valor esperado de la $j$-ésima neurona para la $k$-ésima
+    muestra de entrenamiento.
+    \item[$a_{j}(k)$] es el valor obtenido de la $j$-ésima neurona para la $k$-ésima
+    muestra de entrenamiento.
+\end{description}
+
+A partir de estas pérdidas se define una función de costo, que agrega
+el error sobre el conjunto de entrenamiento, siendo su minimización el principal
+objetivo del proceso de aprendizaje. Una de las funciones más utilizadas es el
+promedio del error cuadrado, definido como:
+\begin{equation}
+    E = \frac{1}{m}\sum_{k=1}^{m}E(k)
+\end{equation}
+donde $m$ es el número de muestras de entrenamiento en el conjunto.
+\medskip
+
+Posteriormente toma lugar la retropropagación, un proceso se utiliza el descenso por 
+gradiente para minimizar el costo.
+\medskip
+
+El descenso por gradiente es un proceso de optimización que busca minimizar una función 
+definida en un espacio $n$-dimensional.
+El gradiente $\nabla f$ de una función escalar $f$ es un vector que, en cada punto
+diferenciable, apunta en la dirección de mayor incremento de la función. Su notación es:
+\begin{equation}
+    \nabla f(x_{1},x_{2},\dots,x_{n})
+\end{equation}
+De manera análoga, el gradiente negativo $-\nabla f$ indica la dirección de mayor
+descenso. Por lo tanto, el descenso por gradiente consiste en actualizar los parámetros
+en la dirección del gradiente negativo con el fin de minimizar la función de error.
+\medskip
+
+La retropropagación calcula el descenso por gradiente de la función de costo:
+\begin{equation}
+    -\nabla E(W)
+\end{equation}
+donde $E$ está definido para el conjunto $W$ de todos los pesos.
+
+Sin embargo, el descenso por gradiente presenta varias limitaciones. Una de las más
+importantes es la posibilidad de converger a mínimos locales. Otros problemas incluyen
+regiones casi planas de la función, donde el gradiente es pequeño y el aprendizaje se
+vuelve lento; valles estrechos, que pueden provocar oscilaciones durante la optimización;
+y valores del paso de actualización inapropiados, que pueden impedir la convergencia o
+provocar que se sobrepasen los mínimos.
+\medskip
+
+La retropropagación es el proceso del descenso por gradiente con la función de error
+recibiendo todos los pesos de la red como parametros.
+\medskip
+
+
 
 
 \subsection{Limitaciones de Redes Totalmente Conectadas}
