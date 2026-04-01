@@ -562,3 +562,8 @@ TSWLatexianTemp*
 
 # Adicionales
 modelos/preentrenados/*.pt
+
+# Graficas
+*.bkp
+*.drawio
+*.pdf
