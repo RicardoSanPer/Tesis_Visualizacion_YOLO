@@ -1,25 +1,29 @@
 \section{Redes Neuronales Artificiales}
-Una red neuronal artificial es un modelo de computación basado en las redes neuronales biológicas.
+Una red neuronal artificial es un modelo de computación basado en las redes neuronales 
+biológicas. Una red neuronal está compuesta por nodos computacionales,
+conocidos como neuronas, que forman conexiones y de forma colectiva aprenden para
+optimizar su salida.
 
-\subsection{Neurona Artificial}
-Una red neuronal está compuesta por neuronas artificiales que, inspiradas en las
-neuronas biológicas, reciben señales de entrada, las combinan mediante una función
+\subsection{La Neurona Artificial}
+Las neuronas artificiales, inspiradas en las
+neuronas biológicas, son nodos computacionales que tienen un valor de activación
+similar a sus contrapartes biológicas. Esta activación es obtenida al recibir señales 
+de entrada, que son combinan mediante una función
 y producen un valor de salida. Las dos funciones principales de una neurona artificial
-son la función de propagación y la función de activación.
+son la suma ponderada y la función de activación.
 
 \begin{description}
-    \item[Función de propagación] Recibe los valores de salida de otras neuronas y los combina 
+    \item[Suma ponderada] Recibe los valores de salida de otras neuronas y los combina 
     considerando el peso de sus conexiones para obtener la entrada neta $z$ de la neurona.
-    Una de las funciones más utilizadas es la suma ponderada, en la que se suman los productos 
-    del valor de salida de cada neurona de entrada y el peso de su conexión, dada por:
+    Está definida como:
     \begin{equation}
         \text{z} = \sum_{i=1}^{n}x_{i} w_{i} + b
     \end{equation}
-    Donde:
+    donde:
     \begin{description}
         \item[$x_{i}$] es el valor de salida de la $i$-ésima neurona de entrada.
         \item[$w_{i}$] es el peso asociado a la conexión de la $i$-ésima neurona de entrada.
-        \item[$b$] es el valor del sesgo.
+        \item[$b$] es el valor del sesgo (bias).
         \item[$n$] es el número total de neuronas de entrada.
     \end{description}
     \item[Función de activación] Transforma la entrada neta $z$ en un valor de activación
@@ -30,7 +34,15 @@ son la función de propagación y la función de activación.
 \end{description}
 %% Mencionar bias
 
-Estas dos funciones permiten modelar el comportamiento básico de una neurona artificial dentro de una red neuronal.
+Estas dos funciones permiten modelar el comportamiento básico de una neurona artificial 
+dentro de una red neuronal.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/neuron.pdf} 
+    \caption{Modelo de la neurona artificial.}
+    \label{fig:neurona}
+\end{figure}
+
 %% Agregar diagrama de una neurona
 
 \subsection{Funciones de Activación}
@@ -61,7 +73,7 @@ utilizada en problemas de clasificación binaria. Sin embargo, presenta limitaci
 importantes, ya que no es diferenciable y su gradiente es nulo en casi todo su dominio. 
 Esto dificulta el uso de algoritmos de retropropagación durante el proceso de aprendizaje, lo que limita su aplicación en redes neuronales modernas.
 
-\subsection{Función Lineal}
+\subsubsection{Función Lineal}
 En el contexto de redes neuronales, la función lineal utilizada como función de activación 
 corresponde típicamente a la función identidad:
 \begin{equation}
@@ -116,7 +128,7 @@ a cero.
 Sin embargo, aún presenta el problema del desvanecimiento del gradiente debido a la
 saturación de la función para valores grandes de la entrada.
 
-\subsection{Función ReLU}
+\subsubsection{Función ReLU}
 La función ReLU, por sus siglas en inglés \textit{Rectified Linear Unit}, es una función 
 de activación lineal por partes que coincide con la función identidad para valores positivos y toma el 
 valor de cero en cualquier otro caso. También conocida como la función rampa, se define como:
@@ -150,8 +162,15 @@ clasificación multiclase, y se utiliza típicamente en la capa de salida de red
 \medskip
 
 La función softmax toma como entrada un vector de valores reales
-$z=\langle z_{1}, z_{2}, \dots, z_{n}\rangle$ y los transforma en un vector de
-probabilidades $p=\langle p_{1}, p_{2}, \dots, p_{n}\rangle$ para $n$ clases, definido como:
+$z$
+\begin{equation}
+    z=\langle z_{1}, z_{2}, \dots, z_{n}\rangle
+\end{equation} y los transforma en un vector de
+probabilidades $p$
+\begin{equation}
+    p=\langle p_{1}, p_{2}, \dots, p_{n}\rangle
+\end{equation}
+para $n$ clases, definido como:
 \begin{equation}
     p_{i} = \frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}
 \end{equation}
@@ -224,23 +243,23 @@ permitiendo que la información se retroalimente dentro de la red. Esto posibili
 dependencias temporales o secuenciales. La recurrencia puede presentarse de forma directa,
 cuando una neurona se conecta consigo misma, o de forma indirecta, mediante conexiones
 a través de otras neuronas.
-\medskip
 
-Existen también arquitecturas con patrones de conexión más complejos, como aquellas que
-incluyen conexiones densas o parcialmente conectadas. Estas variaciones permiten adaptar
-la estructura de la red a distintos tipos de problemas y datos.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/multilayer_nn_arch.pdf} 
+    \caption{Red neuronal feedforward con dos capas ocultas totalmente conectadas.}
+    \label{fig:rn_arquitectura}
+\end{figure}
 % Capas: entrada, oculta, salida
 % Feedforward flow
 % Diagrama
 
-\subsection{Proceso de aprendizaje}
+\subsection{Proceso de Aprendizaje}
 Una de las características más importantes de las redes neuronales es su capacidad
 de generalizar, es decir, de resolver problemas a partir del aprendizaje de patrones
 que describen el comportamiento de los datos. Estos patrones se obtienen a partir
 de un \textit{conjunto de entrenamiento}.
-
-El proceso de aprendizaje consiste en la aplicación de un algoritmo que ajusta los
-pesos de las conexiones neuronales y los sesgos de las neuronas.
+\medskip
 
 Existen tres paradigmas de aprendizaje principales que definen el proceso general
 de aprendizaje: supervisado, no supervisado y por refuerzo.
@@ -273,30 +292,33 @@ entrenamiento.
 
 Por otro lado, en \textit{online learning}, el ajuste de los pesos se realiza
 después de procesar cada muestra de entrenamiento.
-\medskip
 
-Finalmente, a cada iteración completa sobre el conjunto de entrenamiento se le
-denomina \textit{epoch}.
 % Aprendizaje supervisado vs no supervisado
 % Descenso de gradiente
 % Funcion de perdida
 % Backpropagation
 \medskip
 
-El proceso de entrenamiento en el aprendizaje supervisado puede describirse en dos
+
+El proceso de aprendizaje consiste en la aplicación de un algoritmo que ajusta los
+pesos de las conexiones neuronales y los sesgos de las neuronas. El proceso de entrenamiento en el aprendizaje supervisado puede describirse en dos
 etapas principales. En la primera etapa, conocida como \textit{forward propagation},
 las señales correspondientes a una muestra de entrenamiento se introducen en la red
 y se propagan capa a capa hasta producir una salida.
 \medskip
 
-A partir de esta salida, se calcula un error al compararla con el resultado deseado
+A partir de esta salida, se calcula un error en la \textit{computación del error} al compararla
+ con el resultado deseado
 mediante una función de pérdida, la cual cuantifica el error para una muestra
 individual. Una de las funciones de pérdida más utilizadas es la función del error cuadrado,
 definida como:
+
 \begin{equation}
     E(k)=\frac{1}{2}\sum_{j=1}^{n}(t_{j}(k)-a_{j}(k))^{2}
 \end{equation}
+
 donde:
+
 \begin{description}
     \item[$k$] es la $k$-ésima muestra de entrenamiento.
     \item[$n$] es el número de neuronas en la capa de salida.
@@ -310,57 +332,71 @@ A partir de estas pérdidas se define una función de costo, que agrega
 el error sobre el conjunto de entrenamiento, siendo su minimización el principal
 objetivo del proceso de aprendizaje. Una de las funciones más utilizadas es el
 promedio del error cuadrado, definido como:
+
 \begin{equation}
     E = \frac{1}{m}\sum_{k=1}^{m}E(k)
 \end{equation}
+
 donde $m$ es el número de muestras de entrenamiento en el conjunto.
 \medskip
 
-Posteriormente toma lugar la retropropagación, un proceso se utiliza el descenso por 
-gradiente para minimizar el costo.
+El proceso de aprendizaje busca minimizar este costo. 
+Esto puede lograrse mediante el descenso por gradiente, un proceso de optimización que busca 
+minimizar una función definida en un espacio $n$-dimensional.
+El gradiente $\nabla f$ de una función escalar $f$ es un vector que, en cada punto
+diferenciable, apunta en la dirección de mayor incremento de la función.
 \medskip
 
-El descenso por gradiente es un proceso de optimización que busca minimizar una función 
-definida en un espacio $n$-dimensional.
-El gradiente $\nabla f$ de una función escalar $f$ es un vector que, en cada punto
-diferenciable, apunta en la dirección de mayor incremento de la función. Su notación es:
-\begin{equation}
-    \nabla f(x_{1},x_{2},\dots,x_{n})
-\end{equation}
 De manera análoga, el gradiente negativo $-\nabla f$ indica la dirección de mayor
 descenso. Por lo tanto, el descenso por gradiente consiste en actualizar los parámetros
 en la dirección del gradiente negativo con el fin de minimizar la función de error.
 \medskip
 
-La retropropagación calcula el descenso por gradiente de la función de costo:
+La retropropagación es la siguiente etapa y es un proceso que permite calcular de manera eficiente el
+gradiente de la función de costo $\nabla E(W)$ con respecto a los parámetros de la red,
+aprovechándose de la regla de la cadena para el cálculo de derivadas. Dado que
+la salida de la red puede interpretarse como una composición de funciones a través
+de sus capas, es posible encadenar las derivadas desde la capa de salida hacia las
+capas anteriores, propagando el gradiente a lo largo de la red.
+\medskip
+
+Una vez calculado el gradiente de $E(W)$, se determina el cambio a aplicar a los pesos,
+definido como:
 \begin{equation}
-    -\nabla E(W)
+    \Delta W = -\eta \nabla E(W)
 \end{equation}
-donde $E$ está definido para el conjunto $W$ de todos los pesos.
-
-Sin embargo, el descenso por gradiente presenta varias limitaciones. Una de las más
-importantes es la posibilidad de converger a mínimos locales. Otros problemas incluyen
-regiones casi planas de la función, donde el gradiente es pequeño y el aprendizaje se
-vuelve lento; valles estrechos, que pueden provocar oscilaciones durante la optimización;
-y valores del paso de actualización inapropiados, que pueden impedir la convergencia o
-provocar que se sobrepasen los mínimos.
+donde $\eta$ es la tasa de aprendizaje de la red y $\Delta W$ representa el vector
+de actualizaciones para todos los pesos.
 \medskip
 
-La retropropagación es el proceso del descenso por gradiente con la función de error
-recibiendo todos los pesos de la red como parametros.
+Finalmente, la etapa de optimización actualiza los parametros, sumando el
+cambio obtenido a los valores actuales de los parámetros.
+
+\subsection{Limitaciones de Redes Neuronales}
+A pesar de la versatilidad de las redes neuronales para modelar y generalizar problemas,
+estas presentan ciertas limitaciones que pueden dificultar el proceso de aprendizaje y
+predicción en determinados contextos.
 \medskip
 
+Una de las principales limitaciones surge al utilizar capas totalmente conectadas.
+Dependiendo del número de neuronas de entrada, así como del número de neuronas y capas
+ocultas, el modelo puede requerir un gran número de parámetros. Esto incrementa el costo
+computacional tanto del entrenamiento como de la inferencia.
 
+Este problema se acentúa especialmente al trabajar con datos de alta dimensionalidad,
+como imágenes, donde cada píxel puede representar una entrada. En estos casos, una red
+totalmente conectada requeriría un número muy elevado de conexiones entre capas,
+lo que hace necesario escalar considerablemente el tamaño del modelo.
+\medskip
 
+El aumento en el número de parámetros también incrementa el riesgo de sobreajuste
+(\textit{overfitting}), fenómeno que ocurre cuando el modelo se ajusta excesivamente
+a los datos de entrenamiento. Como consecuencia, la función de error sobre dichos datos
+puede ser muy baja, pero el modelo pierde capacidad de generalización, presentando un
+alto error al enfrentarse a datos no vistos previamente.
 
-\subsection{Limitaciones de Redes Totalmente Conectadas}
+Esto dificulta el entrenamiento efectivo del modelo y reduce la fiabilidad de sus
+predicciones en escenarios reales.
 % Muchos parametros
 % Falta de espacialidad
 % Escalabilidad pobre para imagenes
-
-\section{Redes Neuronales Convolucionales}
-\section{Técnicas de detección de objetos}
-\section{YOLOv8}
-\section{Interpretabilidad}
-\section{Visualización}
-\section{Blender}
