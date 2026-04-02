@@ -1,6 +1,98 @@
 \section{Redes Neuronales Convolucionales}
+Una red neuronal convolucional es una arquitectura de red neuronal utilizada
+principalmente para tareas de reconocimiento de patrones en estructuras organizadas
+en forma de cuadrículas, como es el caso del procesamiento de imágenes y la visión
+por computadora.
+\medskip
+
+Para ello, hacen uso de una operación matemática conocida como convolución en lugar de
+transformaciones lineales densas en al menos una de sus capas. Además, introducen en su
+arquitectura conceptos como campos receptivos locales, pesos compartidos y
+submuestreo espacial.
 
 \subsection{Convoluciones}
+En su forma más general, la convolución es una operación aplicada a dos funciones
+definidas sobre una variable independiente. Esta operación expresa el solapamiento
+de una función $g$ sobre una función $f$, resultando en una combinación de ambas
+mediante la integral del producto punto a punto.
+\medskip
+
+La convolución continua entre dos funciones $f(t)$ y $g(t)$ se define como:
+\begin{equation}
+    (f * g)(t) = \int_{-\infty}^{\infty} f(\tau)\, g(t - \tau)\, d\tau
+\end{equation}
+donde:
+\begin{description}
+    \item[$f$] es la señal de entrada.
+    \item[$g$] es el núcleo o kernel.
+\end{description}
+Cabe notar que, en su definición matemática formal, la convolución implica la
+inversión del kernel. Sin embargo, en muchas implementaciones prácticas, incluyendo
+las redes neuronales convolucionales, se utiliza una operación equivalente a la
+correlación cruzada, en la cual no se realiza dicha inversión. A pesar de esta
+diferencia, ambas operaciones son funcionalmente similares en este contexto.
+
+Esta operación puede interpretarse como el desplazamiento de una de las funciones
+a lo largo del dominio, calculando en cada punto la integral del producto entre
+ambas. La convolución mide, por tanto, el grado de similitud entre las funciones
+a medida que una se desplaza respecto a la otra.
+\medskip
+
+En el caso discreto, esta operación se aproxima mediante sumas finitas, lo cual
+permite su aplicación en dominios computacionales como el procesamiento de datos
+discretos:
+
+\begin{equation}
+    (f * g)(i) = \sum_{\tau} f(\tau)\, g(i - \tau)
+\end{equation}
+
+La convolución discreta puede extenderse a dos o más dimensiones, lo que la convierte
+en una operación fundamental para el procesamiento de imágenes. Cabe notar que, en su
+definición matemática formal, la convolución implica la inversión del kernel. Sin embargo,
+muchas implementaciones prácticas, incluyendo las redes neuronales convolucionales, no
+realizan dicha inversión, utilizando en su lugar una operación equivalente a la
+correlación cruzada.
+\medskip
+
+En este contexto, se puede definir una imagen $I$ como la entrada y un kernel
+bidimensional $K$, de modo que la operación se expresa como:
+\begin{equation}
+    (I * K)(i,j) = \sum_{m}\sum_{n} I(i + m, j + n)\, K(m,n)
+\end{equation}
+
+Esta operación puede interpretarse como una suma ponderada de la vecindad de $(i,j)$,
+donde el kernel $K$ proporciona los pesos, midiendo la similitud entre la región local
+de la imagen $I$ y el patrón representado por $K$. La región de la entrada que participa
+en este cálculo, definida por el área cubierta por el kernel, corresponde al campo
+receptivo local en esa posición. En el contexto del procesamiento de imágenes, este
+patrón se conoce como filtro.
+\medskip
+
+Una interpretación más intuitiva, en el contexto del procesamiento de imágenes, consiste
+en considerar una cuadrícula (el kernel) que se posiciona sobre una región de la imagen
+de entrada. En cada posición, se multiplica el valor de cada elemento del kernel con el
+valor del píxel correspondiente en la imagen, y la suma de estos productos define el
+valor de salida en dicha posición. Este proceso se repite a medida que el kernel se
+desplaza a lo largo de toda la imagen.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{diagrams/chapter2/convolution_1.pdf} 
+    \caption{Ejemplo de convolución 2D.}
+    \label{fig:convolution}
+\end{figure}
+
+En el procesamiento de imágenes, los valores asignados a los pesos del kernel pueden utilizarse para
+construir filtros que permiten preprocesar los datos, resaltar patrones o extraer características específicas
+de la imagen.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/convolution_examples.pdf} 
+    \caption{Ejemplo de filtros y sus kernels.}
+    \label{fig:convolution_example}
+\end{figure}
+
 
 \subsection{Conectividad Local y Compartición de Pesos}
 
