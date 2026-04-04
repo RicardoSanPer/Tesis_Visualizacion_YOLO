@@ -75,10 +75,11 @@ valor del píxel correspondiente en la imagen, y la suma de estos productos defi
 valor de salida en dicha posición. Este proceso se repite a medida que el kernel se
 desplaza a lo largo de toda la imagen.
 
-\begin{figure}[ht]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.9\textwidth]{diagrams/chapter2/convolution_1.pdf} 
-    \caption{Ejemplo de convolución 2D.}
+    \caption[Ejemplo de convolución 2D]{Ejemplo de convolución 2D. Puede interpretarse como una
+    suma ponderada de la vecindad de un píxel en función de pesos dados por el kernel. Fuente: elaboración propia.}
     \label{fig:convolution}
 \end{figure}
 
@@ -86,13 +87,62 @@ En el procesamiento de imágenes, los valores asignados a los pesos del kernel p
 construir filtros que permiten preprocesar los datos, resaltar patrones o extraer características específicas
 de la imagen.
 
-\begin{figure}[ht]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=1\textwidth]{diagrams/chapter2/convolution_examples.pdf} 
-    \caption{Ejemplo de filtros y sus kernels.}
+    \includegraphics[width=0.7\textwidth]{diagrams/chapter2/convolution_examples.pdf} 
+    \caption[Ejemplo de filtros y sus kernels]{Ejemplo de filtros y sus kernels correspondientes. Pueden usarse para
+    pre-procesar imágenes, como eliminar ruido, o resaltar características de interés. Fuente: elaboración propia.}
     \label{fig:convolution_example}
 \end{figure}
 
+Cabe mencionar dos parámetros adicionales utilizados en la convolución de imágenes:
+el \textit{padding} y el \textit{stride}.
+\medskip
+
+Al deslizar el kernel sobre los píxeles de la imagen, es posible que el campo receptivo
+local de los píxeles en los bordes abarque posiciones fuera de la imagen, cuyos valores
+no están definidos. Una solución consiste en restringir la convolución únicamente a aquellos
+píxeles cuyo campo receptivo local se encuentra completamente dentro de la imagen. Este
+enfoque se conoce como \textit{padding válido}, pero produce una salida de menor dimensionalidad
+al ignorar los píxeles en los bordes.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/convolution_padding_1.pdf} 
+    \caption[Campos receptivos y padding válido]{Campos receptivos y padding válido. Los píxeles en el borde (rojo) tienen un campo receptivo que incluye valores no definidos.
+    El padding válido restringe la convolución a píxeles con campos receptivos completamente
+    definidos (azul), lo que resulta en una salida de menor dimensionalidad. Fuente: elaboración propia.}
+    \label{fig:convolution_padding_valido}
+\end{figure}
+
+Para preservar la dimensionalidad de la salida se utiliza el \textit{same padding}, en el que
+se agregan valores a la entrada de modo que todos los píxeles tengan un campo receptivo local
+válido. Entre las estrategias más comunes se encuentran el uso de ceros (\textit{zero-padding})
+y la replicación del valor del píxel más cercano (\textit{replication padding}).
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/convolution_padding_2.pdf} 
+    \caption[Same padding y valores comúnes]{Same padding y valores comúnes, como ceros 
+    (izquierda) o el valor del
+    píxel más cercano (derecha). Fuente: elaboración propia.}
+    \label{fig:convolution_padding_same}
+\end{figure}
+
+El \textit{stride}, o paso, es un parámetro que controla el desplazamiento del kernel al
+deslizarse sobre la imagen. Un \textit{stride} de 1 implica que el kernel evalúa cada píxel,
+mientras que un valor de 2 implica que se omite un píxel entre evaluaciones consecutivas.
+Este parámetro permite controlar el grado de solapamiento entre campos receptivos, donde
+valores mayores reducen dicho solapamiento, pero producen salidas de menor dimensionalidad.
+\parencite[p.123]{o2015introduction}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{diagrams/chapter2/convolution_stride.pdf} 
+    \caption[Stride y el efecto de distintos valores]{Stride y el efecto de diferentes valores 
+    en el solapamiento de campos receptivos
+    y la dimensionalidad de la salida. Fuente: elaboración propia.}
+    \label{fig:convolution_stride}
+\end{figure}
 
 \subsection{Conectividad Local y Compartición de Pesos}
 

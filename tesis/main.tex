@@ -17,6 +17,9 @@
 \usepackage[style=apa,backend=biber, language=spanish]{biblatex}
 \addbibresource{bibliografia.bib}
 
+% Cross-references
+\usepackage[hidelinks]{hyperref}
+
 
 \title{
 {Sistema Automatizado de Visualización Tridimensional Interactiva para la
@@ -35,6 +38,7 @@ aplicado a Modelo YOLOv8
 
 \maketitle
 \tableofcontents
+\listoffigures
 
 \chapter{Introducción}
 \input{chapters/chapter1.tex}
@@ -42,7 +46,6 @@ aplicado a Modelo YOLOv8
 \chapter{Marco Teórico}
 \input{chapters/chapter02/chapter2.tex}
 
-\nocite{*}
 \printbibliography
 
 \end{document}

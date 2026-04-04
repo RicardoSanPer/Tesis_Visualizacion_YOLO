@@ -36,10 +36,10 @@ son la suma ponderada y la función de activación.
 
 Estas dos funciones permiten modelar el comportamiento básico de una neurona artificial 
 dentro de una red neuronal.
-\begin{figure}[ht]
+\begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.8\textwidth]{diagrams/chapter2/neuron.pdf} 
-    \caption{Modelo de la neurona artificial.}
+    \caption[Modelo de la neurona artificial]{Modelo de la neurona artificial. Fuente: elaboración propia.}
     \label{fig:neurona}
 \end{figure}
 
@@ -244,10 +244,12 @@ dependencias temporales o secuenciales. La recurrencia puede presentarse de form
 cuando una neurona se conecta consigo misma, o de forma indirecta, mediante conexiones
 a través de otras neuronas.
 
-\begin{figure}[ht]
+\begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.6\textwidth]{diagrams/chapter2/multilayer_nn_arch.pdf} 
-    \caption{Red neuronal feedforward con dos capas ocultas totalmente conectadas.}
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/multilayer_nn_arch.pdf} 
+    \caption[Modelo de una red neuronal feedforward]{Modelo de una red neuronal feedforward.
+    La red está compuesta de una capa de entrada con tres neuronas, dos capas ocultas totalmente
+    conectadas con cuatro neuronas cada una, y una capa de salida con tres neuronas. Fuente: elaboración propia.}
     \label{fig:rn_arquitectura}
 \end{figure}
 % Capas: entrada, oculta, salida

@@ -1,3 +1,15 @@
+% Para distingir entre bibliografia y referencias, usar 
+% OPCION 1:
+%   keywords={ref/biblio}
+%   y \printbibliography[keyword=... title={...}] (\nocite{*} para biblio)
+% OPCION 2:
+%   \DeclareBibliographyCategory{ref/biblio}
+%   \addToCategory{ref/biblio}{key}
+% OPCION 3:
+% \printbibliography[title={referencias}]
+% \nocite{*}
+% \printbibliography[title={bibliografia}]
+
 % Redes Neuronales Artificiales
 @book{Goodfellow-et-al-2016,
     title={Deep Learning},
@@ -78,15 +90,6 @@
   year={1998}
   }
 
-@article{podlozhnyuk2007image,
-  title={Image convolution with CUDA},
-  author={Podlozhnyuk, Victor},
-  journal={NVIDIA Corporation white paper, June},
-  volume={2097},
-  number={3},
-  year={2007}
-}
-
 @article{weisstein2003convolution,
   title={Convolution},
   author={Weisstein, Eric W},
@@ -94,4 +97,12 @@
   year={2003},
   publisher={Wolfram Research, Inc.}
 }
+
+@article{kim2013applications,
+  title={Applications of convolution in image processing with MATLAB},
+  author={Kim, Sung and Casper, Riley},
+  journal={University of Washington},
+  pages={1--20},
+  year={2013}
+  }
 
