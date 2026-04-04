@@ -2,7 +2,7 @@
 Una red neuronal convolucional es una arquitectura de red neuronal utilizada
 principalmente para tareas de reconocimiento de patrones en estructuras organizadas
 en forma de cuadrículas, como es el caso del procesamiento de imágenes y la visión
-por computadora.
+por computadora \parencite[p.326]{Goodfellow-et-al-2016}.
 \medskip
 
 Para ello, hacen uso de una operación matemática conocida como convolución en lugar de
@@ -14,7 +14,7 @@ submuestreo espacial.
 En su forma más general, la convolución es una operación aplicada a dos funciones
 definidas sobre una variable independiente. Esta operación expresa el solapamiento
 de una función $g$ sobre una función $f$, resultando en una combinación de ambas
-mediante la integral del producto punto a punto.
+mediante la integral del producto punto a punto \parencite{weisstein2003convolution}.
 \medskip
 
 La convolución continua entre dos funciones $f(t)$ y $g(t)$ se define como:
@@ -26,11 +26,6 @@ donde:
     \item[$f$] es la señal de entrada.
     \item[$g$] es el núcleo o kernel.
 \end{description}
-Cabe notar que, en su definición matemática formal, la convolución implica la
-inversión del kernel. Sin embargo, en muchas implementaciones prácticas, incluyendo
-las redes neuronales convolucionales, se utiliza una operación equivalente a la
-correlación cruzada, en la cual no se realiza dicha inversión. A pesar de esta
-diferencia, ambas operaciones son funcionalmente similares en este contexto.
 
 Esta operación puede interpretarse como el desplazamiento de una de las funciones
 a lo largo del dominio, calculando en cada punto la integral del producto entre
@@ -55,14 +50,14 @@ correlación cruzada.
 \medskip
 
 En este contexto, se puede definir una imagen $I$ como la entrada y un kernel
-bidimensional $K$, de modo que la operación se expresa como:
+bidimensional $K$, de modo que la operación se expresa como \parencite[p.328]{Goodfellow-et-al-2016}:
 \begin{equation}
     (I * K)(i,j) = \sum_{m}\sum_{n} I(i + m, j + n)\, K(m,n)
 \end{equation}
 
 Esta operación puede interpretarse como una suma ponderada de la vecindad de $(i,j)$,
 donde el kernel $K$ proporciona los pesos, midiendo la similitud entre la región local
-de la imagen $I$ y el patrón representado por $K$. La región de la entrada que participa
+de la imagen $I$ y el patrón representado por $K$\parencite{kim2013applications}. La región de la entrada que participa
 en este cálculo, definida por el área cubierta por el kernel, corresponde al campo
 receptivo local en esa posición. En el contexto del procesamiento de imágenes, este
 patrón se conoce como filtro.
@@ -85,7 +80,7 @@ desplaza a lo largo de toda la imagen.
 
 En el procesamiento de imágenes, los valores asignados a los pesos del kernel pueden utilizarse para
 construir filtros que permiten preprocesar los datos, resaltar patrones o extraer características específicas
-de la imagen.
+de la imagen \parencite{kim2013applications}.
 
 \begin{figure}[!htbp]
     \centering
@@ -96,7 +91,7 @@ de la imagen.
 \end{figure}
 
 Cabe mencionar dos parámetros adicionales utilizados en la convolución de imágenes:
-el \textit{padding} y el \textit{stride}.
+el \textit{padding} y el \textit{stride} \parencite{o2015introduction}.
 \medskip
 
 Al deslizar el kernel sobre los píxeles de la imagen, es posible que el campo receptivo
@@ -134,7 +129,7 @@ deslizarse sobre la imagen. Un \textit{stride} de 1 implica que el kernel evalú
 mientras que un valor de 2 implica que se omite un píxel entre evaluaciones consecutivas.
 Este parámetro permite controlar el grado de solapamiento entre campos receptivos, donde
 valores mayores reducen dicho solapamiento, pero producen salidas de menor dimensionalidad.
-\parencite[p.123]{o2015introduction}
+
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{diagrams/chapter2/convolution_stride.pdf} 

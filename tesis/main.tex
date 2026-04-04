@@ -15,10 +15,14 @@
 
 % Biblatex
 \usepackage[style=apa,backend=biber, language=spanish]{biblatex}
+\addbibresource{referencias.bib}
 \addbibresource{bibliografia.bib}
 
 % Cross-references
 \usepackage[hidelinks]{hyperref}
+
+% Bookmarks (tabla de navegacion)
+\usepackage{bookmark}
 
 
 \title{
@@ -46,6 +50,10 @@ aplicado a Modelo YOLOv8
 \chapter{Marco Teórico}
 \input{chapters/chapter02/chapter2.tex}
 
-\printbibliography
+\printbibliography[title={Referencias}, notkeyword={extra}]
+
+\nocite{*}
+\printbibliography[title={Bibliografía}, keyword={extra}]
+
 
 \end{document}

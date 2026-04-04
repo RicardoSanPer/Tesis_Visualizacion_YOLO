@@ -7,7 +7,7 @@ optimizar su salida.
 \subsection{La Neurona Artificial}
 Las neuronas artificiales, inspiradas en las
 neuronas biológicas, son nodos computacionales que tienen un valor de activación
-similar a sus contrapartes biológicas. Esta activación es obtenida al recibir señales 
+similar a sus contrapartes biológicas \parencite[p.11]{da2016artificial}. Esta activación es obtenida al recibir señales 
 de entrada, que son combinan mediante una función
 y producen un valor de salida. Las dos funciones principales de una neurona artificial
 son la suma ponderada y la función de activación.
@@ -71,11 +71,12 @@ donde $\theta$ es el valor del umbral, comúnmente igual a $0$.
 La función escalonada es una de las funciones de activación más simples y puede ser 
 utilizada en problemas de clasificación binaria. Sin embargo, presenta limitaciones 
 importantes, ya que no es diferenciable y su gradiente es nulo en casi todo su dominio. 
-Esto dificulta el uso de algoritmos de retropropagación durante el proceso de aprendizaje, lo que limita su aplicación en redes neuronales modernas.
+Esto dificulta el uso de algoritmos de retropropagación durante el proceso de aprendizaje,
+lo que limita su aplicación en redes neuronales modernas \parencite{szandala2020review}.
 
 \subsubsection{Función Lineal}
 En el contexto de redes neuronales, la función lineal utilizada como función de activación 
-corresponde típicamente a la función identidad:
+corresponde típicamente a la función identidad\parencite{DBLP:journals/corr/abs-2101-09957}:
 \begin{equation}
     f(z) = z
 \end{equation}
@@ -105,7 +106,7 @@ que dificultan la retropropagación.
 
 Adicionalmente, al no estar centrada en cero, las activaciones de la función sigmoide 
 son siempre positivas, lo que puede generar actualizaciones correlacionadas (los gradientes
-tienen el mismo signo) en los pesos y ralentizar el proceso de optimización.
+tienen el mismo signo) en los pesos y ralentizar el proceso de optimización \parencite{szandala2020review}.
 \medskip
 
 La función sigmoide se utiliza comúnmente en la capa de salida de redes neuronales
@@ -126,12 +127,12 @@ preferida frente a la función sigmoide, ya que sus salidas están centradas en
 cero, lo que permite obtener derivadas derivadas de mayor magnitud en la región cercana 
 a cero.
 Sin embargo, aún presenta el problema del desvanecimiento del gradiente debido a la
-saturación de la función para valores grandes de la entrada.
+saturación de la función para valores grandes de la entrada \parencite{szandala2020review}.
 
 \subsubsection{Función ReLU}
 La función ReLU, por sus siglas en inglés \textit{Rectified Linear Unit}, es una función 
 de activación lineal por partes que coincide con la función identidad para valores positivos y toma el 
-valor de cero en cualquier otro caso. También conocida como la función rampa, se define como:
+valor de cero en cualquier otro caso \parencite{DBLP:journals/corr/abs-2101-09957}. También conocida como la función rampa, se define como:
 \begin{equation}
     f(z) = \max(0,z)
 \end{equation}
@@ -178,7 +179,7 @@ donde $z_i$ corresponde a la entrada neta (pre-activación) de la $i$-ésima neu
 \medskip
 
 De esta forma, cada $p_i$ representa la probabilidad de pertenencia a la clase $i$, y la suma
-de todas las probabilidades es igual a 1.
+de todas las probabilidades es igual a 1 \parencite{franke2023softmax}.
 \medskip
 
 A diferencia de otras funciones de activación, la función softmax no opera de manera
@@ -205,7 +206,7 @@ de manera conjunta. En este esquema, la salida de una capa sirve como entrada pa
 siguiente, formando una composición de transformaciones sucesivas.
 \medskip
 
-Generalmente, una red neuronal se divide en tres tipos de capas:
+Generalmente, una red neuronal se divide en tres tipos de capas \parencite[p.21]{da2016artificial}:
 \begin{description}
     \item[Capa de entrada] Esta capa es responsable de recibir los datos o señales de entrada,
     usualmente preprocesarlos (por ejemplo, mediante normalización), y distribuirlos a las
@@ -230,19 +231,19 @@ En este tipo de redes, las neuronas de una capa se conectan típicamente con las
 de la siguiente. Sin embargo, algunas arquitecturas permiten \textit{conexiones de atajo},
 en las que las conexiones pueden saltarse una o más capas. Adicionalmente, es común que
 las neuronas de una capa se conecten con todas las neuronas de la siguiente, en cuyo caso
-se denomina \textit{capa totalmente conectada}.
+se denomina \textit{capa totalmente conectada} \parencite[pp.~39--40]{Kriesel2007NeuralNetworks}.
 \medskip
 
 Una red neuronal feedforward puede estar compuesta por una sola capa (sin capas ocultas),
 lo que se conoce como arquitectura de una sola capa. Un ejemplo de esta arquitectura es
-el perceptrón, uno de los primeros modelos de redes neuronales.
+el perceptrón, uno de los primeros modelos de redes neuronales \parencite[p.22]{da2016artificial}.
 \medskip
 
 Por otro lado, las redes recurrentes son aquellas en las que existen conexiones cíclicas,
 permitiendo que la información se retroalimente dentro de la red. Esto posibilita modelar
 dependencias temporales o secuenciales. La recurrencia puede presentarse de forma directa,
 cuando una neurona se conecta consigo misma, o de forma indirecta, mediante conexiones
-a través de otras neuronas.
+a través de otras neuronas \parencite[pp.~40--42]{Kriesel2007NeuralNetworks}.
 
 \begin{figure}[!htbp]
     \centering
@@ -285,7 +286,7 @@ de aprendizaje: supervisado, no supervisado y por refuerzo.
     comportamientos deseables y penalizando aquellos que no lo son.
 \end{description}
 
-En adición a los paradigmas de aprendizaje, el proceso de entrenamiento también
+En adición a los paradigmas de aprendizaje descritos \parencite[pp.~26--27]{da2016artificial}, el proceso de entrenamiento también
 puede clasificarse en función de cómo se procesa el conjunto de entrenamiento.
 En \textit{offline learning}, también conocido como aprendizaje por lotes, el
 ajuste de los pesos se realiza después de procesar un conjunto de muestras de
@@ -303,8 +304,9 @@ después de procesar cada muestra de entrenamiento.
 
 
 El proceso de aprendizaje consiste en la aplicación de un algoritmo que ajusta los
-pesos de las conexiones neuronales y los sesgos de las neuronas. El proceso de entrenamiento en el aprendizaje supervisado puede describirse en dos
-etapas principales. En la primera etapa, conocida como \textit{forward propagation},
+pesos de las conexiones neuronales y los sesgos de las neuronas. El proceso de entrenamiento 
+en el aprendizaje supervisado puede describirse en dos
+etapas principales \parencite[p.57]{da2016artificial}. En la primera etapa, conocida como \textit{forward propagation},
 las señales correspondientes a una muestra de entrenamiento se introducen en la red
 y se propagan capa a capa hasta producir una salida.
 \medskip
@@ -342,21 +344,21 @@ promedio del error cuadrado, definido como:
 donde $m$ es el número de muestras de entrenamiento en el conjunto.
 \medskip
 
-El proceso de aprendizaje busca minimizar este costo. 
+El proceso de aprendizaje busca minimizar este costo \parencite[pp.~61--62]{da2016artificial}. 
 Esto puede lograrse mediante el descenso por gradiente, un proceso de optimización que busca 
 minimizar una función definida en un espacio $n$-dimensional.
-El gradiente $\nabla f$ de una función escalar $f$ es un vector que, en cada punto
-diferenciable, apunta en la dirección de mayor incremento de la función.
 \medskip
 
+El gradiente $\nabla f$ de una función escalar $f$ es un vector que, en cada punto
+diferenciable, apunta en la dirección de mayor incremento de la función.
 De manera análoga, el gradiente negativo $-\nabla f$ indica la dirección de mayor
 descenso. Por lo tanto, el descenso por gradiente consiste en actualizar los parámetros
-en la dirección del gradiente negativo con el fin de minimizar la función de error.
+en la dirección del gradiente negativo con el fin de minimizar la función de error \parencite[p.~61--62]{Kriesel2007NeuralNetworks}.
 \medskip
 
 La retropropagación es la siguiente etapa y es un proceso que permite calcular de manera eficiente el
 gradiente de la función de costo $\nabla E(W)$ con respecto a los parámetros de la red,
-aprovechándose de la regla de la cadena para el cálculo de derivadas. Dado que
+aprovechándose de la regla de la cadena para el cálculo de derivadas \parencite[p.62]{da2016artificial}. Dado que
 la salida de la red puede interpretarse como una composición de funciones a través
 de sus capas, es posible encadenar las derivadas desde la capa de salida hacia las
 capas anteriores, propagando el gradiente a lo largo de la red.
@@ -386,7 +388,7 @@ ocultas, el modelo puede requerir un gran número de parámetros. Esto increment
 computacional tanto del entrenamiento como de la inferencia.
 
 Este problema se acentúa especialmente al trabajar con datos de alta dimensionalidad,
-como imágenes, donde cada píxel puede representar una entrada. En estos casos, una red
+como imágenes \parencite{o2015introduction}, donde cada píxel puede representar una entrada. En estos casos, una red
 totalmente conectada requeriría un número muy elevado de conexiones entre capas,
 lo que hace necesario escalar considerablemente el tamaño del modelo.
 \medskip
