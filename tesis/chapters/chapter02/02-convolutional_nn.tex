@@ -20,6 +20,7 @@ mediante la integral del producto punto a punto \parencite{weisstein2003convolut
 La convolución continua entre dos funciones $f(t)$ y $g(t)$ se define como:
 \begin{equation}
     (f * g)(t) = \int_{-\infty}^{\infty} f(\tau)\, g(t - \tau)\, d\tau
+    \label{eq:conv_continua}
 \end{equation}
 donde:
 \begin{description}
@@ -39,6 +40,7 @@ discretos:
 
 \begin{equation}
     (f * g)(i) = \sum_{\tau} f(\tau)\, g(i - \tau)
+    \label{eq:conv_discreta}
 \end{equation}
 
 La convolución discreta puede extenderse a dos o más dimensiones, lo que la convierte
@@ -53,6 +55,7 @@ En este contexto, se puede definir una imagen $I$ como la entrada y un kernel
 bidimensional $K$, de modo que la operación se expresa como \parencite[p.328]{Goodfellow-et-al-2016}:
 \begin{equation}
     (I * K)(i,j) = \sum_{m}\sum_{n} I(i + m, j + n)\, K(m,n)
+    \label{eq:conv_2d}
 \end{equation}
 
 Esta operación puede interpretarse como una suma ponderada de la vecindad de $(i,j)$,

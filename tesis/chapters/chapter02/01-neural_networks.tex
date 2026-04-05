@@ -18,6 +18,7 @@ son la suma ponderada y la función de activación.
     Está definida como:
     \begin{equation}
         \text{z} = \sum_{i=1}^{n}x_{i} w_{i} + b
+    \label{eq:suma_ponderada}
     \end{equation}
     donde:
     \begin{description}
@@ -56,7 +57,7 @@ número de capas.
 %Entre las funciones de activación más utilizadas se encuentran las funciones sigmoides y 
 %las funciones lineales por partes.
 
-\subsubsection{Funcion Escalonada}
+\subsubsection{Función Escalonada}
 También conocida como \textit{función escalonada binaria}, es una función en la que la neurona 
 es activada si la entrada de la neurona supera un umbral. La función escalonada está dada por:
 \begin{equation}
@@ -175,7 +176,8 @@ para $n$ clases, definido como:
 \begin{equation}
     p_{i} = \frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}
 \end{equation}
-donde $z_i$ corresponde a la entrada neta (pre-activación) de la $i$-ésima neurona en la capa de salida.
+donde $z_i$ corresponde a la entrada neta resultante de la suma ponderada \eqref{eq:suma_ponderada} 
+de la $i$-ésima neurona en la capa de salida.
 \medskip
 
 De esta forma, cada $p_i$ representa la probabilidad de pertenencia a la clase $i$, y la suma
@@ -319,6 +321,7 @@ definida como:
 
 \begin{equation}
     E(k)=\frac{1}{2}\sum_{j=1}^{n}(t_{j}(k)-a_{j}(k))^{2}
+    \label{eq:error}
 \end{equation}
 
 donde:
@@ -339,6 +342,7 @@ promedio del error cuadrado, definido como:
 
 \begin{equation}
     E = \frac{1}{m}\sum_{k=1}^{m}E(k)
+    \label{eq:costo}
 \end{equation}
 
 donde $m$ es el número de muestras de entrenamiento en el conjunto.
@@ -357,17 +361,18 @@ en la dirección del gradiente negativo con el fin de minimizar la función de e
 \medskip
 
 La retropropagación es la siguiente etapa y es un proceso que permite calcular de manera eficiente el
-gradiente de la función de costo $\nabla E(W)$ con respecto a los parámetros de la red,
+gradiente de la función de costo con respecto a los parámetros de la red,
 aprovechándose de la regla de la cadena para el cálculo de derivadas \parencite[p.62]{da2016artificial}. Dado que
 la salida de la red puede interpretarse como una composición de funciones a través
 de sus capas, es posible encadenar las derivadas desde la capa de salida hacia las
 capas anteriores, propagando el gradiente a lo largo de la red.
 \medskip
 
-Una vez calculado el gradiente de $E(W)$, se determina el cambio a aplicar a los pesos,
+Una vez calculado el gradiente de la función de costo $\Delta E(W)$, se determina el cambio a aplicar a los pesos,
 definido como:
 \begin{equation}
     \Delta W = -\eta \nabla E(W)
+    \label{eq:cambio_pesos}
 \end{equation}
 donde $\eta$ es la tasa de aprendizaje de la red y $\Delta W$ representa el vector
 de actualizaciones para todos los pesos.
