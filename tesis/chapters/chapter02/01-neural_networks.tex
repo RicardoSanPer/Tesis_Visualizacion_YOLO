@@ -136,6 +136,7 @@ de activación lineal por partes que coincide con la función identidad para val
 valor de cero en cualquier otro caso \parencite{DBLP:journals/corr/abs-2101-09957}. También conocida como la función rampa, se define como:
 \begin{equation}
     f(z) = \max(0,z)
+    \label{eq:relu}
 \end{equation}
 Una de sus principales ventajas es su simplicidad computacional, ya que su gradiente toma valores constantes 
 $0$ o $1$, lo que facilita el cálculo durante la retropropagación
@@ -175,6 +176,7 @@ probabilidades $p$
 para $n$ clases, definido como:
 \begin{equation}
     p_{i} = \frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}
+    \label{eq:softmax}
 \end{equation}
 donde $z_i$ corresponde a la entrada neta resultante de la suma ponderada \eqref{eq:suma_ponderada} 
 de la $i$-ésima neurona en la capa de salida.

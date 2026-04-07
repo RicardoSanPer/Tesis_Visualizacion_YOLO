@@ -142,8 +142,114 @@ valores mayores reducen dicho solapamiento, pero producen salidas de menor dimen
     \label{fig:convolution_stride}
 \end{figure}
 
+\subsection{Arquitectura de la Red Convolucional}
+La arquitectura de las redes convolucionales es similar a la de una red neuronal,
+en la que múltiples capas se conectan de forma sucesiva para extraer patrones de la entrada.
+Al igual que estas, una red convolucional cuenta con una capa de entrada y una capa de salida.
+Sin embargo, las redes convolucionales utilizan principalmente capas convolucionales para
+resaltar características, así como capas de \textit{pooling} que reducen la dimensionalidad
+con el propósito de disminuir el número de parámetros y la complejidad computacional del modelo.
+
+\subsubsection{Capa Convolucional}
+La capa convolucional es responsable de realizar convoluciones con el objetivo de extraer
+características de la entrada. Esta capa aplica uno o varios filtros (en conjunto conocidos
+como banco de filtros) sobre la entrada, donde cada filtro produce un mapa de activación
+bidimensional y, en conjunto, estos forman un volumen de activación, como se muestra en la
+\cref{fig:convolution_layer}.
+\medskip
+
+Los kernels utilizados por estos filtros actúan como los parámetros de aprendizaje de la red
+convolucional. Esto implica que funcionan como pesos compartidos y, por lo tanto, los filtros
+pueden interpretarse como neuronas compartidas. Estos conceptos se explican en una sección
+subsecuente. Cabe notar que las redes convolucionales suelen utilizar 
+la función de activación ReLU tras la convolución.
+\medskip
+
+El uso de múltiples filtros en una convolución introduce un tercer parámetro conocido como
+\textit{profundidad}, el cual está determinado por el número de filtros en el banco de filtros.
+Convoluciones con poca profundidad resultan en un menor número de neuronas y parámetros en la red,
+pero pueden reducir la capacidad de reconocimiento de patrones \parencite{o2015introduction}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/convolution_layer.pdf} 
+    \caption[La capa de convolución]{La capa de convolución toma una entrada de dimensiones $H \times W \times C$.
+        Dado un banco de $M$ filtros, cada uno con un kernel tridimensional, se aplica una
+        convolución sobre el volumen de entrada. Cada filtro produce un mapa de activación
+        bidimensional y, en conjunto, generan un volumen de activación de dimensiones
+        $H' \times W' \times M$. Fuente: elaboración propia.}
+    \label{fig:convolution_layer}
+\end{figure}
+
+\subsubsection{Capa de Pooling}
+Conocida también como capa de submuestreo, esta capa suele seguir a las capas convolucionales.
+Como se mencionó anteriormente, su propósito es reducir la dimensionalidad de los datos con el
+fin de disminuir el número de parámetros utilizados por la red y mitigar el problema de
+\textit{overfitting}.
+\medskip
+
+Para realizar el submuestreo, la capa de \textit{pooling} aplica una función sobre regiones locales
+de la entrada. Entre las funciones más comunes se encuentran \textit{max-pooling}, en la que se
+preserva el valor máximo de activación de la vecindad; \textit{mean-pooling}, en la que se calcula
+el promedio de los valores; y el \textit{pooling estocástico}, en el que se selecciona un valor de
+forma aleatoria. Comúnmente se utiliza la operación de \textit{max-pooling}.
+\medskip
+
+La operación de \textit{pooling} puede interpretarse de forma análoga a una convolución en la que
+se preserva un único valor dentro del campo receptivo local. Generalmente se utiliza un \textit{stride}
+tal que no exista solapamiento entre los campos receptivos. Típicamente se emplea un kernel de tamaño
+$2\times 2$ con un \textit{stride} de 2 \parencite{o2015introduction}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/max_pooling.pdf} 
+    \caption[Ejemplo de Max-Pooling]{Ejemplo de \textit{max-pooling} con la configuración típica de un kernel
+    de $2\times 2$ y un \textit{stride} de 2. Esta operación se aplica de forma independiente
+    a cada mapa de activación del volumen producido por una capa convolucional.}
+    \label{fig:max_pool}
+\end{figure}
+\subsubsection{Capa Totalmente Conectada}
+Las redes convolucionales suelen contener varias capas totalmente conectadas que funcionan de
+manera similar a las de las redes neuronales tradicionales. Estas suelen ubicarse al final de la
+arquitectura, ya que en este punto se pierde la estructura espacial de los datos. Su propósito es
+procesar los mapas de activación para realizar la inferencia final, y comúnmente utilizan la función
+de activación ReLU \eqref{eq:relu}  y softmax \eqref{eq:softmax} para la última capa de la red. 
+Cabe mencionar que, previo a esta etapa, los datos se transforman de una estructura
+tridimensional a un vector unidimensional en un proceso conocido como \textit{flattening}.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/full_connected_layer_flattening.pdf} 
+    \caption[Flattening en las capas totalmente conectadas.]{Flatenning en las capas totalmente conectadas. 
+    Un volumen de activación es transformado a un vector unidimensional, perdiendo su 
+    espacialidad, para ser procesado por las capas totalmentes conectadas en la inferencia final.
+    Fuente: elaboración propia.}
+    \label{fig:fully_connected_flattening}
+\end{figure}
+
+Teniendo las capas de convolución, \textit{pooling} y totalmente conectadas, se puede
+definir una arquitectura básica de una red convolucional de la siguiente forma:
+\begin{itemize}
+    \item Una capa de entrada, que recibe como entrada de la red una imagen.
+    \item Una o varias capas convolucionales, encargadas de extraer características.
+    Estas pueden estar intercaladas con capas de \textit{pooling}.
+    \item Una o varias capas totalmente conectadas, cuyo propósito es procesar las
+    características extraídas por las capas convolucionales.
+    \item Una capa de salida, que genera la predicción final de la red.
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/cnn_architecture.pdf} 
+    \caption[Arquitectura de una red convoluciona.]{Arquitectura de una red convolucional.
+    Las capas convolucionales (azul) se encargan de extaer caracteristicas, mientras las de
+    pooling (amarillo) reducen la dimensionalidad y el número de parametros en la red.
+    Las capas totalmente conectadas (rojo) realizan el procesamiento de la inferencia y
+    producen la salida de la red.
+    Fuente: elaboración propia.}
+    \label{fig:cnn_architecture}
+\end{figure}
+
 \subsection{Conectividad Local y Compartición de Pesos}
 
-\subsection{Arquitectura de la Red Convolucional}
-
 \subsection{Mapas de Activación y Representaciones}
+
