@@ -148,7 +148,8 @@ en la que múltiples capas se conectan de forma sucesiva para extraer patrones d
 Al igual que estas, una red convolucional cuenta con una capa de entrada y una capa de salida.
 Sin embargo, las redes convolucionales utilizan principalmente capas convolucionales para
 resaltar características, así como capas de \textit{pooling} que reducen la dimensionalidad
-con el propósito de disminuir el número de parámetros y la complejidad computacional del modelo.
+con el propósito de disminuir el número de parámetros y la complejidad computacional del modelo 
+\parencite{o2015introduction}.
 
 \subsubsection{Capa Convolucional}
 La capa convolucional es responsable de realizar convoluciones con el objetivo de extraer
@@ -168,7 +169,7 @@ la función de activación ReLU tras la convolución.
 El uso de múltiples filtros en una convolución introduce un tercer parámetro conocido como
 \textit{profundidad}, el cual está determinado por el número de filtros en el banco de filtros.
 Convoluciones con poca profundidad resultan en un menor número de neuronas y parámetros en la red,
-pero pueden reducir la capacidad de reconocimiento de patrones \parencite{o2015introduction}.
+pero pueden reducir la capacidad de reconocimiento de patrones.
 
 \begin{figure}[!htbp]
     \centering
@@ -212,7 +213,7 @@ $2\times 2$ con un \textit{stride} de 2 \parencite{o2015introduction}.
 Las redes convolucionales suelen contener varias capas totalmente conectadas que funcionan de
 manera similar a las de las redes neuronales tradicionales. Estas suelen ubicarse al final de la
 arquitectura, ya que en este punto se pierde la estructura espacial de los datos. Su propósito es
-procesar los mapas de activación para realizar la inferencia final, y comúnmente utilizan la función
+procesar los mapas de activación para realizar la inferencia final \parencite{sakib2019overview}, y comúnmente utilizan la función
 de activación ReLU \eqref{eq:relu}  y softmax \eqref{eq:softmax} para la última capa de la red. 
 Cabe mencionar que, previo a esta etapa, los datos se transforman de una estructura
 tridimensional a un vector unidimensional en un proceso conocido como \textit{flattening}.
@@ -248,6 +249,56 @@ definir una arquitectura básica de una red convolucional de la siguiente forma:
     Fuente: elaboración propia.}
     \label{fig:cnn_architecture}
 \end{figure}
+
+\subsubsection{LeNet}
+LeNet es una familia de arquitecturas de redes convolucionales desarrolladas por Yann LeCun
+en la década de 1990, utilizadas principalmente para el reconocimiento de caracteres.
+
+\medskip
+
+En 1998, LeCun desarrolló LeNet-5, el cual presenta mejoras respecto a arquitecturas anteriores
+al combinar el uso de capas convolucionales y de \textit{pooling} (submuestreo)
+\parencite{lecun1998gradient}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/lenet5.pdf} 
+    \caption[Arquitectura LeNet-5]{Arquitectura de LeNet-5. 
+    La red toma como entrada una imagen de dimensiones $32\times 32$, sobre la 
+    cual se aplican capas convolucionales (C1, C3, C5) y de submuestreo (S2, S4), 
+    seguidas de una capa totalmente conectada (F6), 
+    para finalmente producir una salida de clasificación en 10 clases. 
+    Fuente: elaboración propia a partir de \parencite{lecun1998gradient}.}
+    \label{fig:lenet5_arq}
+\end{figure}
+
+\subsubsection{AlexNet}
+AlexNet fue presentado en 2012 como parte del concurso ILSVRC, el cual hace uso del
+conjunto de imágenes ImageNet. Este modelo alcanzó un error top-5 de aproximadamente
+15.3\%, logrando el mejor desempeño hasta ese momento.
+\medskip
+
+Una de sus principales innovaciones fue el uso de múltiples unidades de procesamiento
+gráfico (GPU) para acelerar el entrenamiento. Para ello, la red se distribuye entre dos GPU,
+permitiendo el procesamiento en paralelo de distintas partes del modelo. Aunque cada GPU
+opera sobre una porción de la red, existen conexiones entre ambas en capas específicas,
+lo que permite el intercambio de información \parencite{krizhevsky2012imagenet}.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/alexnet.pdf} 
+    \caption[Arquitectura AlexNet]{Arquitectura de AlexNet. La red se 
+    distribuye entre dos GPU, permitiendo el procesamiento en paralelo 
+    de distintas partes del modelo. Aunque cada GPU opera sobre una 
+    porción de la red, existen conexiones entre ambas en capas 
+    específicas, lo que permite el intercambio de información.
+    Fuente: elaboración propia a partir de \parencite{krizhevsky2012imagenet}.}
+    \label{fig:alexnet_arq}
+\end{figure}
+
+\subsubsection{VGGNet}
+\subsubsection{GoogleNet}
+\subsubsection{ResNet}
+\subsubsection{EfficientNet}
 
 \subsection{Conectividad Local y Compartición de Pesos}
 
