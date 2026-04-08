@@ -287,7 +287,7 @@ lo que permite el intercambio de información \parencite{krizhevsky2012imagenet}
     \centering
     \includegraphics[width=1\textwidth]{diagrams/chapter2/alexnet.pdf} 
     \caption[Arquitectura AlexNet]{Arquitectura de AlexNet. La red se 
-    distribuye entre dos GPU, permitiendo el procesamiento en paralelo 
+    distribuye entre dos GPUs, permitiendo el procesamiento en paralelo 
     de distintas partes del modelo. Aunque cada GPU opera sobre una 
     porción de la red, existen conexiones entre ambas en capas 
     específicas, lo que permite el intercambio de información.
@@ -295,9 +295,72 @@ lo que permite el intercambio de información \parencite{krizhevsky2012imagenet}
     \label{fig:alexnet_arq}
 \end{figure}
 
-\subsubsection{VGGNet}
-\subsubsection{GoogleNet}
+\subsubsection{VGGNet}VGGNet (del inglés \textit{Visual Geometry Group}) fue presentado en 2014 como parte
+del concurso ILSVRC. Inspirado en la arquitectura de AlexNet, este modelo propone
+una arquitectura más profunda mediante el uso de múltiples capas convolucionales
+apiladas de forma sucesiva.
+\medskip
+
+Estos bloques de convolución emplean kernels de tamaño reducido ($3\times3$), los cuales,
+al combinarse, permiten alcanzar un campo receptivo equivalente al de kernels de mayor
+tamaño, al tiempo que incrementan la capacidad de representación del modelo mediante
+la introducción de más no linealidades.
+\medskip
+
+Este modelo alcanzó un error top-5 de 6.8\%, demostrando que la profundidad de la red
+tiene un impacto significativo en la precisión de la clasificación
+\parencite{simonyan2014very}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/vgg.pdf} 
+    \caption[Arquitectura VGGNet]{Arquitectura de VGGNet. La red es similar a
+    AlexNet, pero incrementa su profundidad al apilar sucesivamente varias capas
+    convolucionales.
+    Fuente: elaboración propia a partir de \parencite{simonyan2014very}.}
+    \label{fig:vgg_arq}
+\end{figure}
+
+\subsubsection{GoogLeNet}
+GoogLeNet fue presentado para el concurso ILSVRC en 2014, obteniendo el primer lugar
+con un error top-5 de 6.6\%. Esta arquitectura introduce los bloques \textit{Inception},
+los cuales dividen la entrada en múltiples ramas, aplican convoluciones de distintas
+escalas y operaciones de pooling, y posteriormente concatenan los resultados a lo largo
+de la dimensión de profundidad.
+\medskip
+
+Los bloques Inception permiten extraer características a múltiples escalas de forma
+paralela, combinando diferentes tipos de convoluciones y operaciones de pooling,
+mientras mantienen un costo computacional eficiente mediante el uso de convoluciones
+$1\times1$ para la reducción de dimensionalidad.
+\medskip
+
+Adicionalmente, la red incorpora clasificadores auxiliares que realizan predicciones
+a partir de activaciones intermedias, contribuyendo a la función de pérdida durante el
+entrenamiento. Estos clasificadores ayudan a mejorar la propagación del gradiente y a
+regularizar el modelo, y sus salidas son descartadas durante la inferencia \parencite{szegedy2015going}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/googlenet.pdf} 
+    \caption[Aqrutiectura GoogLeNet]{Arquitectura GoogLeNet.
+    Fuente: elaboración propia a partir de \parencite{szegedy2015going}.}
+    \label{fig:googlenet_arch}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/googlenet_inception.pdf} 
+    \caption[Bloque Inception de GoogLeNet]{Bloque Inception de GoogLeNet. Permite
+    extraer caracteristicas de diferentes tamaños simultaneamente.
+    Fuente: elaboración propia a partir de \parencite{szegedy2015going}.}
+    \label{fig:googlenet_inception}
+\end{figure}
+
+
+
 \subsubsection{ResNet}
+
 \subsubsection{EfficientNet}
 
 \subsection{Conectividad Local y Compartición de Pesos}
