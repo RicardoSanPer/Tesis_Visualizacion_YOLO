@@ -358,12 +358,77 @@ regularizar el modelo, y sus salidas son descartadas durante la inferencia \pare
 \end{figure}
 
 \subsubsection{ResNet}
-ResNet fue predentado para el concurso ILSVRC en 2016. Esta arquitectura utiliza atajos
-entre capas, convirtiendo la red en una red residual, para atender el problema del degradado.
-El problema del degradado ocurre cuando al incrementar la profundidad de la red su
-precisión se satura y degrada rapidamente.
+ResNet fue presentada en el concurso ILSVRC en 2015. Esta arquitectura utiliza atajos
+entre capas, convirtiendo la red en una red residual, con el 
+objetivo de atender el problema de degradación.
+El problema de degradación ocurre cuando, al incrementar la profundidad de la red, 
+su precisión se satura e incluso comienza a degradarse rápidamente \parencite{he2016deep}.
+\medskip
+
+Adicionalmente, la red adopta batch normalization en cada convolución. Batch normalization
+ es un proceso en el que se normalizan las activaciones de la red, evitando que pequeños 
+ cambios en los parámetros se amplifiquen conforme los datos se propagan a través de la red. 
+ Esto ayuda a mitigar el problema del gradiente desvaneciente y, de forma complementaria, 
+ el del gradiente explosivo\parencite{ioffe2015batch}.
+
+ \begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/resnet.pdf} 
+    \caption[Aqrutiectura ResNet]{Arquitectura ResNet. Esta arquitectura utiliza
+    atajos entre capas. Los atajos identidad (flechas sólidas) se usan cuando la entrada
+    y salida tienen la misma dimensionalidad. Cuando la dimensionalidad difiere (flechas
+    punteadas) se usa \textit{zero-padding} o una proyección para igualar las
+    dimensionalidades.
+    Fuente: elaboración propia a partir de \parencite{he2016deep}.}
+    \label{fig:resnet_arch}
+\end{figure}
 
 \subsubsection{EfficientNet}
+Propuesto en 2019, esta red atiende problemas relacionados con la escala de redes. Notando
+que muchas arquitecturas suelen escalar solo una dimensión de la red (profundidad, anchura, o
+resolución), y que se alcanza una mejor precisión al balancear las dimensiones.
+Entonces EfficientNet utiliza un metodo de escalado compuesto (\textit{compound scaing})
+al introducir un coeficiente para escalar uniformemente las dimensiones de la red.
+Este coeficiente busca escalar la red en base a una cantidad de memoria o FLOPS (operaciones
+de punto flotante) objetivo \parencite{tan2019efficientnet}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/efficientnet.pdf} 
+    \caption[Arquitectura EfficientNet]{Arquitectura EfficientNet base (EfficientNet-B0).
+    La familia de modelos EfficientNet-B1 a EfficientNet-B7 se obtienen al utilizar 
+    diferentes valores para el coeficiente de escala compuesta.
+    Fuente: elaboración propia a partir de \parencite{tan2019efficientnet}.}
+    \label{fig:efficient_arch}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/mbconv_block.pdf} 
+    \caption[Bloque Mobile (MBConv)]{Bloque Mobile (MBConv). 
+    Desarrollado como parte de la arquitectura MobileNetV2, y 
+    posteriormente extendido con bloques 
+    \textit{squeeze-and-excitation (SE)} en MnasNet y EfficientNet. La capa de 
+    expansión intermedia actúa como un cuello de botella invertido, seguida de 
+    una convolución \textit{depthwise} (DCONV) que realiza el filtrado espacial 
+    de manera eficiente, mejorando el rendimiento en dispositivos móviles. 
+    Fuente: elaboración propia a partir de \parencite{sandler2018sandler2018mobilenetv2, tan2019mnasnet}.}
+    \label{fig:mbconv_block}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/seblock.pdf} 
+    \caption[Bloque squeeze-and-excitation (SE)]{Bloque \textit{squeeze-and-excitation} (SE).
+     Recalibra características a nivel de canal modelando explícitamente las interdependencias
+     entre canales. Utiliza dos etapas: \textit{squeeze}, la cual comprime la información
+     espacial de cada canal en un descriptor global; y \textit{excitation}, que emplea
+     estos descriptores para capturar dependencias entre canales y generar factores de
+     reponderación. Toma como parámetro $r$, un valor de tasa de reducción.
+     Fuente: elaboración propia a partir de \parencite{hu2018squeeze}.
+    }
+    \label{fig:se_block}
+\end{figure}
 
 \subsection{Conectividad Local y Compartición de Pesos}
 
