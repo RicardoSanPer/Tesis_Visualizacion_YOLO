@@ -142,6 +142,59 @@ valores mayores reducen dicho solapamiento, pero producen salidas de menor dimen
     \label{fig:convolution_stride}
 \end{figure}
 
+\subsection{Conectividad Local y Compartición de Pesos}
+
+Como se mencionó anteriormente, las redes neuronales son versátiles para generalizar y
+resolver problemas. Sin embargo, al aplicarse a tareas relacionadas con imágenes, presentan
+desventajas importantes, como la gran cantidad de parámetros requeridos, su limitada
+escalabilidad y el hecho de que la estructura topológica de la entrada (su naturaleza
+bidimensional) es ignorada.
+\medskip
+
+Las redes convolucionales abordan estos problemas al introducir conectividad local y
+compartición de pesos mediante el uso de convoluciones.
+\medskip
+
+Mediante la conectividad local, la red puede identificar patrones locales como bordes y
+esquinas, los cuales pueden combinarse en capas subsecuentes para extraer características
+más complejas.
+\medskip
+
+Adicionalmente, estos detectores de características son igualmente útiles en cualquier parte
+de la imagen, por lo que se emplean unidades detectoras con diferentes campos receptivos,
+pero con pesos idénticos \parencite{lecun1998gradient}.
+\medskip
+
+Estos dos conceptos se integran en una red convolucional en la forma de los kernels de los
+filtros convolucionales. El kernel de cada filtro contiene un conjunto de pesos que se aplica
+de manera uniforme sobre distintas regiones de la imagen, considerando únicamente una
+región local por cada posición de la entrada (su campo receptivo).
+\medskip
+
+Los kernels actúan como detectores de características dentro de la red convolucional,
+conectando regiones locales de la entrada con activaciones en capas posteriores y reutilizando
+los mismos pesos en cada posición. Estos pesos forman parte del conjunto de parámetros
+que la red aprende durante el proceso de retropropagación.
+
+\subsection{Mapas de Activación y Representaciones}
+Como resultado de la aplicación de una convolución en una red convolucional, se obtiene
+un mapa de activación, el cual indica la respuesta de cada detector a lo largo de la imagen.
+Este también se denomina mapa de características, para enfatizar que representa una
+característica aprendida por la red \parencite{lecun1998gradient}.
+\medskip
+
+Cabe mencionar que una red convolucional busca resaltar múltiples características y
+patrones en una entrada, por lo que una sola operación de convolución suele implicar
+la aplicación de múltiples filtros, cada uno orientado a detectar una característica de
+interés mediante su propio kernel.
+\medskip
+
+Cada filtro produce su propio mapa de activación, por lo que la convolución genera
+como resultado un volumen con tantos canales como filtros utilizados, donde cada canal
+corresponde al mapa de activación de un filtro. Esto introduce un tercer parámetro en la
+operación de convolución, conocido como \textit{profundidad}, el cual está determinado por
+el número de filtros empleados.
+
 \subsection{Arquitectura de la Red Convolucional}
 La arquitectura de las redes convolucionales es similar a la de una red neuronal,
 en la que múltiples capas se conectan de forma sucesiva para extraer patrones de la entrada.
@@ -156,20 +209,13 @@ La capa convolucional es responsable de realizar convoluciones con el objetivo d
 características de la entrada. Esta capa aplica uno o varios filtros (en conjunto conocidos
 como banco de filtros) sobre la entrada, donde cada filtro produce un mapa de activación
 bidimensional y, en conjunto, estos forman un volumen de activación, como se muestra en la
-\cref{fig:convolution_layer}.
-\medskip
-
-Los kernels utilizados por estos filtros actúan como los parámetros de aprendizaje de la red
-convolucional. Esto implica que funcionan como pesos compartidos y, por lo tanto, los filtros
-pueden interpretarse como neuronas compartidas. Estos conceptos se explican en una sección
-subsecuente. Cabe notar que las redes convolucionales suelen utilizar 
+\cref{fig:convolution_layer}. Cabe notar que las redes convolucionales suelen utilizar 
 la función de activación ReLU tras la convolución.
 \medskip
 
-El uso de múltiples filtros en una convolución introduce un tercer parámetro conocido como
-\textit{profundidad}, el cual está determinado por el número de filtros en el banco de filtros.
-Convoluciones con poca profundidad resultan en un menor número de neuronas y parámetros en la red,
-pero pueden reducir la capacidad de reconocimiento de patrones.
+La profundidad de una capa convolucional está determinada por el número de filtros en el banco 
+de filtros. Adicionalmente, dado que las capas convolucionales reciben como entrada un volumen 
+de activación, cada filtro aplica su kernel a lo largo de toda la profundidad de dicho volumen.
 
 \begin{figure}[!htbp]
     \centering
@@ -242,18 +288,24 @@ definir una arquitectura básica de una red convolucional de la siguiente forma:
     \centering
     \includegraphics[width=1\textwidth]{diagrams/chapter2/cnn_architecture.pdf} 
     \caption[Arquitectura de una red convoluciona.]{Arquitectura de una red convolucional.
-    Las capas convolucionales (azul) se encargan de extaer caracteristicas, mientras las de
-    pooling (amarillo) reducen la dimensionalidad y el número de parametros en la red.
-    Las capas totalmente conectadas (rojo) realizan el procesamiento de la inferencia y
+    Las capas convolucionales CONV (azul) se encargan de extaer caracteristicas, mientras las de
+    \textit{pooling} MAX (amarillo) reducen la dimensionalidad y el número de parametros en la red.
+    Las capas totalmente conectadas FC (rojo) realizan el procesamiento de la inferencia y
     producen la salida de la red.
     Fuente: elaboración propia.}
     \label{fig:cnn_architecture}
 \end{figure}
 
+Estas capas constituyen los bloques de construcción fundamentales de las redes 
+convolucionales. La arquitectura mostrada en \cref{fig:cnn_architecture} presenta 
+un diseño básico de una red convolucional. Muchas arquitecturas modernas siguen este 
+mismo principio: primero emplean bloques convolucionales con el propósito de extraer 
+características, y posteriormente utilizan capas totalmente conectadas para la 
+inferencia final. A continuación, se presentan algunas arquitecturas representativas.
+
 \subsubsection{LeNet}
 LeNet es una familia de arquitecturas de redes convolucionales desarrolladas por Yann LeCun
 en la década de 1990, utilizadas principalmente para el reconocimiento de caracteres.
-
 \medskip
 
 En 1998, LeCun desarrolló LeNet-5, el cual presenta mejoras respecto a arquitecturas anteriores
@@ -325,12 +377,12 @@ tiene un impacto significativo en la precisión de la clasificación
 GoogLeNet fue presentado para el concurso ILSVRC en 2014, obteniendo el primer lugar
 con un error top-5 de 6.6\%. Esta arquitectura introduce los bloques \textit{Inception},
 los cuales dividen la entrada en múltiples ramas, aplican convoluciones de distintas
-escalas y operaciones de pooling, y posteriormente concatenan los resultados a lo largo
+escalas y operaciones de \textit{pooling}, y posteriormente concatenan los resultados a lo largo
 de la dimensión de profundidad.
 \medskip
 
 Los bloques Inception permiten extraer características a múltiples escalas de forma
-paralela, combinando diferentes tipos de convoluciones y operaciones de pooling,
+paralela, combinando diferentes tipos de convoluciones y operaciones de \textit{pooling},
 mientras mantienen un costo computacional eficiente mediante el uso de convoluciones
 $1\times1$ para la reducción de dimensionalidad.
 \medskip
@@ -352,7 +404,8 @@ regularizar el modelo, y sus salidas son descartadas durante la inferencia \pare
     \centering
     \includegraphics[width=1\textwidth]{diagrams/chapter2/googlenet_inception.pdf} 
     \caption[Bloque Inception de GoogLeNet]{Bloque Inception de GoogLeNet. Permite
-    extraer caracteristicas de diferentes tamaños simultaneamente.
+    extraer caracteristicas de diferentes tamaños simultaneamente al utilizar diferentes
+    tamaños de kernel.
     Fuente: elaboración propia a partir de \parencite{szegedy2015going}.}
     \label{fig:googlenet_inception}
 \end{figure}
@@ -374,7 +427,7 @@ Adicionalmente, la red adopta batch normalization en cada convolución. Batch no
  \begin{figure}[!htbp]
     \centering
     \includegraphics[width=1\textwidth]{diagrams/chapter2/resnet.pdf} 
-    \caption[Aqrutiectura ResNet]{Arquitectura ResNet. Esta arquitectura utiliza
+    \caption[Arquitectura ResNet]{Arquitectura ResNet. Esta arquitectura utiliza
     atajos entre capas. Los atajos identidad (flechas sólidas) se usan cuando la entrada
     y salida tienen la misma dimensionalidad. Cuando la dimensionalidad difiere (flechas
     punteadas) se usa \textit{zero-padding} o una proyección para igualar las
@@ -412,7 +465,7 @@ de punto flotante) objetivo \parencite{tan2019efficientnet}.
     expansión intermedia actúa como un cuello de botella invertido, seguida de 
     una convolución \textit{depthwise} (DCONV) que realiza el filtrado espacial 
     de manera eficiente, mejorando el rendimiento en dispositivos móviles. 
-    Fuente: elaboración propia a partir de \parencite{sandler2018sandler2018mobilenetv2, tan2019mnasnet}.}
+    Fuente: elaboración propia a partir de \parencite{sandler2018mobilenetv2, tan2019mnasnet}.}
     \label{fig:mbconv_block}
 \end{figure}
 
@@ -429,8 +482,4 @@ de punto flotante) objetivo \parencite{tan2019efficientnet}.
     }
     \label{fig:se_block}
 \end{figure}
-
-\subsection{Conectividad Local y Compartición de Pesos}
-
-\subsection{Mapas de Activación y Representaciones}
 
