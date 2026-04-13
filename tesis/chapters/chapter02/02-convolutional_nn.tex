@@ -143,7 +143,6 @@ valores mayores reducen dicho solapamiento, pero producen salidas de menor dimen
 \end{figure}
 
 \subsection{Conectividad Local y Compartición de Pesos}
-
 Como se mencionó anteriormente, las redes neuronales son versátiles para generalizar y
 resolver problemas. Sin embargo, al aplicarse a tareas relacionadas con imágenes, presentan
 desventajas importantes, como la gran cantidad de parámetros requeridos, su limitada
@@ -155,8 +154,8 @@ Las redes convolucionales abordan estos problemas al introducir conectividad loc
 compartición de pesos mediante el uso de convoluciones.
 \medskip
 
-Mediante la conectividad local, la red puede identificar patrones locales como bordes y
-esquinas, los cuales pueden combinarse en capas subsecuentes para extraer características
+Mediante la conectividad local, la red puede identificar patrones locales como bordes y 
+esquinas, los cuales pueden combinarse en capas subsecuentes para extraer características 
 más complejas.
 \medskip
 
@@ -168,13 +167,42 @@ pero con pesos idénticos \parencite{lecun1998gradient}.
 Estos dos conceptos se integran en una red convolucional en la forma de los kernels de los
 filtros convolucionales. El kernel de cada filtro contiene un conjunto de pesos que se aplica
 de manera uniforme sobre distintas regiones de la imagen, considerando únicamente una
-región local por cada posición de la entrada (su campo receptivo).
+región local por cada posición de la entrada (su campo receptivo), y actuando como las neuronas
+conectando capas.
 \medskip
 
 Los kernels actúan como detectores de características dentro de la red convolucional,
 conectando regiones locales de la entrada con activaciones en capas posteriores y reutilizando
 los mismos pesos en cada posición. Estos pesos forman parte del conjunto de parámetros
 que la red aprende durante el proceso de retropropagación.
+
+\subsubsection{Campos Receptivos}
+Cabe mencionar que una red convolucional suele hacer uso de múltiples convoluciones apiladas
+una tras otra. Esto implica que la activación de una neurona en una capa profunda de la red
+se ve influenciada por activaciones de neuronas en capas anteriores y, por lo tanto, cada
+neurona tiene un campo de influencia correspondiente en la entrada. A este campo se le denomina
+campo receptivo teórico, y su tamaño está determinado por los parámetros de las capas intermedias,
+como el tamaño de los kernels y el stride.
+\medskip
+
+Sin embargo, en la práctica, solo una fracción de esta región tiene una influencia significativa
+en la activación, debido a que las neuronas en los extremos contribuyen a través de un menor número
+de caminos en la red. Esto da lugar a una región más pequeña dentro del campo receptivo teórico con
+mayor influencia, denominada campo receptivo efectivo. El tamaño del campo receptivo efectivo juega
+un papel importante en redes convolucionales profundas, particularmente en la detección de
+características de gran escala en la entrada\parencite{luo2016understanding}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/campo_receptivo.pdf} 
+    \caption[Campos receptivos]{La activación de una neurona se ve afectada por un conjunto 
+    de neuronas de capas anteriores, cuyo tamaño crece con la profundidad de la red. El conjunto 
+    de neuronas de la entrada que influye en una neurona de una capa dada se denomina campo 
+    receptivo teórico, mientras que el subconjunto con influencia significativa corresponde 
+    al campo receptivo efectivo, usualmente solo una fracción de su tamaño.
+     Fuente: elaboración propia.}
+    \label{fig:receptive_fields}
+\end{figure}
 
 \subsection{Mapas de Activación y Representaciones}
 Como resultado de la aplicación de una convolución en una red convolucional, se obtiene
@@ -301,7 +329,10 @@ convolucionales. La arquitectura mostrada en \cref{fig:cnn_architecture} present
 un diseño básico de una red convolucional. Muchas arquitecturas modernas siguen este 
 mismo principio: primero emplean bloques convolucionales con el propósito de extraer 
 características, y posteriormente utilizan capas totalmente conectadas para la 
-inferencia final. A continuación, se presentan algunas arquitecturas representativas.
+inferencia final. 
+\medskip
+
+A continuación, se presentan algunas arquitecturas representativas.
 
 \subsubsection{LeNet}
 LeNet es una familia de arquitecturas de redes convolucionales desarrolladas por Yann LeCun
@@ -418,7 +449,7 @@ El problema de degradación ocurre cuando, al incrementar la profundidad de la r
 su precisión se satura e incluso comienza a degradarse rápidamente \parencite{he2016deep}.
 \medskip
 
-Adicionalmente, la red adopta batch normalization en cada convolución. Batch normalization
+Adicionalmente, la red adopta \textit{batch normalization} en cada convolución. \textit{Batch normalization}
  es un proceso en el que se normalizan las activaciones de la red, evitando que pequeños 
  cambios en los parámetros se amplifiquen conforme los datos se propagan a través de la red. 
  Esto ayuda a mitigar el problema del gradiente desvaneciente y, de forma complementaria, 
