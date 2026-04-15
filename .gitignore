@@ -563,9 +563,11 @@ TSWLatexianTemp*
 # Adicionales
 modelos/preentrenados/*.pt
 tesis/notas.md
+tesis/images
 
 # Graficas
 *.bkp
 *.drawio
 *.pdf
 *.png
+*.jpg
