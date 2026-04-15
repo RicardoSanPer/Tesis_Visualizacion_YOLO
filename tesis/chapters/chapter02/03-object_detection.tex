@@ -1,0 +1,30 @@
+\section{Técnicas de Detección de Objetos}
+Hasta el momento se han explorado las redes convolucionales como herramientas de clasificación:
+dada una imagen de entrada, un modelo puede extraer características y asignar una etiqueta en
+función de estas. Las redes convolucionales han sido ampliamente utilizadas durante décadas
+en tareas como el reconocimiento de rostros y de peatones. Sin embargo, su aplicación directa
+a la detección genérica de objetos es limitada.
+\medskip
+
+La detección genérica de objetos tiene como objetivo la localización y clasificación de múltiples
+objetos en una imagen, etiquetándolos mediante una caja delimitadora (\textit{bounding box}) que
+indica su ubicación. Este problema puede abordarse mediante redes
+convolucionales utilizando un método de preprocesamiento conocido como ventana deslizante
+(\textit{sliding window}). En este enfoque, se define una ventana de tamaño fijo que se desplaza
+sobre la imagen, utilizando cada región cubierta como entrada independiente para la red.
+\medskip
+
+La principal desventaja de este método es su ineficiencia, ya que requiere evaluar múltiples
+regiones de la imagen de forma redundante, lo que lo hace poco práctico para aplicaciones en
+tiempo real. Además, el tamaño de los objetos detectables está limitado por el tamaño de la
+ventana.
+\medskip
+
+Para abordar estas limitaciones, surgen dos principales enfoques para la detección de objetos.
+El primero, conocido como enfoque de dos etapas (también denominado basado en regiones),
+divide la tarea en una fase de propuesta de regiones y una fase de clasificación. El segundo,
+conocido como enfoque de una etapa (también denominado basado en regresión o de tiempo real),
+realiza de forma conjunta la clasificación y la predicción de las cajas delimitadoras a partir
+de la imagen de entrada  \parencite{zhao2019object}.
+\subsection{Detección de Dos Etapas}
+\subsection{Detección de Una Etapa}
