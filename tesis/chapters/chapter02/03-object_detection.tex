@@ -7,12 +7,77 @@ a la detección genérica de objetos es limitada.
 \medskip
 
 La detección genérica de objetos tiene como objetivo la localización y clasificación de múltiples
-objetos en una imagen, etiquetándolos mediante una caja delimitadora (\textit{bounding box}) que
-indica su ubicación. Este problema puede abordarse mediante redes
-convolucionales utilizando un método de preprocesamiento conocido como ventana deslizante
-(\textit{sliding window}). En este enfoque, se define una ventana de tamaño fijo que se desplaza
+objetos en una imagen. Para ello, las redes convolucionales son delegadas al papel de un módulo con la
+tarea de extraer características dentro de un modelo de detección de objetos, mientras otros 
+módulos se encargan de proponer regiones de la entrada donde hay posibles regiones de 
+interés, y de realizar la predicción de la localización y clasificación \parencite{zhao2019object}.
+
+
+\subsection{Representación y Localización de Objetos}
+%% Bounding boxes
+%% centro vs esquinas
+%% Interpretación geometrica
+
+\subsection{Medidas de Solapamiento y Evaluación}
+Una vez que el modelo ha inferido una caja delimitadora, se puede evaluar su rendimiento mediante una métrica conocida como \textit{intersección sobre unión} (por sus siglas en inglés, \textit{IoU, intersection over union}).
+\medskip
+
+Dadas una caja $A$, que representa la caja delimitadora real del objeto de interés, y una caja $B$ inferida por el modelo, el IoU se calcula como el cociente entre el área de intersección y el área de unión de $A$ y $B$, tomando valores en el rango $(0,1]$:
+\begin{equation}
+IoU=\frac{A\cap B}{A\cup B}
+\end{equation}
+
+Adicionalmente, el objeto contenido dentro de la caja delimitadora real se considera una muestra positiva, mientras que el resto de la imagen corresponde a muestras negativas. Al realizar una detección, se pueden distinguir cuatro casos:
+\begin{itemize}
+    \item Verdadero positivo (TP): ocurre cuando el modelo predice correctamente una muestra positiva.
+    \item Verdadero negativo (TN): ocurre cuando el modelo predice correctamente una muestra negativa.
+    \item Falso positivo (FP): ocurre cuando el modelo predice incorrectamente una muestra positiva.
+    \item Falso negativo (FN): ocurre cuando el modelo no detecta una muestra positiva.
+\end{itemize}
+
+A partir de estos casos se definen dos métricas de evaluación: la precisión (P) y la sensibilidad (R). La precisión representa la proporción de predicciones positivas que corresponden a verdaderos positivos:
+\begin{equation}
+    P = \frac{TP}{TP + FP}
+\end{equation}
+Por otro lado, la sensibilidad representa la proporción de verdaderos positivos respecto al total de muestras positivas reales:
+\begin{equation}
+    R = \frac{TP}{TP + FN}
+\end{equation}
+
+Con la precisión y la sensibilidad se construye la curva precisión-sensibilidad (PR), con la sensibilidad en el eje horizontal y la precisión en el eje vertical, la cual describe el rendimiento del modelo al variar el umbral de decisión. La precisión promedio (AP) de una categoría o clase se define como:
+\begin{equation}
+    AP = \int_{0}^{1} P(R),dR
+\end{equation}
+La precisión promedio media del modelo (mAP), considerando $n$ categorías, se define como:
+\begin{equation}
+    mAP=\frac{1}{n}\sum_{i=1}^{n}AP_{i}
+\end{equation}
+\parencite{zhao2019object}.
+%% IoU
+%% Precisión/recall
+%% mAP
+
+\subsection{Supresión de Detecciones Redundantes}
+%% NMS
+%% Problema de multiples predicciones
+%% Idea general del algoritmo
+
+\subsection{Metodos de Detección de Objetos}
+
+\subsubsection{Detección por Ventana Deslizante}
+En este enfoque, se define una ventana de tamaño fijo que se desliza
 sobre la imagen, utilizando cada región cubierta como entrada independiente para la red.
 \medskip
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/deteccion_sliding_window.pdf} 
+    \caption[Detección de objetos mediante ventana deslizante]{Detección de objetos mediante ventana 
+    deslizante. Cada región es utilizada como entrada para la red convolucional, y la ubicación de 
+    las cajas delimitadoras se infiere a partir de la confianza de la predicción.
+    Fuente: elaboración propia.}
+    \label{fig:detection_sliding_window}
+\end{figure}
 
 La principal desventaja de este método es su ineficiencia, ya que requiere evaluar múltiples
 regiones de la imagen de forma redundante, lo que lo hace poco práctico para aplicaciones en
@@ -26,5 +91,17 @@ divide la tarea en una fase de propuesta de regiones y una fase de clasificació
 conocido como enfoque de una etapa (también denominado basado en regresión o de tiempo real),
 realiza de forma conjunta la clasificación y la predicción de las cajas delimitadoras a partir
 de la imagen de entrada  \parencite{zhao2019object}.
-\subsection{Detección de Dos Etapas}
-\subsection{Detección de Una Etapa}
+
+\subsubsection{Detección de Dos Etapas}
+La detección de objetos en dos etapas, como fue mencionado anteriormente, es un método
+que divide la tarea de detección en dos etapas principales: la propuesta de regiones,
+que busca identificar regiones de interes en la entrada, y la fase de clasificación,
+que realiza la clasificación por cada región utilizando redes convolucionales y . 
+\medskip
+
+\subsubsection{Detección de Una Etapa}
+
+\subsection{Predicción de Regiones y Escalas}
+%% Anchor boxes
+%% prediccion de offset
+%% deteccion multi-escala
