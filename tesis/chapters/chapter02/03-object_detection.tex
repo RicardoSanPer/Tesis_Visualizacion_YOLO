@@ -12,8 +12,20 @@ tarea de extraer características dentro de un modelo de detección de objetos, 
 módulos se encargan de proponer regiones de la entrada donde hay posibles regiones de 
 interés, y de realizar la predicción de la localización y clasificación \parencite{zhao2019object}.
 
-
 \subsection{Representación y Localización de Objetos}
+En la detección de objetos, la caja delimitadora (\textit{bounding box}) se utiliza para describir la
+localización de un objeto y, junto con su clasificación, constituye uno de los principales resultados
+producidos por el modelo. 
+\medskip
+
+La caja delimitadora es un rectángulo que encierra la región de la imagen en la que se identifica un
+objeto de interés. Esta puede expresarse como un par de coordenadas correspondientes a la esquina
+superior izquierda y la esquina inferior derecha de la caja, o bien como la coordenada del centro de
+la caja junto con su anchura y altura \parencite{zhang2023dive}.
+\medskip
+
+Geométricamente, la caja delimitadora representa la región más simple y pequeña de la imagen que 
+contiene al objeto de interés.
 %% Bounding boxes
 %% centro vs esquinas
 %% Interpretación geometrica
@@ -52,21 +64,15 @@ La precisión promedio media del modelo (mAP), considerando $n$ categorías, se 
 \begin{equation}
     mAP=\frac{1}{n}\sum_{i=1}^{n}AP_{i}
 \end{equation}
-\parencite{zhao2019object}.
+\parencite{zeng2026deep}
 %% IoU
 %% Precisión/recall
 %% mAP
 
-\subsection{Supresión de Detecciones Redundantes}
-%% NMS
-%% Problema de multiples predicciones
-%% Idea general del algoritmo
-
-\subsection{Metodos de Detección de Objetos}
-
-\subsubsection{Detección por Ventana Deslizante}
-En este enfoque, se define una ventana de tamaño fijo que se desliza
-sobre la imagen, utilizando cada región cubierta como entrada independiente para la red.
+\subsection{Detección por Ventana Deslizante}
+Uno de detección de objetos sencillo es el de detección por ventana deslizante, en el cual
+se define una ventana de tamaño fijo que se desliza sobre la imagen, utilizando cada región 
+cubierta como entrada independiente para la red.
 \medskip
 
 \begin{figure}[!htbp]
@@ -82,26 +88,39 @@ sobre la imagen, utilizando cada región cubierta como entrada independiente par
 La principal desventaja de este método es su ineficiencia, ya que requiere evaluar múltiples
 regiones de la imagen de forma redundante, lo que lo hace poco práctico para aplicaciones en
 tiempo real. Además, el tamaño de los objetos detectables está limitado por el tamaño de la
-ventana.
+ventana \parencite{zhao2019object}.
+
+\subsection{Predicción de Regiones y Escalas}
+Para resolver los problemas presentados por el método de la ventana deslizante, los modelos modernos
+utilizan un enfoque de predicción basado en regiones mediante cajas ancla
+(\textit{anchor boxes}). Estas cajas actúan como referencias iniciales para la detección y 
+consisten en un conjunto de cajas predefinidas de distintas escalas y relaciones de aspecto, 
+que se colocan de forma repetida sobre una cuadrícula derivada del mapa de características de la red.
 \medskip
 
-Para abordar estas limitaciones, surgen dos principales enfoques para la detección de objetos.
-El primero, conocido como enfoque de dos etapas (también denominado basado en regiones),
-divide la tarea en una fase de propuesta de regiones y una fase de clasificación. El segundo,
-conocido como enfoque de una etapa (también denominado basado en regresión o de tiempo real),
-realiza de forma conjunta la clasificación y la predicción de las cajas delimitadoras a partir
-de la imagen de entrada  \parencite{zhao2019object}.
+Cada caja ancla genera una predicción que incluye ajustes de posición y tamaño mediante un desfase 
+(\textit{offset}), así como una puntuación de presencia de objeto y probabilidades de clase.
+\medskip
 
-\subsubsection{Detección de Dos Etapas}
+Finalmente, las predicciones se filtran utilizando estas puntuaciones y técnicas como la supresión 
+de no máximos (\textit{Non-Maximum Suppression}) para obtener las detecciones finales.
+%% Anchor boxes
+%% prediccion de offset
+%% deteccion multi-escala
+
+\subsection{Supresión de Detecciones Redundantes}
+%% NMS
+%% Problema de multiples predicciones
+%% Idea general del algoritmo
+
+
+\subsection{Detección de Dos Etapas}
 La detección de objetos en dos etapas, como fue mencionado anteriormente, es un método
 que divide la tarea de detección en dos etapas principales: la propuesta de regiones,
 que busca identificar regiones de interes en la entrada, y la fase de clasificación,
 que realiza la clasificación por cada región utilizando redes convolucionales y . 
 \medskip
 
-\subsubsection{Detección de Una Etapa}
+\subsection{Detección de Una Etapa}
 
-\subsection{Predicción de Regiones y Escalas}
-%% Anchor boxes
-%% prediccion de offset
-%% deteccion multi-escala
+
