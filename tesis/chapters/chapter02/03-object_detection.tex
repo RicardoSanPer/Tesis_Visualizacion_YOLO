@@ -21,7 +21,7 @@ producidos por el modelo.
 La caja delimitadora es un rectángulo que encierra la región de la imagen en la que se identifica un
 objeto de interés. Esta puede expresarse como un par de coordenadas correspondientes a la esquina
 superior izquierda y la esquina inferior derecha de la caja, o bien como la coordenada del centro de
-la caja junto con su anchura y altura \parencite{zhang2023dive}.
+la caja junto con su anchura y altura \parencite[p.630]{zhang2023dive}.
 \medskip
 
 Geométricamente, la caja delimitadora representa la región más simple y pequeña de la imagen que 
@@ -103,24 +103,98 @@ Cada caja ancla genera una predicción que incluye ajustes de posición y tamañ
 \medskip
 
 Finalmente, las predicciones se filtran utilizando estas puntuaciones y técnicas como la supresión 
-de no máximos (\textit{Non-Maximum Suppression}) para obtener las detecciones finales.
+de no máximos (\textit{Non-Maximum Suppression}) para obtener las detecciones finales \parencite{matlabanchorboxes}.
+\medskip
+
+Adicionalmente, aprovechando la arquitectura de múltiples capas de los modelos de detección,
+es posible realizar detección multi-escala de objetos de diferentes tamaños al utilizar mapas 
+de características en distintas profundidades de la red.
+\medskip
+
+Las capas más profundas presentan un mayor campo receptivo sobre la entrada, lo que permite 
+detectar objetos de mayor tamaño, mientras que las capas menos profundas tienen un campo 
+receptivo más pequeño y son más adecuadas para detectar objetos de menor tamaño \parencite[pp.~648--649]{zhang2023dive}.
 %% Anchor boxes
 %% prediccion de offset
 %% deteccion multi-escala
 
 \subsection{Supresión de Detecciones Redundantes}
+Al realizar la predicción de múltiples objetos, es posible que múltiples cajas ancla se ajusten al mismo
+objeto, resultando en varias cajas delimitadoras con un solapamiento considerable entre sí.
+Este problema se puede abordar combinando las cajas correspondientes al mismo objeto en una sola mediante
+supresión de no máximos (\textit{non-maximum suppression}, o \textit{NMS}).
+\medskip
+
+El algoritmo NMS funciona de la siguiente forma:
+\begin{itemize}
+    \item[1.] Para cada caja delimitadora predicha $B$, se asigna la clase con mayor probabilidad y
+    se utiliza dicha probabilidad $p$ como puntuación de $B$.
+    \item[2.] Se ordenan las cajas en una lista de forma descendente según el valor $p$.
+    \item[3.] Se toma la caja $B$ con mayor puntuación $p$ como referencia y se descartan de la lista
+    todas aquellas cajas cuyo valor de IoU respecto a $B$ sea mayor que un umbral predefinido.
+    \item[4.] Se repite el paso 3 con la siguiente caja de mayor puntuación $p$, hasta que todas las cajas
+    hayan sido procesadas. De este modo, la lista final contiene únicamente cajas con alta puntuación y bajo solapamiento entre sí.
+    \item[5.] La lista resultante corresponde al conjunto final de detecciones.
+\end{itemize}
+La NMS permite suprimir detecciones redundantes y simplificar la salida del modelo \parencite{zhang2023dive}.
+Su principal desventaja aparece cuando el modelo predice dos objetos distintos con un solapamiento considerable
+(por ejemplo, cuando uno ocluye parcialmente a otro), lo que puede provocar que una de las detecciones sea
+eliminada de forma errónea.
 %% NMS
 %% Problema de multiples predicciones
 %% Idea general del algoritmo
 
 
 \subsection{Detección de Dos Etapas}
-La detección de objetos en dos etapas, como fue mencionado anteriormente, es un método
-que divide la tarea de detección en dos etapas principales: la propuesta de regiones,
-que busca identificar regiones de interes en la entrada, y la fase de clasificación,
-que realiza la clasificación por cada región utilizando redes convolucionales y . 
+Modelos de detección modernos se pueden clasificar en uno de dos tipos, uno de ellos siendo
+la detección de dos etapas.
 \medskip
 
-\subsection{Detección de Una Etapa}
+La detección de objetos en dos etapas es un método
+que divide la tarea de detección en dos etapas principales: la propuesta de regiones,
+que busca identificar regiones de interés en la entrada, y la fase de clasificación,
+que realiza la clasificación por cada región utilizando redes convolucionales. La detección de dos
+etapas ofrece una presición superior al metodo de una etapa discutido posteriormente, pero al coste de
+un mayor tiempo de computación. 
+\medskip
 
+Tres modelos notables que utilizan este método son R-CNN, Fast R-CNN, y Faster R-CNN.
+
+\subsection{R-CNN}
+R-CNN (\textit{Regions with CNN features}) es un modelo de detección de objetos que combina 
+propuestas de regiones con redes neuronales convolucionales. R-CNN se divide en tres módulos: 
+el primero genera propuestas de regiones independientes de la categoría, el segundo utiliza una 
+red convolucional para extraer vectores de características, y el tercero emplea un conjunto de 
+máquinas de vectores de soporte (\textit{support vector machines}, o SVM) específicos por clase.
+\medskip
+
+Para el primer módulo, R-CNN utiliza búsqueda selectiva para seleccionar aproximadamente dos mil 
+propuestas de regiones. Este algoritmo genera regiones iniciales 
+a partir de bordes y agrupaciones perceptuales en la imagen, y posteriormente combina regiones 
+adyacentes mediante un algoritmo codicioso basándose en su similitud \parencite{uijlings2013selective}.
+\medskip
+
+Para el módulo de extracción de características, se emplea una red convolucional de cinco capas 
+convolucionales y dos capas totalmente conectadas para extraer un vector de características de 
+4096 dimensiones por cada región propuesta. Dado que la red requiere entradas de tamaño fijo, 
+cada región es distorsionada para ajustarse a las dimensiones esperadas por la red.
+\medskip
+
+Finalmente, para cada clase se asigna una puntuación a cada vector de características utilizando 
+el SVM correspondiente, y posteriormente se aplica supresión no máxima (NMS) codiciosa con un umbral 
+aprendido para eliminar detecciones redundantes.
+\medskip
+
+Este modelo destacó por su rendimiento en PASCAL VOC 2012, logrando una mejora superior al 3
+0\% respecto al mejor resultado previo. Este desempeño fue posible gracias al uso 
+de propuestas de regiones y al preentrenamiento supervisado de la red sobre grandes conjuntos 
+de datos con anotaciones a nivel de imagen, seguido de un ajuste fino para la tarea 
+de detección de objetos \parencite{girshick2014rich}.
+%% R-CNN
+%% Fast R-CNN
+%% Faster R-CNN
+
+\subsection{Detección de Una Etapa}
+%% SSD
+%% YOLO
 
