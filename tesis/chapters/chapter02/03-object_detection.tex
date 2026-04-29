@@ -190,6 +190,28 @@ Este modelo destacó por su rendimiento en PASCAL VOC 2012, logrando una mejora 
 de propuestas de regiones y al preentrenamiento supervisado de la red sobre grandes conjuntos 
 de datos con anotaciones a nivel de imagen, seguido de un ajuste fino para la tarea 
 de detección de objetos \parencite{girshick2014rich}.
+
+\subsection{Fast R-CNN}
+Fast R-CNN es un modelo de detección de objetos propuesto para resolver varias de las limitaciones de 
+R-CNN, particularmente la complejidad de su entrenamiento y su alto costo computacional en inferencia.
+\medskip
+
+A diferencia de R-CNN, Fast R-CNN procesa la imagen completa una sola vez mediante una red convolucional 
+para obtener un mapa de características. A partir de este mapa y de un conjunto de propuestas de región 
+externas, el modelo proyecta cada propuesta como una región de interés (\textit{Region of Interest}, o RoI) 
+y extrae de ella un vector de características de tamaño fijo mediante una capa de agrupamiento RoI 
+(\textit{RoI pooling}). Cada vector es posteriormente procesado por capas totalmente conectadas que se 
+ramifican en dos salidas: una distribución de probabilidad sobre las clases y un conjunto de regresores 
+para refinar las posiciones de las cajas delimitadoras.
+\medskip
+
+El modelo logra un procesamiento considerablemente más rápido al compartir el cómputo convolucional 
+entre múltiples RoI de una misma imagen, evitando reevaluar la red completa para cada propuesta como 
+ocurre en R-CNN. Además, el entrenamiento se simplifica al realizar una sola etapa de ajuste fino 
+(\textit{fine-tuning}), en contraste con el entrenamiento multietapa de R-CNN. Fast R-CNN también 
+mejora la precisión, alcanzando un mAP de 66\% en PASCAL VOC 2012, y reduce significativamente el 
+tiempo de inferencia a aproximadamente 0.3 segundos por imagen, sin considerar el tiempo requerido 
+para generar propuestas de región \parencite{girshick2015fast}.
 %% R-CNN
 %% Fast R-CNN
 %% Faster R-CNN
