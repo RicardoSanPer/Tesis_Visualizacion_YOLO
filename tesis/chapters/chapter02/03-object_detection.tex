@@ -212,6 +212,30 @@ ocurre en R-CNN. Además, el entrenamiento se simplifica al realizar una sola et
 mejora la precisión, alcanzando un mAP de 66\% en PASCAL VOC 2012, y reduce significativamente el 
 tiempo de inferencia a aproximadamente 0.3 segundos por imagen, sin considerar el tiempo requerido 
 para generar propuestas de región \parencite{girshick2015fast}.
+
+\subsection{Faster R-CNN}
+Faster R-CNN fue introducido con el propósito de proponer un método de generación de regiones candidato 
+más rápido que los existentes, ya que, a pesar de que modelos previos como Fast R-CNN alcanzaban velocidades 
+cercanas al tiempo real en inferencia, aún se veían limitados por el costo computacional de la etapa 
+de propuesta de regiones.
+\medskip
+
+Para resolver este problema, Faster R-CNN introduce las redes de propuesta de regiones 
+(\textit{region proposal networks}, o RPN). Estas reutilizan los mapas de características generados por 
+la red convolucional principal y añaden una pequeña red totalmente convolucional para predecir propuestas 
+de región de manera eficiente. Esta red produce, para cada ubicación, tanto una estimación de objetividad 
+como ajustes de regresión para refinar cajas delimitadoras candidatas. Además, 
+las RPN pueden entrenarse de extremo a extremo específicamente para la tarea de propuesta de regiones.
+\medskip
+
+Las redes de propuesta de regiones se implementan como una red totalmente convolucional sobre el mapa de 
+características compartido. Como entrada toman la salida de una capa convolucional y la procesan 
+mediante una ventana deslizante. Cada ventana es proyectada a una representación de menor 
+dimensionalidad mediante una convolución, y posteriormente se procesa mediante dos capas 
+convolucionales paralelas: una para clasificación y otra para regresión. 
+Estas capas producen, respectivamente, puntajes de objetividad y propuestas de 
+regiones en forma de cajas de ancla para múltiples escalas y relaciones de aspecto \parencite{ren2016faster}.
+
 %% R-CNN
 %% Fast R-CNN
 %% Faster R-CNN
