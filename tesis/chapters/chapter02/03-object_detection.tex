@@ -160,7 +160,7 @@ un mayor tiempo de computación.
 
 Tres modelos notables que utilizan este método son R-CNN, Fast R-CNN, y Faster R-CNN.
 
-\subsection{R-CNN}
+\subsubsection{R-CNN}
 R-CNN (\textit{Regions with CNN features}) es un modelo de detección de objetos que combina 
 propuestas de regiones con redes neuronales convolucionales. R-CNN se divide en tres módulos: 
 el primero genera propuestas de regiones independientes de la categoría, el segundo utiliza una 
@@ -191,7 +191,7 @@ de propuestas de regiones y al preentrenamiento supervisado de la red sobre gran
 de datos con anotaciones a nivel de imagen, seguido de un ajuste fino para la tarea 
 de detección de objetos \parencite{girshick2014rich}.
 
-\subsection{Fast R-CNN}
+\subsubsection{Fast R-CNN}
 Fast R-CNN es un modelo de detección de objetos propuesto para resolver varias de las limitaciones de 
 R-CNN, particularmente la complejidad de su entrenamiento y su alto costo computacional en inferencia.
 \medskip
@@ -213,7 +213,7 @@ mejora la precisión, alcanzando un mAP de 66\% en PASCAL VOC 2012, y reduce sig
 tiempo de inferencia a aproximadamente 0.3 segundos por imagen, sin considerar el tiempo requerido 
 para generar propuestas de región \parencite{girshick2015fast}.
 
-\subsection{Faster R-CNN}
+\subsubsection{Faster R-CNN}
 Faster R-CNN fue introducido con el propósito de proponer un método de generación de regiones candidato 
 más rápido que los existentes, ya que, a pesar de que modelos previos como Fast R-CNN alcanzaban velocidades 
 cercanas al tiempo real en inferencia, aún se veían limitados por el costo computacional de la etapa 
@@ -241,6 +241,50 @@ regiones en forma de cajas de ancla para múltiples escalas y relaciones de aspe
 %% Faster R-CNN
 
 \subsection{Detección de Una Etapa}
+La detección de objetos de una etapa es otro modelo de detección de objetos.
+\medskip
+
+A diferencia del metodo de dos etapas, el de una etapa realiza la detección y clasificación en una sola etapa,
+basandose en regresión y clasificación global, y mapeando directamente de pixeles a coordenadas de cajas
+delimitadoras y probabilidades de clases. Esto reduce el tiempo requerido para detectar objetos, volviendo
+este metodo ideal para detección de objetos en tiempo real, pero al costo de una menor presición.
+\medskip
+
+Dos familias de modelos representativos de este método son SSD y YOLO.
+
+\subsubsection{SSD}
+El modelo \textit{Single Shot MultiBox Detector} (SSD) fue propuesto en 2016 para atender las limitaciones 
+de los modelos de detección de dos etapas, como Faster R-CNN. Este modelo logra una mayor velocidad y 
+precisión de detección (59 fotogramas por segundo con 74.3\% mAP) en comparación con Faster R-CNN 
+(7 fotogramas por segundo con 73.2\% mAP), al eliminar la etapa explícita de propuesta de regiones y el 
+remuestreo de características.
+\medskip
+
+SSD utiliza una red convolucional de clasificación de imágenes como base, eliminando sus capas finales de 
+clasificación y agregando capas convolucionales adicionales para la detección de objetos. Estas extensiones 
+incluyen mapas de características de tamaño progresivamente menor para permitir la detección multiescala, 
+así como capas convolucionales que predicen, para cada ubicación, tanto probabilidades de clase como 
+desplazamientos con respecto a un conjunto de cajas predeterminadas asociadas a cada mapa de 
+características \parencite{liu2016ssd}.
+
+\subsubsection{YOLO }
+YOLO (\textit{You Only Look Once}) es un modelo de detección de objetos de una etapa propuesto en 2015. 
+A diferencia de los enfoques de dos etapas, YOLO formula la detección de objetos como un problema de 
+regresión unificada, prediciendo directamente, a partir de la imagen completa, probabilidades de clase 
+y coordenadas de cajas delimitadoras.
+\medskip
+
+YOLO logra altas velocidades de detección al unificar localización y clasificación en una sola pasada, 
+lo que simplifica considerablemente el pipeline de detección y permite alcanzar velocidades de hasta 150 
+fotogramas por segundo. Además, el modelo analiza la imagen de forma global, incorporando información 
+contextual sobre las clases y sus apariciones, lo que reduce aproximadamente a la mitad los errores de 
+fondo en comparación con otros modelos. Adicionalmente, YOLO aprende representaciones que generalizan mejor 
+a nuevos dominios y entradas inesperadas \parencite{redmon2016you}.
+\medskip
+
+A partir de esta propuesta surgieron múltiples iteraciones que extendieron y refinaron la arquitectura 
+original. El enfoque de este trabajo se centra en YOLOv8.
+
 %% SSD
 %% YOLO
 
