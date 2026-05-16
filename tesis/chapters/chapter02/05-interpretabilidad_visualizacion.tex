@@ -1,77 +1,73 @@
 \section{Interpretabilidad y Explicabilidad de Inteligencia Artificial}
-Hasta el momento se ha construido una base para entender el funcionamiento de redes neuronales y 
-redes convolucionales desde un punto de vista técnico. Sin embargo, la creciente adopción de sistemas 
-de inteligencia artificial en distintas industrias y en la vida cotidiana ha generado la necesidad 
-de desarrollar modelos más transparentes, cuyos procesos de toma de decisiones resulten comprensibles 
-para los usuarios humanos. A partir de esta necesidad surgen los conceptos de inteligencia artificial 
-interpretable e inteligencia artificial explicable (\textit{Explainable Artificial Intelligence}, 
-o XAI).
+Hasta el momento se ha construido una base para entender el funcionamiento de redes neuronales y redes 
+convolucionales desde un punto de vista técnico. Sin embargo, la creciente adopción de sistemas de 
+inteligencia artificial en distintas industrias y en la vida cotidiana ha generado la necesidad de 
+desarrollar modelos más transparentes, cuyos procesos de toma de decisiones resulten comprensibles para 
+los usuarios humanos. A partir de esta necesidad surgen los conceptos de inteligencia artificial interpretable
+ e inteligencia artificial explicable (\textit{Explainable Artificial Intelligence}, o XAI).
 \medskip
 
-La interpretabilidad de la inteligencia artificial se refiere a la capacidad de un modelo para 
-proporcionar un entendimiento claro de sus mecanismos internos y predicciones. Generalmente, 
-se consideran interpretables aquellos modelos cuyas arquitecturas y mecanismos son lo suficientemente 
-simples como para ser comprendidos sin herramientas adicionales. A estos modelos también se les 
-conoce como modelos de caja blanca o modelos transparentes. Un ejemplo de este tipo es el 
-perceptrón, un modelo de red neuronal compuesto únicamente por una capa de entrada y una capa de 
-salida, cuya simplicidad permite describir matemáticamente la relación entre las entradas y 
-las salidas. Otros ejemplos de modelos transparentes incluyen la regresión lineal, 
-la regresión logística y los árboles de decisiones.
+El campo de la inteligencia artificial explicable (XAI) tiene como propósito desarrollar métodos que 
+permitan mejorar la interpretabilidad y comprensibilidad de los modelos, ya sea mediante el diseño de 
+arquitecturas inherentemente transparentes o a través de herramientas y métodos externos orientados a 
+explicar su comportamiento y predicciones \parencite{arrieta2020explainable}.
 \medskip
 
-Sin embargo, como se describió en secciones anteriores, las redes neuronales modernas poseen 
-arquitecturas considerablemente más complejas: una sola capa puede contener miles de parámetros. 
-Describir matemáticamente la relación entre las entradas y salidas de estos modelos puede implicar 
-la consideración de miles, o incluso millones, de parámetros. Debido a ello, el entendimiento de 
-estos sistemas suele abstraerse a niveles más altos, mientras que su funcionamiento interno detallado 
-permanece difícil de interpretar. Por esta razón, modelos de aprendizaje profundo como las redes 
-convolucionales y los grandes modelos de lenguaje (\textit{Large Language Models}, o LLMs) suelen 
-clasificarse como modelos de caja negra o post-hoc \parencite{dwivedi2023explainable}.
+Los métodos de XAI pueden clasificarse según tres ejes principales: modelos de caja blanca o caja negra, 
+interpretabilidad global o local, y métodos agnósticos o específicos del modelo.
+
+\subsection{Modelos de caja blanca y negra}
+Esta clasificación de métodos de XAI depende de la interpretabilidad inherente de un modelo o sistema.
 \medskip
 
-Como respuesta a la necesidad de comprender mejor los procesos de toma de decisiones de los sistemas 
-de inteligencia artificial, surge el campo de la inteligencia artificial explicable 
-(XAI), cuyo propósito es desarrollar métodos que permitan mejorar la interpretabilidad y 
-comprensibilidad de los modelos, ya sea mediante el diseño de arquitecturas inherentemente 
-transparentes o a través de herramientas externas orientadas a explicar su comportamiento y 
-predicciones \parencite{arrieta2020explainable}.
+Los modelos de caja blanca, también conocidos como modelos transparentes o intrínsicos, son aquellos cuyas 
+arquitecturas y mecanismos son lo suficientemente simples como para ser comprendidos sin herramientas 
+adicionales. Ejemplos de modelos en esta clasificación incluye modelos cuya simplicidad permite describir 
+matemáticamente la relación  entre las entradas y las salidas como modelos de regresión lineal, de 
+regresión logística y los árboles de decisiones.
+\medskip
+
+Por otro lado, los modelos de caja negra son aquellos con mecanismos internos altamente complejos como para 
+ser fácilmente interpretables. El entendimiento de estos sistemas suele abstraerse a niveles más altos, 
+mientras que su funcionamiento interno detallado permanece difícil de interpretar. Un ejemplo de este 
+tipo son las redes neuronales modernas, las cuales poseen arquitecturas considerablemente complejas: una 
+sola capa puede contener miles de parámetros. Describir matemáticamente la relación entre las entradas y 
+salidas de estos modelos puede implicar la consideración de miles, o incluso millones, de parámetros. Por 
+esta razón, modelos de aprendizaje profundo como las redes convolucionales y los grandes modelos de 
+lenguaje (\textit{Large Language Models}, o LLMs) suelen clasificarse en esta 
+categoría \parencite{dwivedi2023explainable}. Debido a su complejidad, estos modelos suelen requerir métodos 
+post-hoc para su explicación, es decir, técnicas externas orientadas a interpretar su comportamiento y 
+predicciones.
+
+\subsection{Interpretación Global y Local}
+Los métodos de XAI pueden clasificarse en base al alcance de la interpretabilidad.
+\medskip
+
+La interpretabilidad local se refiere a métodos que buscan explicar el comportamiento del modelo para una 
+predicción específica. Estos métodos buscan explicar y analizar la toma de decisiones del modelo con el fin 
+de comprender el razonamiento detrás de una predicción.
+\medskip
+
+Por otro lado, la interpretabilidad global proporciona un análisis general del modelo y de su 
+comportamiento \parencite{dwivedi2023explainable}.
 
 \subsection{Técnicas Agnósticas y Específicas al Modelo}
-La explicabilidad post-hoc tiene como objetivo los modelos que no son inmediatamente interpretables
-(los modelos de caja negra o post-hoc), por lo que requieren de técnicas adicionales para mejorar su
-interpretabilidad. Estas técnicas se pueden clasificar en técnicas especificas y agnósticas al modelo.
+Las técnicas pueden casificarse en base al modelo que se examina, siendo agnósticas o específicas al modelo.
 \medskip
 
-\subsubsection{Técnicas Agnósticas al Modelo}
 Las técnicas agnósticas al modelo están diseñadas para explicar el proceso de predicción de 
 distintos tipos de modelos independientemente de su arquitectura interna. Estas técnicas pueden 
-clasificarse, de manera general, en métodos basados en modelos sustitutos simplificados, 
-métodos de estimación de relevancia de características y métodos basados en visualización \parencite{arrieta2020explainable}.
+clasificarse, de manera general, en métodos de visualización, de extracción de conocimientos, de importancia
+de características, y basados en ejemplos.
 \medskip
+%%Agregar ejemplos: LIME, SHAP
 
-Muchas de las técnicas basadas en simplificación del modelo se fundamentan en la extracción de 
-reglas, una estrategia que busca aproximar el proceso de toma de decisiones del modelo a partir 
-de pares entrada-salida. Un ejemplo de este enfoque es el algoritmo LIME 
-(por sus siglas en inglés \textit{Local Interpretable Model-Agnostic Explanations}) 
-\parencite{ribeiro2016should}, el cual construye un modelo lineal local que aproxima el 
-comportamiento del modelo alrededor de una predicción específica. Este tipo de análisis se 
-conoce como interpretabilidad local, ya que se enfoca en explicar una predicción individual. 
-Por otro lado, la interpretabilidad global busca describir el comportamiento general del modelo 
-completo \parencite{dwivedi2023explainable}.
-\medskip
+Por otro lado, las técnicas específicas al modelo son diseñadas para la interpretación de modelos con 
+características y capacidades específicas. Los metodos para interpretar modelos de caja blanca (intrínsicos) son,
+por definición, técnicas específicas al modelo \parencite{adadi2018peeking}.
 
-Las técnicas de estimación de relevancia de características buscan explicar las predicciones de un 
-modelo mediante la asignación de niveles de importancia a las características de entrada. Un ejemplo 
-de este enfoque es SHAP (por sus siglas en inglés \textit{SHapley Additive exPlanations}) 
-\parencite{lundberg2017unified}, método basado en valores de Shapley que estima la contribución 
-aditiva de cada característica a una predicción.
-\medskip
+%% Tecnicas para CNN
+%% Saliency map, GRAD-CAM, GRAD-CAM++, score cam, layer-wise relevance propagation
 
-Finalmente, las técnicas basadas en visualización son menos comunes en enfoques agnósticos al 
-modelo debido a la dificultad de aplicarlas a arquitecturas generales. Sin embargo, estas técnicas 
-resultan especialmente útiles en el análisis e interpretación de redes convolucionales, 
-particularmente en la visualización de representaciones intermedias y activaciones internas.
-
-\subsubsection{Técnicas Específicas al Modelo}
-Estas técnicas son diseñadas para la interpretación de modelos con características y capacidades
-específicas.
+%% Herramientas de visualización
+%% Tensor board, netron, implementaciones grad cam(?), nn-svg, plot neural net, activation-viz

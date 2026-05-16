@@ -63,6 +63,10 @@ Administración de paquetes.
 
 Librería y funciones de aprendizaje profundo.
 
+**Torchinfo**
+
+Información más detallada de una red.
+
 **Ultralytics**
 
 Librería para la creación y administración de modelo YOLO.
