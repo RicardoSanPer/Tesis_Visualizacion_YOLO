@@ -60,12 +60,57 @@ distintos tipos de modelos independientemente de su arquitectura interna. Estas 
 clasificarse, de manera general, en métodos de visualización, de extracción de conocimientos, de importancia
 de características, y basados en ejemplos.
 \medskip
+
+Dos ejemplos de técnicas agnósticas al modelo son LIME y SHAP. LIME (por sus siglas en inglés 
+\textit{Local Interpretable Model-Agnostic Explanations}) crea modelos localmente lineales centrados
+en las predicciones, mientras que SHAP (por sus siglas en inglés \textit{SHapley Aditive exPlanations})
+calcula la importancia aditiva de ciertas características para una predicción en particular.
 %%Agregar ejemplos: LIME, SHAP
+\medskip
 
 Por otro lado, las técnicas específicas al modelo son diseñadas para la interpretación de modelos con 
 características y capacidades específicas. Los metodos para interpretar modelos de caja blanca (intrínsicos) son,
 por definición, técnicas específicas al modelo \parencite{adadi2018peeking}.
 
+\subsection{Técnicas de Explicación de Redes Neuronales Convolucionales}
+Actualmente los métodos para la explicación de redes neuronales convolucionales se pueden dividir
+en dos categorías en base a su enfoque: las técnicas que buscan entender el proceso de desición
+al mapear la entrada y la salida para determinar regiones de importancia, y las técnicas que
+buscan examinar la red e interpretar las representaciones intermedias.
+
+\subsubsection{Redes Deconvolucionales}
+Las redes deconvolucionales poseen una arquitectura similar a la de las redes convolucionales. 
+Sin embargo, mientras que una red convolucional sigue un enfoque \textit{bottom-up}, 
+construyendo representaciones cada vez más abstractas a partir de características de bajo nivel, 
+una red deconvolucional sigue un enfoque \textit{top-down}. Las redes deconvolucionales buscan 
+reconstruir o aproximar la señal de entrada a partir de los mapas de activación internos de una 
+red convolucional mediante operaciones inversas aproximadas de convolución y pooling 
+\parencite{zeiler2010deconvolutional}. En otras palabras, buscan inferir qué patrones de 
+entrada generan determinadas activaciones dentro de la red.
+
+\subsubsection{Layer-wise Relevance Propagation}
+Layer-wise Relevance Propagation (LRP) es una técnica de interpretabilidad que busca visualizar 
+la contribución de cada píxel o característica de entrada sobre una predicción del modelo. 
+Para ello, distribuye puntajes de relevancia desde la salida de la red hacia las capas 
+anteriores en un proceso similar a la retropropagación, permitiendo identificar qué regiones de 
+la entrada contribuyen en mayor medida a una predicción determinada \parencite{bach2015pixel}.
+
+\subsubsection{Grad-CAM}
+Gradient-weighted Class Activation Mapping (Grad-CAM) es una técnica de visualización que 
+utiliza la información de gradientes propagada hacia la última capa convolucional de una red 
+para generar un mapa de activación discriminativo, el cual resalta las regiones más relevantes 
+de una imagen para una predicción determinada \parencite{selvaraju2017grad}. Grad-CAM++ es una 
+mejora de este método que, entre otras características, mejora la localización de múltiples 
+instancias de una misma clase dentro de una imagen, captura objetos con mayor integridad y 
+generaliza el método para arquitecturas convolucionales especializadas en distintas 
+tareas \parencite{chattopadhay2018grad}.
+
+\subsubsection{Score-CAM}
+Score-CAM es una técnica basada en mapas de activación de clases. A diferencia de Grad-CAM, 
+este método no depende de los gradientes; en su lugar, obtiene los pesos de clase de cada 
+mapa de activación a partir de la contribución de dichos mapas durante la propagación hacia 
+adelante. El resultado final consiste en una combinación lineal de los mapas de activación 
+ponderados por sus respectivos pesos de clase \parencite{wang2020scorecam}.
 %% Tecnicas para CNN
 %% Saliency map, GRAD-CAM, GRAD-CAM++, score cam, layer-wise relevance propagation
 
