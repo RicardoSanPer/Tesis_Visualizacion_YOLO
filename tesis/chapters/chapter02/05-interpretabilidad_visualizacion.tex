@@ -110,9 +110,41 @@ Score-CAM es una técnica basada en mapas de activación de clases. A diferencia
 este método no depende de los gradientes; en su lugar, obtiene los pesos de clase de cada 
 mapa de activación a partir de la contribución de dichos mapas durante la propagación hacia 
 adelante. El resultado final consiste en una combinación lineal de los mapas de activación 
-ponderados por sus respectivos pesos de clase \parencite{wang2020scorecam}.
+ponderados por sus respectivos pesos de clase \parencite{wang2020score}.
 %% Tecnicas para CNN
 %% Saliency map, GRAD-CAM, GRAD-CAM++, score cam, layer-wise relevance propagation
+
+\subsection{Herramientas de visualización}
+A continuación se exploran algunas herramientas de interpretabilidad.
+
+\subsubsection{TensorBoard}
+TensorBoard es una plataforma que proporciona diversas funcionalidades para la experimentación y el análisis 
+de modelos de aprendizaje de máquina. Entre las características útiles para la inspección e 
+interpretación de modelos se encuentran el seguimiento de métricas como la pérdida y la precisión, 
+la visualización del grafo computacional del modelo (capas y operaciones), y la exploración de histogramas 
+de pesos, sesgos y tensores \parencite{tensorboard_docs}.
+
+\subsubsection{Netron}
+Netron es un visor de redes neuronales, modelos de aprendizaje profundo y modelos de aprendizaje de 
+máquina, con soporte para múltiples frameworks, entre ellos PyTorch, TensorFlow y Darknet 
+\parencite{netron}. Esta herramienta permite explorar la arquitectura de un modelo de forma 
+interactiva mediante la inspección de sus capas, así como de sus entradas y salidas.
+
+\subsubsection{Pytorch Grad-Cam}
+PyTorch Grad-CAM (pytorch-grad-cam) es una biblioteca de Python que implementa diversos métodos CAM 
+para la explicabilidad de modelos de visión por computadora. Además de proporcionar implementaciones 
+de estos algoritmos, incluye métricas y herramientas para evaluar y comparar sus resultados 
+\parencite{pytorch-grad-cam}.
+
+\subsubsection{Captum}
+Captum es una biblioteca de Python orientada a la interpretabilidad y explicabilidad de modelos de 
+PyTorch. Implementa una amplia variedad de técnicas de atribución y visualización, entre ellas SHAP, 
+LIME, mapas de saliencia y deconvolución. La biblioteca proporciona una interfaz unificada para la 
+aplicación de estos métodos, facilitando el análisis del comportamiento interno de los modelos y 
+la interpretación de sus predicciones \parencite{captum}.
+
+\subsubsection{Lucid}
+
 
 %% Herramientas de visualización
 %% Tensor board, netron, implementaciones grad cam(?), nn-svg, plot neural net, activation-viz
