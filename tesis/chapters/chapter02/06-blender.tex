@@ -1,0 +1,62 @@
+\section{Blender}
+Blender es un programa de creación 3D de código abierto y libre con herramientas para el 
+pipeline completo, incluyendo modelado, animación, simulación, renderizado y edición de video.
+\medskip
+
+Al ser un programa de creación 3D, Blender permite la interacción con los elementos de una escena
+a través de la interfaz de usuario, nodos de programación visual y una API para su interacción
+mediante scripts. 
+
+\subsection{Arquitectura de Blender}
+Blender organiza los datos en escenas, las cuales definen los objetos visibles, cámaras, luces y
+opciones de renderizado. Un archivo \textit{.blend}, el formato que Blender usa, puede contener
+múltiples escenas, y los datos contenidos en una escena pueden ser vinculados a otra escena, 
+permitiendo su reúso y organización \parencite{blendersceneintro}.
+\medskip
+
+Los objetos, por su parte, son las entidades contenidas en la escena como mallas 3D, esqueletos,
+luces, cámaras y curvas. Cada tipo de objeto está compuesto de dos partes:
+\begin{description}
+    \item[Objeto] Contiene datos de la transformación.
+    \item[Datos de objeto] Contiene datos específicos del tipo de objeto. Por ejemplo, un
+    objeto de malla contiene datos de la geometría, materiales y grupos de vértices, mientras
+    que una cámara en su lugar almacena configuraciones como la longitud focal o el tamaño del
+    sensor.
+\end{description}\parencite{blenderobjectintro}
+\medskip
+
+Finalmente, las colecciones son agrupaciones de objetos dentro de la escena cuyo objetivo principal
+es organizar objetos, además de permitir la manipulación conjunta de algunos parámetros de sus 
+contenidos. Las colecciones pueden contener otras colecciones, pero todas están contenidas
+dentro de la colección raíz de la escena \parencite{blendercollectionintro}.
+
+\subsection{Editor de nodos}
+Blender pone a disposición editores de nodos de geometría y de materiales, los cuales actúan como
+una interfaz de programación visual para la creación y manipulación procedural de los datos
+de geometría y de materiales, respectivamente.
+\medskip
+
+El editor de nodos es utilizado para manipular geometría al agregar un modificador de grupo de nodos
+al objeto. Los nodos de geometría permiten instanciar, generar y modificar geometría, así como alterar
+sus atributos. Uno de sus usos principales es la generación procedural de geometría, lo que permite 
+crear mallas y objetos complejos de forma parametrizada \parencite{blendergeometryintro}.
+\medskip
+
+El editor de nodos de materiales (o editor de \textit{shaders}), por otra parte, se utiliza para 
+modificar el aspecto de un objeto.
+De forma similar a los nodos de geometría, los nodos de material se emplean para la generación
+procedural de las texturas utilizadas por el material y su parametrización \parencite{blendershaderintro}.
+\medskip
+
+Finalmente, Blender ofrece un editor de nodos de composición para manipular el resultado de una
+renderización (como imágenes o videos). Su propósito está enfocado en la edición de posproducción
+de contenido, por lo que queda fuera del alcance de este trabajo \parencite{blendercompositeintro}.
+
+\subsection{API de Python}
+Blender incluye un intérprete de Python, el cual permanece activo de forma continua, para ejecutar scripts de usuario
+y otras herramientas del editor \parencite{blenderapioverview}. Adicionalmente, Blender provee una API estructurada como una biblioteca
+de Python.
+
+La API de Blender permite utilizar las mismas herramientas de la interfaz de usuario a través 
+de un script, además de facilitar la creación de herramientas nuevas y la extensión del motor gráfico
+ \parencite{blenderapiquickstart}.
