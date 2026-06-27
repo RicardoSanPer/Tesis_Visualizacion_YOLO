@@ -53,10 +53,42 @@ renderización (como imágenes o videos). Su propósito está enfocado en la edi
 de contenido, por lo que queda fuera del alcance de este trabajo \parencite{blendercompositeintro}.
 
 \subsection{API de Python}
-Blender incluye un intérprete de Python, el cual permanece activo de forma continua, para ejecutar scripts de usuario
-y otras herramientas del editor \parencite{blenderapioverview}. Adicionalmente, Blender provee una API estructurada como una biblioteca
+Blender incluye un intérprete de Python que permanece activo de forma continua para ejecutar scripts de usuario
+y otras herramientas del editor \parencite{blenderapioverview}. Adicionalmente, esta API está estructurada como una biblioteca
 de Python.
 
-La API de Blender permite utilizar las mismas herramientas de la interfaz de usuario a través 
-de un script, además de facilitar la creación de herramientas nuevas y la extensión del motor gráfico
- \parencite{blenderapiquickstart}.
+La API de Blender permite utilizar las mismas funciones de la interfaz de usuario a través 
+de scripts, además de facilitar la creación de herramientas nuevas y la extensión del 
+motor gráfico \parencite{blenderapiquickstart}. Estas funcionalidades se pueden empaquetar en 
+forma de una extensión para facilitar su distribución e instalación.
+
+\subsection{Elementos de gráficos 3D}
+Al ser un programa de creación 3D, Blender comparte los elementos fundamentales de cualquier motor gráfico.
+Estos incluyen:
+\begin{description}
+    \item[Modelos] Son colecciones de vértices, aristas y caras que describen la malla de un
+    objeto tridimensional. Blender pone a disposición del usuario primitivas básicas como
+    cubos y esferas; no obstante, se pueden construir objetos de mayor complejidad.
+    \item[Texturas] Son imágenes utilizadas para modificar el aspecto de la superficie de
+    una malla. En conjunto, diversas texturas pueden definir un material, el cual determina atributos
+    superficiales como la rugosidad, metalicidad, color base y normales. Las texturas también pueden ser
+    3D, en cuyo caso definen el aspecto del volumen contenido en la malla.
+    \item[Iluminación] Las luces iluminan la escena y, en conjunto con las texturas y materiales,
+    definen un modelo de iluminación PBR (\textit{Physically Based Rendering} o renderizado basado en la física), 
+    aunque también se pueden emplear modelos de iluminación no realista.
+    \item[Animación] Blender proporciona herramientas como huesos y esqueletos que permiten modificar la pose de un modelo a través
+    del tiempo. Adicionalmente, la mayoría de los atributos de un objeto se pueden animar mediante el uso de la línea de tiempo.
+    \item[Cámaras] Son modelos virtuales que definen el espacio de la escena visible durante
+    el renderizado. Los parámetros de la cámara son análogos a los de sus contrapartes reales, lo que permite
+    ajustar atributos como el campo de visión y el tamaño del sensor.
+    \item[Renderizado] Consiste en la generación de una imagen bidimensional a partir de los objetos visibles por la cámara. Blender
+    incluye tres motores de renderizado: Workbench, utilizado para visualizar la escena de forma rápida en el editor; 
+    EEVEE, que emplea técnicas de rasterización para la visualización en tiempo real; y Cycles, el cual utiliza técnicas de 
+    trazado de rayos (simulando el comportamiento físico de la luz) para lograr un resultado fotorrealista, a costa de un mayor 
+    tiempo de cómputo y demanda de recursos.
+    \item[Composición] Se utiliza para manipular el resultado del renderizado, abarcando la corrección de color
+    y efectos de posprocesado. También permite combinar el resultado de múltiples renderizados mediante capas y pases.
+    \item[Simulación] Adicionalmente, Blender puede realizar diversos tipos de simulaciones físicas, incluyendo la 
+    dinámica de partículas, cuerpos rígidos, cuerpos blandos, fluidos, cabello y ropa.
+\end{description}
+ 
