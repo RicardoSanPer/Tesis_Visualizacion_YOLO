@@ -1,66 +1,34 @@
-\section{Blender}
+\section{Blender y Visualización}
 Blender es un programa de creación 3D de código abierto y libre con herramientas para el 
-pipeline completo, incluyendo modelado, animación, simulación, renderizado y edición de video.
+\textit{pipeline} completo, incluyendo modelado, animación, simulación, renderizado y edición de video.
 \medskip
 
 Al ser un programa de creación 3D, Blender permite la interacción con los elementos de una escena
 a través de la interfaz de usuario, nodos de programación visual y una API para su interacción
-mediante scripts. 
+mediante \textit{scripts}. 
 
 \subsection{Arquitectura de Blender}
 Blender organiza los datos en escenas, las cuales definen los objetos visibles, cámaras, luces y
-opciones de renderizado. Un archivo \textit{.blend}, el formato que Blender usa, puede contener
-múltiples escenas, y los datos contenidos en una escena pueden ser vinculados a otra escena, 
+opciones de renderizado. Un archivo \textit{.blend} ---el formato nativo de Blender--- puede contener
+múltiples escenas, y los datos contenidos en una de ellas pueden ser vinculados a otra, 
 permitiendo su reúso y organización \parencite{blendersceneintro}.
 \medskip
 
-Los objetos, por su parte, son las entidades contenidas en la escena como mallas 3D, esqueletos,
+Los objetos, por su parte, son las entidades contenidas en la escena, tales como mallas 3D, esqueletos,
 luces, cámaras y curvas. Cada tipo de objeto está compuesto de dos partes:
 \begin{description}
-    \item[Objeto] Contiene datos de la transformación.
-    \item[Datos de objeto] Contiene datos específicos del tipo de objeto. Por ejemplo, un
-    objeto de malla contiene datos de la geometría, materiales y grupos de vértices, mientras
-    que una cámara en su lugar almacena configuraciones como la longitud focal o el tamaño del
+    \item[Objeto] Contiene los datos de la transformación espacial.
+    \item[Datos de objeto] Contiene los datos específicos del tipo de objeto. Por ejemplo, un
+    objeto de malla almacena información de la geometría, materiales y grupos de vértices, mientras
+    que una cámara, en su lugar, guarda configuraciones como la longitud focal o el tamaño del
     sensor.
 \end{description}\parencite{blenderobjectintro}
 \medskip
 
 Finalmente, las colecciones son agrupaciones de objetos dentro de la escena cuyo objetivo principal
-es organizar objetos, además de permitir la manipulación conjunta de algunos parámetros de sus 
-contenidos. Las colecciones pueden contener otras colecciones, pero todas están contenidas
+es la organización de los elementos, además de permitir la manipulación conjunta de algunos parámetros de sus 
+contenidos. Las colecciones pueden contener otras colecciones, pero todas están integradas 
 dentro de la colección raíz de la escena \parencite{blendercollectionintro}.
-
-\subsection{Editor de nodos}
-Blender pone a disposición editores de nodos de geometría y de materiales, los cuales actúan como
-una interfaz de programación visual para la creación y manipulación procedural de los datos
-de geometría y de materiales, respectivamente.
-\medskip
-
-El editor de nodos es utilizado para manipular geometría al agregar un modificador de grupo de nodos
-al objeto. Los nodos de geometría permiten instanciar, generar y modificar geometría, así como alterar
-sus atributos. Uno de sus usos principales es la generación procedural de geometría, lo que permite 
-crear mallas y objetos complejos de forma parametrizada \parencite{blendergeometryintro}.
-\medskip
-
-El editor de nodos de materiales (o editor de \textit{shaders}), por otra parte, se utiliza para 
-modificar el aspecto de un objeto.
-De forma similar a los nodos de geometría, los nodos de material se emplean para la generación
-procedural de las texturas utilizadas por el material y su parametrización \parencite{blendershaderintro}.
-\medskip
-
-Finalmente, Blender ofrece un editor de nodos de composición para manipular el resultado de una
-renderización (como imágenes o videos). Su propósito está enfocado en la edición de posproducción
-de contenido, por lo que queda fuera del alcance de este trabajo \parencite{blendercompositeintro}.
-
-\subsection{API de Python}
-Blender incluye un intérprete de Python que permanece activo de forma continua para ejecutar scripts de usuario
-y otras herramientas del editor \parencite{blenderapioverview}. Adicionalmente, esta API está estructurada como una biblioteca
-de Python.
-
-La API de Blender permite utilizar las mismas funciones de la interfaz de usuario a través 
-de scripts, además de facilitar la creación de herramientas nuevas y la extensión del 
-motor gráfico \parencite{blenderapiquickstart}. Estas funcionalidades se pueden empaquetar en 
-forma de una extensión para facilitar su distribución e instalación.
 
 \subsection{Elementos de gráficos 3D}
 Al ser un programa de creación 3D, Blender comparte los elementos fundamentales de cualquier motor gráfico.
@@ -91,4 +59,74 @@ Estos incluyen:
     \item[Simulación] Adicionalmente, Blender puede realizar diversos tipos de simulaciones físicas, incluyendo la 
     dinámica de partículas, cuerpos rígidos, cuerpos blandos, fluidos, cabello y ropa.
 \end{description}
- 
+
+\subsection{Editor de nodos}
+Blender pone a disposición editores de nodos de geometría y de materiales, los cuales actúan como
+una interfaz de programación visual para la creación y manipulación procedural de los datos
+de geometría y de materiales, respectivamente.
+\medskip
+
+El editor de nodos se utiliza para manipular la topología al agregar un modificador de grupo de nodos
+al objeto. Los nodos de geometría permiten instanciar, generar y modificar geometría, así como alterar
+sus atributos. Uno de sus usos principales es la generación procedural de geometría, lo que permite 
+crear mallas y objetos complejos de forma parametrizada \parencite{blendergeometryintro}.
+\medskip
+
+El editor de nodos de materiales (o editor de \textit{shaders}), por otra parte, se utiliza para 
+modificar el aspecto de un objeto.
+De forma similar a los nodos de geometría, los nodos de material se emplean para la generación
+procedural de las texturas utilizadas por el material y su parametrización \parencite{blendershaderintro}.
+\medskip
+
+Finalmente, Blender ofrece un editor de nodos de composición para manipular el resultado de una
+renderización (como imágenes o videos). Su propósito está enfocado en la edición de posproducción
+de contenido, por lo que queda fuera del alcance de este trabajo \parencite{blendercompositeintro}.
+
+\subsection{API de Python}
+Blender incluye un intérprete de Python que permanece activo de forma continua para ejecutar \textit{scripts} de usuario
+y otras herramientas del editor \parencite{blenderapioverview}. Adicionalmente, esta API está estructurada como una biblioteca
+de Python independiente, cuyo núcleo se gestiona a través del módulo principal \textit{bpy}. Este módulo actúa como el puente 
+operativo entre el entorno de programación y la arquitectura interna de datos de Blender.
+
+La API de Blender permite utilizar las mismas funciones de la interfaz de usuario a través 
+de \textit{scripts}, además de facilitar la creación de herramientas nuevas y la extensión del 
+motor gráfico \parencite{blenderapiquickstart}. Estas funcionalidades se pueden empaquetar en 
+forma de una extensión para facilitar su distribución e instalación.
+
+\subsection{Visualización Científica}
+Visualización es la comunicación de información mediante el uso de representaciones gráficas. El
+uso de imágenes para transimitir información ha sido usado por su facilidad de transmitir una
+gran cantidad de información de forma paralela y rápida independientemente del lenguaje. %p1
+El
+campo de la visualización está intimamente relacionado con el campo de las gráficas por
+computadora, originalmente siendo un subcampo de esta. Pero mientras las gráficas por
+computadora se enfoca en las primitivas gráficas y su organización, la visualización se enfoca
+en los datos de trasfondo, involucrando otras disciplinas como interacciones entre humanos y computadoras,
+estadística, psicología de la percepción, entro otros.%p23
+ La visualización científica se enfoca en la 
+visualización de datos de orígen científico.
+
+La visualización de datos requiere de un mapeo de los datos a una representación, con cada valor
+de los datos usualmente siendo representado por una primitiva gráfica como un punto, linea, o forma
+geométrica, o por sus atributos como tamaño, posición, orientación y color. Métodos de
+visualización moderna consideran tambien la interactividad con la visualización: se proveen controles
+para su visualización y mapeo. %p30
+
+El proceso de visualización se puede definir como un pipeline consistente de los siguientes pasos
+\begin{description}
+    \item[Selección de datos] Consiste en identificar los datos a visualizar.
+    \item[Mapeo visual de datos] Es el mapeo de valores de datos a elementos gráficos o sus atributos.
+    Usualmente involucra también el procesamiento previo de los datos, proceso que transforma los datos
+    a un formato usable por el sistema de visualización.
+    \item[Transformación de vista] Consiste en la especificación de atributos de la visualización
+    independientes de los datos como selección de colores e iluminación.
+    \item[Generación de la visualización] Se genera la imagen final de la visualización, incluyendo
+    información adicional para facilitar su interpretación.
+\end{description} %P33
+
+\subsection{Visualización 3D}
+
+% Fundamentos de visualizacion 3d
+% mapeo de datos a atributos visuales (shaders y materiales)
+% generacion procedural de estructuras masivas mediante nodos de geometria
+% automatización de renderizado en 2do plano
