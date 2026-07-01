@@ -102,15 +102,15 @@ campo de la visualización está intimamente relacionado con el campo de las gr�
 computadora, originalmente siendo un subcampo de esta. Pero mientras las gráficas por
 computadora se enfoca en las primitivas gráficas y su organización, la visualización se enfoca
 en los datos de trasfondo, involucrando otras disciplinas como interacciones entre humanos y computadoras,
-estadística, psicología de la percepción, entro otros.%p23
- La visualización científica se enfoca en la 
+estadística, psicología de la percepción, entro otros \parencite[p.23]{ward2010interactive}.%p23
+La visualización científica se enfoca en la 
 visualización de datos de orígen científico.
 
 La visualización de datos requiere de un mapeo de los datos a una representación, con cada valor
 de los datos usualmente siendo representado por una primitiva gráfica como un punto, linea, o forma
 geométrica, o por sus atributos como tamaño, posición, orientación y color. Métodos de
 visualización moderna consideran tambien la interactividad con la visualización: se proveen controles
-para su visualización y mapeo. %p30
+para su visualización y mapeo \parencite[p.30]{ward2010interactive}. %p30
 
 El proceso de visualización se puede definir como un pipeline consistente de los siguientes pasos
 \begin{description}
@@ -122,10 +122,53 @@ El proceso de visualización se puede definir como un pipeline consistente de lo
     independientes de los datos como selección de colores e iluminación.
     \item[Generación de la visualización] Se genera la imagen final de la visualización, incluyendo
     información adicional para facilitar su interpretación.
-\end{description} %P33
+\end{description} \parencite[p.33]{ward2010interactive}
+%P33
 
 \subsection{Visualización 3D}
+Como se exploró en las redes neuronales convolucionales, los datos de interés para su visualización 
+son los tensores que conforman la salida de las capas de convolución, donde cada valor representa
+una activación de la neurona correspondiente. Estos datos se pueden interpretar como datos volumétricos.
+\medskip
 
+Los métodos de visualización de datos volumétricos se pueden clasificar en tres categorías generales:
+
+\subsubsection{Técnicas de Rebanado}
+En las técnicas de rebanado se utiliza un plano 2D para cortar el volumen y extraer una rebanada 2D
+de los datos, similar a un corte transversal.
+
+\subsubsection{Técnicas de isosuperficies}
+En estas técnicas se utiliza un valor de corte que define los valores que se consideran "dentro" y "fuera"
+del volumen, a partir de los cuales se contruye una malla para visualizar la superficie definida.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/marching_cubes.pdf} 
+    \caption[Algoritmo Marching Cubes]{Algoritmo Marching Cubes en 2D. Para cada combinación de valores vecinos
+    "dentro" (azul) y "fuera" existe un mapeo a una arista (o malla en el caso 3D) correspondiente. 
+    El algoritmo "marcha" sobre cada casilla (o cubo en el caso 3D), insertando el mapeo correspondiente.
+    Algunas implementaciones introducen interpolado para suavizar las curvas resultantes.
+    Fuente: elaboración propia.}
+    \label{fig:marching_cubes}
+\end{figure}
+\subsubsection{Renderizado de Volumen}
+En el renderizado de volumen los valores son interpretados como una densidad. Utilizando técnicas de
+trazado de rayos el volumen se visualiza como una nube de densidades.
+
+Esta técnica es utilizada principalmente en efectos especiales para renderizar fluidos, gases y
+nubes.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/volumetric_rendering.pdf} 
+    \caption[Renderizado Volumétrico]{Renderizado Volumetrico. De la camara se emiten rayos que,
+    al intersectar con el volumen, toman muestras en diversos puntos para determinar la opacidad
+    final del pixel correspondiente al rayo. Algunas implementaciones avanzadas emiten rayos adicionales
+    a partir de los puntos de muestreo para obtener resultados más realistas con sombreado e iluminación.
+    Fuente: elaboración propia.}
+    \label{fig:volumetric_rendering}
+\end{figure}
+
+\subsection{OpenVDB}
 % Fundamentos de visualizacion 3d
 % mapeo de datos a atributos visuales (shaders y materiales)
 % generacion procedural de estructuras masivas mediante nodos de geometria
