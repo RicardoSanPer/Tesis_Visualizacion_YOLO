@@ -192,9 +192,9 @@ o densidades sobre una rejilla, y algoritmos como \textit{marching cubes} convie
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=1\textwidth]{images/simulacion_fluido.png} 
-    \caption[Simulación de Fluido]{Simulación de fluido en Blender. Utiliza partículas para
-    simular fluidos, a partir de las cuales genera una malla para representar su superficie.
-    Los nodos de geometría también pueden convertir datos volumétricos en formato OpenVDB a una malla.
+    \caption[Simulación de Fluido]{Simulación de fluidos en Blender. 
+    El motor físico utiliza un sistema de partículas para calcular la dinámica del fluido, 
+    a partir del cual genera una malla poligonal para representar su superficie.
     Fuente: elaboración propia.}
     \label{fig:fluid_sim}
 \end{figure}
@@ -220,11 +220,35 @@ no definidas, tales como nubes, humo y fuego.
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=1\textwidth]{images/visualizacion_openvdb.png} 
-    \caption[Renderizado Volumétrico en Blender]{Blender permite el renderizado de volumenes
-    a partir de su simulador de gases o de información volumétrica importada en formato OpenVDB.
+    \caption[Renderizado Volumétrico en Blender]{Renderizado volumétrico en Blender. 
+    El motor gráfico permite la representación de volúmenes tanto a partir de su simulador 
+    nativo de fluidos y gases como de información externa importada en formato OpenVDB. 
     Fuente: elaboración propia utilizando datos volumétricos de muestra de OpenVDB \parencite{openvdb_sample_data}.}
     \label{fig:volume_vdb}
 \end{figure}
+
+\subsubsection{OpenVDB}
+OpenVDB es una librería de C++ de código abierto que contiene una estructura de datos jerárquica y herramientas para la
+manipulación de datos volumétricos discretizados en una cuadrícula tridimensional. Está basada
+en VDB, una arquitectura desarrollada por Ken Museth para el estudio de animación DreamWorks Animation \parencite{openvdbabout}.
+\medskip
+
+El formato provisto por OpenVDB ofrece un espacio de indexación tridimensional infinito, almacenamiento compacto para datos dispersos,
+acceso rápido a la memoria y una colección de algoritmos optimizados para su estructura jerárquica. Estas características lo convierten
+en el estándar de la industria para el manejo de datos volumétricos en el campo de los efectos visuales (VFX),
+siendo adoptado por una amplia variedad de programas relacionados con la animación, simulación y gráficos por computadora en tiempo real.
+\medskip
+
+Blender forma parte del conjunto de herramientas que integran este soporte. El programa permite la importación nativa de datos volumétricos 
+en formato OpenVDB, visualizándolos por defecto como un volumen disperso continuo (véase la figura~\ref{fig:volume_vdb}); no obstante, 
+mediante el uso de nodos de geometría es posible convertirlos y visualizarlos como mallas poligonales, 
+o bien, procesarlos como una secuencia de secciones transversales sólidas utilizando los nodos de 
+materiales. 
+\medskip
+
+OpenVDB también ofrece soporte para Python en forma de un módulo con funciones para la
+manipulación básica de volúmenes. Este componente, en conjunto con el intérprete de Python integrado en Blender, 
+permite la creación, lectura y modificación de datos volumétricos mediante scripts directamente dentro del editor.
 % Fundamentos de visualizacion 3d
 % mapeo de datos a atributos visuales (shaders y materiales)
 % generacion procedural de estructuras masivas mediante nodos de geometria
