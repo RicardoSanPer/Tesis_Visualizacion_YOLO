@@ -60,6 +60,24 @@ Estos incluyen:
     dinámica de partículas, cuerpos rígidos, cuerpos blandos, fluidos, cabello y ropa.
 \end{description}
 
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/escena_blender.png} 
+    \caption[Escena en Blender]{Escena en Blender. Contiene varios elementos gráficos en la forma de
+    mallas, una fuente de iluminación, y una cámara.
+    Fuente: elaboración propia, utilizando modelo de tetera proveniente de \parencite{newell1975utah}.}
+    \label{fig:blender_scene}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/blender_render_examples.pdf} 
+    \caption[Renderizado en Blender]{Ejemplos de renderizado en Blender utilizando los motores
+    Workbench (izquierda), EEVEE (centro) y Cycles (derecha).
+    Fuente: elaboración propia, utilizando modelo de tetera proveniente de \parencite{newell1975utah}.}
+    \label{fig:blender_render}
+\end{figure}
+
 \subsection{Editor de nodos}
 Blender pone a disposición editores de nodos de geometría y de materiales, los cuales actúan como
 una interfaz de programación visual para la creación y manipulación procedural de los datos
@@ -81,6 +99,17 @@ procedural de las texturas utilizadas por el material y su parametrización \par
 Finalmente, Blender ofrece un editor de nodos de composición para manipular el resultado de una
 renderización (como imágenes o videos). Su propósito está enfocado en la edición de posproducción
 de contenido, por lo que queda fuera del alcance de este trabajo \parencite{blendercompositeintro}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/node_editors_example.png} 
+    \caption[Escena Creada con Editores de Nodos]{Ejemplo de escena creada con los editores de nodos.
+    Los nodos de geometría crean un plano al que aplica perturbaciones para generar terreno y distribuir
+    vegetación. Los nodos de material asignan texturas al terreno para dar un aspecto
+    natural.
+    Fuente: elaboración propia.}
+    \label{fig:node_editor}
+\end{figure}
 
 \subsection{API de Python}
 Blender incluye un intérprete de Python que permanece activo de forma continua para ejecutar \textit{scripts} de usuario
@@ -126,49 +155,76 @@ El proceso de visualización se puede definir como un pipeline consistente de lo
 %P33
 
 \subsection{Visualización 3D}
-Como se exploró en las redes neuronales convolucionales, los datos de interés para su visualización 
+Como se exploró en la sección de redes neuronales convolucionales, los datos de interés para su visualización 
 son los tensores que conforman la salida de las capas de convolución, donde cada valor representa
-una activación de la neurona correspondiente. Estos datos se pueden interpretar como datos volumétricos.
+una activación de la neurona correspondiente. Estos datos se pueden interpretar formalmente como datos volumétricos.
 \medskip
 
-Los métodos de visualización de datos volumétricos se pueden clasificar en tres categorías generales:
+Los métodos de visualización de datos volumétricos se pueden clasificar en tres categorías generales 
+\parencite[p.~195]{ward2010interactive}:
 
-\subsubsection{Técnicas de Rebanado}
-En las técnicas de rebanado se utiliza un plano 2D para cortar el volumen y extraer una rebanada 2D
-de los datos, similar a un corte transversal.
+\subsubsection{Técnicas de rebanado}
+En las técnicas de rebanado se utiliza un plano bidimensional para cortar el volumen y extraer una sección
+de los datos, de manera análoga a un corte transversal médico o estructural.
+
+Esta técnica es la más conveniente para la visualización de los tensores de una red neuronal convolucional,
+pues cada sección transversal de un volumen de activación corresponde directamente a la activación de un filtro 
+en particular de la convolución.
 
 \subsubsection{Técnicas de isosuperficies}
-En estas técnicas se utiliza un valor de corte que define los valores que se consideran "dentro" y "fuera"
-del volumen, a partir de los cuales se contruye una malla para visualizar la superficie definida.
+En estas técnicas se utiliza un valor umbral de corte que define los valores considerados «dentro» y «fuera»
+de un volumen, a partir de los cuales se construye una malla poligonal para visualizar su contorno o superficie externa.
+
+Estas técnicas son ampliamente utilizadas en la simulación de fluidos, donde estos se representan en forma de partículas
+o densidades sobre una rejilla, y algoritmos como \textit{marching cubes} convierten dicho volumen en una malla geométrica.
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=1\textwidth]{diagrams/chapter2/marching_cubes.pdf} 
-    \caption[Algoritmo Marching Cubes]{Algoritmo Marching Cubes en 2D. Para cada combinación de valores vecinos
-    "dentro" (azul) y "fuera" existe un mapeo a una arista (o malla en el caso 3D) correspondiente. 
-    El algoritmo "marcha" sobre cada casilla (o cubo en el caso 3D), insertando el mapeo correspondiente.
-    Algunas implementaciones introducen interpolado para suavizar las curvas resultantes.
+    \caption[Algoritmo Marching Cubes]{Algoritmo \textit{Marching Cubes} \parencite{lorensen1998marching}en 2D. Para cada combinación de valores vecinos
+    «dentro» (azul) y «fuera» existe un mapeo a una arista (o malla en el caso 3D) correspondiente. 
+    El algoritmo «marcha» sobre cada casilla (o cubo en el caso 3D), insertando el mapeo correspondiente
+    para producir una malla. Algunas implementaciones introducen interpolación lineal para suavizar las superficies resultantes.
     Fuente: elaboración propia.}
     \label{fig:marching_cubes}
 \end{figure}
-\subsubsection{Renderizado de Volumen}
-En el renderizado de volumen los valores son interpretados como una densidad. Utilizando técnicas de
-trazado de rayos el volumen se visualiza como una nube de densidades.
 
-Esta técnica es utilizada principalmente en efectos especiales para renderizar fluidos, gases y
-nubes.
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/simulacion_fluido.png} 
+    \caption[Simulación de Fluido]{Simulación de fluido en Blender. Utiliza partículas para
+    simular fluidos, a partir de las cuales genera una malla para representar su superficie.
+    Los nodos de geometría también pueden convertir datos volumétricos en formato OpenVDB a una malla.
+    Fuente: elaboración propia.}
+    \label{fig:fluid_sim}
+\end{figure}
+
+\subsubsection{Renderizado de volumen}
+En el renderizado de volumen, los valores se interpretan como una densidad espacial. Utilizando técnicas de
+marchado de rayos (\textit{ray marching}), el volumen se visualiza como una nube densa continua en lugar de una superficie sólida.
+
+Esta técnica es empleada principalmente en la industria de los efectos visuales para renderizar gases y objetos con fronteras
+no definidas, tales como nubes, humo y fuego.
+
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=1\textwidth]{diagrams/chapter2/volumetric_rendering.pdf} 
-    \caption[Renderizado Volumétrico]{Renderizado Volumetrico. De la camara se emiten rayos que,
-    al intersectar con el volumen, toman muestras en diversos puntos para determinar la opacidad
-    final del pixel correspondiente al rayo. Algunas implementaciones avanzadas emiten rayos adicionales
-    a partir de los puntos de muestreo para obtener resultados más realistas con sombreado e iluminación.
+    \caption[Renderizado Volumétrico]{Renderizado volumétrico. Desde la cámara se proyectan rayos que,
+    al intersectar con el volumen, toman muestras en puntos discretos (es decir, «marchan» en intervalos regulares) 
+    para determinar la opacidad y el color final del píxel correspondiente \parencite{perlin1989hypertexture}. Algunas implementaciones avanzadas emiten rayos adicionales 
+    hacia las fuentes de luz a partir de los puntos de muestreo para calcular sombras e iluminación volumétrica realista.
     Fuente: elaboración propia.}
     \label{fig:volumetric_rendering}
 \end{figure}
 
-\subsection{OpenVDB}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/visualizacion_openvdb.png} 
+    \caption[Renderizado Volumétrico en Blender]{Blender permite el renderizado de volumenes
+    a partir de su simulador de gases o de información volumétrica importada en formato OpenVDB.
+    Fuente: elaboración propia utilizando datos volumétricos de muestra de OpenVDB \parencite{openvdb_sample_data}.}
+    \label{fig:volume_vdb}
+\end{figure}
 % Fundamentos de visualizacion 3d
 % mapeo de datos a atributos visuales (shaders y materiales)
 % generacion procedural de estructuras masivas mediante nodos de geometria
