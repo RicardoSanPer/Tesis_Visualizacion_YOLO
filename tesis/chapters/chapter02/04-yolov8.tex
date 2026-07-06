@@ -1,3 +1,45 @@
-\section{YOLOv8}
+\section{YOLOv2}
+YOLOv2 es el segundo modelo de la familia YOLO, desarrollado por Joseph Redmon y Ali Farhadi en 2016.
+YOLOv2 es conocido tambien como YOLO9000 por su capacidad de detectar mas de 9000 clases de objetos, y
+es una mejora directa del modelo anterior.
+\medskip
+
+Una de sus principales contribuciones fue el desarrollo de nuevos métodos para aprovechar la gran cantidad
+de datos de entrenamiento existentes de clasificación para expandir el alcance de los sistemas de
+detección. Utilizando una vista jerarquica de la clasificación de objetos permite combinar distintos
+datasets para el entrenamiento del modelo.
+\medskip
+
+YOLOv2 se enfoca también en mejorar la sensibilidad y localización del modelo anterior, manteniendo la
+precisión de clasificación. Adicionalmente busca simplificar el modelo en ves de escalarlo para mantener
+su velocidad. Para incrementar mAP YOLOv2 introduce normalización por lotes y un clasificador de alta
+resolución entrenado para una resolución de $448\times448$, a diferencia de YOLO que está entrenado en una 
+resolución de $224\times224$. YOLOv2 usa cajas ancla para predecir las cajas delimitadoras, a diferencia de
+YOLO que predice directamente las coordenadas de estas.
+\medskip
+
 
 \subsection{Arquitectura}
+YOLOv2 introduce la arquitectura Darknet-19, una arquitectura de red con 19 capas convolucionales y 5
+capas de maxpooling.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/darknet-19.pdf} 
+    \caption[Arquitectura YOLOv2]{Arquitectura de YOLOv2 (Darknet-19)
+    Fuente: elaboración propia, a partir de \parencite{redmon2017yolo9000}.}
+    \label{fig:darknet_arch}
+\end{figure}
+
+Para el desarrollo de este trabajo se utilizará YOLOv2-Tiny, una variación del modelo con
+una arquitectura más simplificada, diseñada para poder ser ejecutada en sistemas con recursos
+limitados.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/tiny-architecture.pdf} 
+    \caption[Arquitectura YOLOv2-Tiny]{Arquitectura de YOLOv2-Tiny.
+    Fuente: elaboración propia, a partir del archivo de configuración en el repositorio
+    oficial de Darknet \parencite{redmon_darknet_yolov2tiny}.}
+    \label{fig:tiny_arch}
+\end{figure}
