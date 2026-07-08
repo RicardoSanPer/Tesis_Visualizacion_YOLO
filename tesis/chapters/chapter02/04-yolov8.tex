@@ -1,21 +1,26 @@
 \section{YOLOv2}
-YOLOv2 es el segundo modelo de la familia YOLO, desarrollado por Joseph Redmon y Ali Farhadi en 2016.
-YOLOv2 es conocido tambien como YOLO9000 por su capacidad de detectar mas de 9000 clases de objetos, y
-es una mejora directa del modelo anterior.
+YOLOv2 es la segunda iteración de la familia de modelos YOLO, desarrollada por Joseph Redmon y Ali Farhadi en 2016 
+\parencite{redmon2017yolo9000}. Esta arquitectura es conocida también en la literatura como YOLO9000 debido a su 
+capacidad para detectar más de 9000 clases de objetos de forma simultánea, posicionándose como una optimización 
+directa del modelo predecesor.
 \medskip
 
-Una de sus principales contribuciones fue el desarrollo de nuevos métodos para aprovechar la gran cantidad
-de datos de entrenamiento existentes de clasificación para expandir el alcance de los sistemas de
-detección. Utilizando una vista jerarquica de la clasificación de objetos permite combinar distintos
-datasets para el entrenamiento del modelo.
+Una de sus principales contribuciones metodológicas fue el desarrollo de un mecanismo de entrenamiento conjunto que 
+aprovecha los grandes volúmenes de datos existentes en tareas de clasificación para expandir el alcance de los 
+sistemas de detección. Mediante una estructura jerárquica para la clasificación de conceptos 
+(denominada \textit{WordTree}), el algoritmo permite combinar conjuntos de datos heterogéneos durante la etapa de 
+aprendizaje del modelo.
 \medskip
 
-YOLOv2 se enfoca también en mejorar la sensibilidad y localización del modelo anterior, manteniendo la
-precisión de clasificación. Adicionalmente busca simplificar el modelo en ves de escalarlo para mantener
-su velocidad. Para incrementar mAP YOLOv2 introduce normalización por lotes y un clasificador de alta
-resolución entrenado para una resolución de $448\times448$, a diferencia de YOLO que está entrenado en una 
-resolución de $224\times224$. YOLOv2 usa cajas ancla para predecir las cajas delimitadoras, a diferencia de
-YOLO que predice directamente las coordenadas de estas.
+Asimismo, YOLOv2 se enfoca en incrementar la sensibilidad (\textit{recall}) y la precisión en la localización de 
+las cajas respecto a la versión anterior, resguardando la eficiencia computacional. Con el objetivo de mantener 
+una alta velocidad de inferencia, la arquitectura se simplifica estructuralmente en vez de escalarse de forma 
+masiva. Para incrementar la métrica mAP (\textit{mean Average Precision}), YOLOv2 introduce normalización por lotes 
+(\textit{batch normalization}) en todas las capas convolucionales y emplea un clasificador de alta resolución 
+ajustado a $448\times448$ píxeles, a diferencia de la primera versión entrenada a $224\times224$ píxeles. 
+Finalmente, el modelo implementa el uso de cajas de anclaje (\textit{anchor boxes}) para guiar la predicción 
+de los límites de los objetos, sustituyendo la regresión directa de coordenadas cartesianas utilizada originalmente 
+en YOLOv1.
 \medskip
 
 
@@ -32,7 +37,7 @@ capas de maxpooling.
 \end{figure}
 
 Para el desarrollo de este trabajo se utilizará YOLOv2-Tiny, una variación del modelo con
-una arquitectura más simplificada, diseñada para poder ser ejecutada en sistemas con recursos
+una arquitectura más simple diseñada para poder ser ejecutada en sistemas con recursos
 limitados.
 
 \begin{figure}[!htbp]
@@ -43,3 +48,23 @@ limitados.
     oficial de Darknet \parencite{redmon_darknet_yolov2tiny}.}
     \label{fig:tiny_arch}
 \end{figure}
+
+\subsection{Clasificación y detección}
+YOLOv2 utiliza un árbol jerárquico denominado \textit{WordTree}, en el cual cada clase potencial que el modelo puede
+detectar es representada como un nodo dentro de una estructura arbórea. En esta arquitectura, la raíz representa
+la categoría más general («objeto físico»), mientras que las ramificaciones sucesivas corresponden a conceptos
+más específicos. Dicha organización permite combinar clases que no son mutuamente excluyentes 
+(como una raza de perro específica y la categoría general «perro»). Para calcular la probabilidad
+de una clase determinada, el modelo calcula la probabilidad condicional de cada nodo con respecto a sus predecesores, 
+multiplicándolas a lo largo del camino que conecta dicho nodo con la raíz del árbol. El mecanismo \textit{WordTree} facilita 
+asimismo la fusión de conjuntos de datos heterogéneos al mapear simplemente las nuevas clases a los nodos correspondientes en la jerarquía.
+\medskip
+
+Por otra parte, como se estableció previamente, YOLOv2 se estructura como una red completamente convolucional. 
+A diferencia de su predecesor, el modelo elimina las capas totalmente conectadas para la etapa de predicción e implementa 
+cajas de anclaje (\textit{anchor boxes}). Esto permite desacoplar la localización espacial de la predicción de la clase de la caja, 
+al tiempo que incrementa sustancialmente el volumen total de regiones propuestas en comparación con YOLOv1. 
+Asimismo, el algoritmo aplica el método de agrupamiento $k$-medias (\textit{$k$-means clustering}) sobre el conjunto de datos de entrenamiento 
+para determinar de forma automática las dimensiones óptimas de las cajas de anclaje iniciales, eliminando la necesidad de sintonizarlas 
+manualmente y optimizando el proceso de convergencia. Finalmente, en lugar de predecir coordenadas globales absolutas, YOLOv2 calcula 
+el desfase (\textit{offset}) de la caja con respecto al centro de la celda de la cuadrícula, lo que incrementa significativamente la estabilidad del entrenamiento.
