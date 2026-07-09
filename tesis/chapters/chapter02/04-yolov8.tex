@@ -21,8 +21,6 @@ ajustado a $448\times448$ píxeles, a diferencia de la primera versión entrenad
 Finalmente, el modelo implementa el uso de cajas de anclaje (\textit{anchor boxes}) para guiar la predicción 
 de los límites de los objetos, sustituyendo la regresión directa de coordenadas cartesianas utilizada originalmente 
 en YOLOv1.
-\medskip
-
 
 \subsection{Arquitectura}
 YOLOv2 introduce la arquitectura Darknet-19, una arquitectura de red con 19 capas convolucionales y 5
@@ -63,8 +61,8 @@ asimismo la fusión de conjuntos de datos heterogéneos al mapear simplemente la
 Por otra parte, como se estableció previamente, YOLOv2 se estructura como una red completamente convolucional. 
 A diferencia de su predecesor, el modelo elimina las capas totalmente conectadas para la etapa de predicción e implementa 
 cajas de anclaje (\textit{anchor boxes}). Esto permite desacoplar la localización espacial de la predicción de la clase de la caja, 
-al tiempo que incrementa sustancialmente el volumen total de regiones propuestas en comparación con YOLOv1. 
+al tiempo que incrementa substancialmente el volumen total de regiones propuestas en comparación con YOLOv1. 
 Asimismo, el algoritmo aplica el método de agrupamiento $k$-medias (\textit{$k$-means clustering}) sobre el conjunto de datos de entrenamiento 
-para determinar de forma automática las dimensiones óptimas de las cajas de anclaje iniciales, eliminando la necesidad de sintonizarlas 
+para determinar de forma automática las dimensiones óptimas de las cajas de anclaje iniciales, eliminando la necesidad de ajustarlas 
 manualmente y optimizando el proceso de convergencia. Finalmente, en lugar de predecir coordenadas globales absolutas, YOLOv2 calcula 
 el desfase (\textit{offset}) de la caja con respecto al centro de la celda de la cuadrícula, lo que incrementa significativamente la estabilidad del entrenamiento.
