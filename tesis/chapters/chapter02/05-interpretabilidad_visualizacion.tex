@@ -1,0 +1,155 @@
+\section{Interpretabilidad y Explicabilidad de Inteligencia Artificial}
+Hasta el momento se ha construido una base para entender el funcionamiento de redes neuronales y redes 
+convolucionales desde un punto de vista técnico. Sin embargo, la creciente adopción de sistemas de 
+inteligencia artificial en distintas industrias y en la vida cotidiana ha generado la necesidad de 
+desarrollar modelos más transparentes, cuyos procesos de toma de decisiones resulten comprensibles para 
+los usuarios humanos. A partir de esta necesidad surgen los conceptos de inteligencia artificial interpretable
+ e inteligencia artificial explicable (\textit{Explainable Artificial Intelligence}, o XAI).
+\medskip
+
+El campo de la inteligencia artificial explicable (XAI) tiene como propósito desarrollar métodos que 
+permitan mejorar la interpretabilidad y comprensibilidad de los modelos, ya sea mediante el diseño de 
+arquitecturas inherentemente transparentes o a través de herramientas y métodos externos orientados a 
+explicar su comportamiento y predicciones \parencite{arrieta2020explainable}.
+\medskip
+
+Los métodos de XAI pueden clasificarse según tres ejes principales: modelos de caja blanca o caja negra, 
+interpretabilidad global o local, y métodos agnósticos o específicos del modelo.
+
+\subsection{Modelos de caja blanca y negra}
+Esta clasificación de métodos de XAI depende de la interpretabilidad inherente de un modelo o sistema.
+\medskip
+
+Los modelos de caja blanca, también conocidos como modelos transparentes o intrínsicos, son aquellos cuyas 
+arquitecturas y mecanismos son lo suficientemente simples como para ser comprendidos sin herramientas 
+adicionales. Ejemplos de modelos en esta clasificación incluye modelos cuya simplicidad permite describir 
+matemáticamente la relación  entre las entradas y las salidas como modelos de regresión lineal, de 
+regresión logística y los árboles de decisiones.
+\medskip
+
+Por otro lado, los modelos de caja negra son aquellos con mecanismos internos altamente complejos como para 
+ser fácilmente interpretables. El entendimiento de estos sistemas suele abstraerse a niveles más altos, 
+mientras que su funcionamiento interno detallado permanece difícil de interpretar. Un ejemplo de este 
+tipo son las redes neuronales modernas, las cuales poseen arquitecturas considerablemente complejas: una 
+sola capa puede contener miles de parámetros. Describir matemáticamente la relación entre las entradas y 
+salidas de estos modelos puede implicar la consideración de miles, o incluso millones, de parámetros. Por 
+esta razón, modelos de aprendizaje profundo como las redes convolucionales y los grandes modelos de 
+lenguaje (\textit{Large Language Models}, o LLMs) suelen clasificarse en esta 
+categoría \parencite{dwivedi2023explainable}. Debido a su complejidad, estos modelos suelen requerir métodos 
+post-hoc para su explicación, es decir, técnicas externas orientadas a interpretar su comportamiento y 
+predicciones.
+
+\subsection{Interpretación Global y Local}
+Los métodos de XAI pueden clasificarse en base al alcance de la interpretabilidad.
+\medskip
+
+La interpretabilidad local se refiere a métodos que buscan explicar el comportamiento del modelo para una 
+predicción específica. Estos métodos buscan explicar y analizar la toma de decisiones del modelo con el fin 
+de comprender el razonamiento detrás de una predicción.
+\medskip
+
+Por otro lado, la interpretabilidad global proporciona un análisis general del modelo y de su 
+comportamiento \parencite{dwivedi2023explainable}.
+
+\subsection{Técnicas Agnósticas y Específicas al Modelo}
+Las técnicas pueden casificarse en base al modelo que se examina, siendo agnósticas o específicas al modelo.
+\medskip
+
+Las técnicas agnósticas al modelo están diseñadas para explicar el proceso de predicción de 
+distintos tipos de modelos independientemente de su arquitectura interna. Estas técnicas pueden 
+clasificarse, de manera general, en métodos de visualización, de extracción de conocimientos, de importancia
+de características, y basados en ejemplos.
+\medskip
+
+Dos ejemplos de técnicas agnósticas al modelo son LIME y SHAP. LIME (por sus siglas en inglés 
+\textit{Local Interpretable Model-Agnostic Explanations}) crea modelos localmente lineales centrados
+en las predicciones, mientras que SHAP (por sus siglas en inglés \textit{SHapley Aditive exPlanations})
+calcula la importancia aditiva de ciertas características para una predicción en particular.
+%%Agregar ejemplos: LIME, SHAP
+\medskip
+
+Por otro lado, las técnicas específicas al modelo son diseñadas para la interpretación de modelos con 
+características y capacidades específicas. Los metodos para interpretar modelos de caja blanca (intrínsicos) son,
+por definición, técnicas específicas al modelo \parencite{adadi2018peeking}.
+
+\subsection{Técnicas de Explicación de Redes Neuronales Convolucionales}
+Actualmente los métodos para la explicación de redes neuronales convolucionales se pueden dividir
+en dos categorías en base a su enfoque: las técnicas que buscan entender el proceso de desición
+al mapear la entrada y la salida para determinar regiones de importancia, y las técnicas que
+buscan examinar la red e interpretar las representaciones intermedias.
+
+\subsubsection{Redes Deconvolucionales}
+Las redes deconvolucionales poseen una arquitectura similar a la de las redes convolucionales. 
+Sin embargo, mientras que una red convolucional sigue un enfoque \textit{bottom-up}, 
+construyendo representaciones cada vez más abstractas a partir de características de bajo nivel, 
+una red deconvolucional sigue un enfoque \textit{top-down}. Las redes deconvolucionales buscan 
+reconstruir o aproximar la señal de entrada a partir de los mapas de activación internos de una 
+red convolucional mediante operaciones inversas aproximadas de convolución y pooling 
+\parencite{zeiler2010deconvolutional}. En otras palabras, buscan inferir qué patrones de 
+entrada generan determinadas activaciones dentro de la red.
+
+\subsubsection{Layer-wise Relevance Propagation}
+Layer-wise Relevance Propagation (LRP) es una técnica de interpretabilidad que busca visualizar 
+la contribución de cada píxel o característica de entrada sobre una predicción del modelo. 
+Para ello, distribuye puntajes de relevancia desde la salida de la red hacia las capas 
+anteriores en un proceso similar a la retropropagación, permitiendo identificar qué regiones de 
+la entrada contribuyen en mayor medida a una predicción determinada \parencite{bach2015pixel}.
+
+\subsubsection{Grad-CAM}
+Gradient-weighted Class Activation Mapping (Grad-CAM) es una técnica de visualización que 
+utiliza la información de gradientes propagada hacia la última capa convolucional de una red 
+para generar un mapa de activación discriminativo, el cual resalta las regiones más relevantes 
+de una imagen para una predicción determinada \parencite{selvaraju2017grad}. Grad-CAM++ es una 
+mejora de este método que, entre otras características, mejora la localización de múltiples 
+instancias de una misma clase dentro de una imagen, captura objetos con mayor integridad y 
+generaliza el método para arquitecturas convolucionales especializadas en distintas 
+tareas \parencite{chattopadhay2018grad}.
+
+\subsubsection{Score-CAM}
+Score-CAM es una técnica basada en mapas de activación de clases. A diferencia de Grad-CAM, 
+este método no depende de los gradientes; en su lugar, obtiene los pesos de clase de cada 
+mapa de activación a partir de la contribución de dichos mapas durante la propagación hacia 
+adelante. El resultado final consiste en una combinación lineal de los mapas de activación 
+ponderados por sus respectivos pesos de clase \parencite{wang2020score}.
+%% Tecnicas para CNN
+%% Saliency map, GRAD-CAM, GRAD-CAM++, score cam, layer-wise relevance propagation
+
+\subsection{Herramientas de visualización}
+A continuación se exploran algunas herramientas de interpretabilidad.
+
+\subsubsection{TensorBoard}
+TensorBoard es una plataforma que proporciona diversas funcionalidades para la experimentación y el análisis 
+de modelos de aprendizaje de máquina. Entre las características útiles para la inspección e 
+interpretación de modelos se encuentran el seguimiento de métricas como la pérdida y la precisión, 
+la visualización del grafo computacional del modelo (capas y operaciones), y la exploración de histogramas 
+de pesos, sesgos y tensores \parencite{tensorboard_docs}.
+
+\subsubsection{Netron}
+Netron es un visor de redes neuronales, modelos de aprendizaje profundo y modelos de aprendizaje de 
+máquina, con soporte para múltiples frameworks, entre ellos PyTorch, TensorFlow y Darknet 
+\parencite{netron}. Esta herramienta permite explorar la arquitectura de un modelo de forma 
+interactiva mediante la inspección de sus capas, así como de sus entradas y salidas.
+
+\subsubsection{Pytorch Grad-Cam}
+PyTorch Grad-CAM (pytorch-grad-cam) es una biblioteca de Python que implementa diversos métodos CAM 
+para la explicabilidad de modelos de visión por computadora. Además de proporcionar implementaciones 
+de estos algoritmos, incluye métricas y herramientas para evaluar y comparar sus resultados 
+\parencite{pytorch-grad-cam}.
+
+\subsubsection{Captum}
+Captum es una biblioteca de Python orientada a la interpretabilidad y explicabilidad de modelos de 
+PyTorch. Implementa una amplia variedad de técnicas de atribución y visualización, entre ellas SHAP, 
+LIME, mapas de saliencia y deconvolución. La biblioteca proporciona una interfaz unificada para la 
+aplicación de estos métodos, facilitando el análisis del comportamiento interno de los modelos y 
+la interpretación de sus predicciones \parencite{captum}.
+
+\subsubsection{Lucid}
+Lucid es una colección de herramientas e infraestructura para la investigación de la 
+interpretabilidad de redes neuronales \parencite{lucid}. Entre sus principales funcionalidades se encuentra la 
+visualización de características, mediante la generación de 
+imágenes sintéticas que maximizan la activación de neuronas, canales o capas específicas de una 
+red neuronal.
+
+
+%% Herramientas de visualización
+%% Tensor board, netron, implementaciones grad cam(?), nn-svg, plot neural net, activation-viz

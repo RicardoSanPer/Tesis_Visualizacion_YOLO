@@ -1,0 +1,290 @@
+\section{Técnicas de Detección de Objetos}
+Hasta el momento se han explorado las redes convolucionales como herramientas de clasificación:
+dada una imagen de entrada, un modelo puede extraer características y asignar una etiqueta en
+función de estas. Las redes convolucionales han sido ampliamente utilizadas durante décadas
+en tareas como el reconocimiento de rostros y de peatones. Sin embargo, su aplicación directa
+a la detección genérica de objetos es limitada.
+\medskip
+
+La detección genérica de objetos tiene como objetivo la localización y clasificación de múltiples
+objetos en una imagen. Para ello, las redes convolucionales son delegadas al papel de un módulo con la
+tarea de extraer características dentro de un modelo de detección de objetos, mientras otros 
+módulos se encargan de proponer regiones de la entrada donde hay posibles regiones de 
+interés, y de realizar la predicción de la localización y clasificación \parencite{zhao2019object}.
+
+\subsection{Representación y Localización de Objetos}
+En la detección de objetos, la caja delimitadora (\textit{bounding box}) se utiliza para describir la
+localización de un objeto y, junto con su clasificación, constituye uno de los principales resultados
+producidos por el modelo. 
+\medskip
+
+La caja delimitadora es un rectángulo que encierra la región de la imagen en la que se identifica un
+objeto de interés. Esta puede expresarse como un par de coordenadas correspondientes a la esquina
+superior izquierda y la esquina inferior derecha de la caja, o bien como la coordenada del centro de
+la caja junto con su anchura y altura \parencite[p.630]{zhang2023dive}.
+\medskip
+
+Geométricamente, la caja delimitadora representa la región más simple y pequeña de la imagen que 
+contiene al objeto de interés.
+%% Bounding boxes
+%% centro vs esquinas
+%% Interpretación geometrica
+
+\subsection{Medidas de Solapamiento y Evaluación}
+Una vez que el modelo ha inferido una caja delimitadora, se puede evaluar su rendimiento mediante una métrica conocida como \textit{intersección sobre unión} (por sus siglas en inglés, \textit{IoU, intersection over union}).
+\medskip
+
+Dadas una caja $A$, que representa la caja delimitadora real del objeto de interés, y una caja $B$ inferida por el modelo, el IoU se calcula como el cociente entre el área de intersección y el área de unión de $A$ y $B$, tomando valores en el rango $(0,1]$:
+\begin{equation}
+IoU=\frac{A\cap B}{A\cup B}
+\end{equation}
+
+Adicionalmente, el objeto contenido dentro de la caja delimitadora real se considera una muestra positiva, mientras que el resto de la imagen corresponde a muestras negativas. Al realizar una detección, se pueden distinguir cuatro casos:
+\begin{itemize}
+    \item Verdadero positivo (TP): ocurre cuando el modelo predice correctamente una muestra positiva.
+    \item Verdadero negativo (TN): ocurre cuando el modelo predice correctamente una muestra negativa.
+    \item Falso positivo (FP): ocurre cuando el modelo predice incorrectamente una muestra positiva.
+    \item Falso negativo (FN): ocurre cuando el modelo no detecta una muestra positiva.
+\end{itemize}
+
+A partir de estos casos se definen dos métricas de evaluación: la precisión (P) y la sensibilidad (R). La precisión representa la proporción de predicciones positivas que corresponden a verdaderos positivos:
+\begin{equation}
+    P = \frac{TP}{TP + FP}
+\end{equation}
+Por otro lado, la sensibilidad representa la proporción de verdaderos positivos respecto al total de muestras positivas reales:
+\begin{equation}
+    R = \frac{TP}{TP + FN}
+\end{equation}
+
+Con la precisión y la sensibilidad se construye la curva precisión-sensibilidad (PR), con la sensibilidad en el eje horizontal y la precisión en el eje vertical, la cual describe el rendimiento del modelo al variar el umbral de decisión. La precisión promedio (AP) de una categoría o clase se define como:
+\begin{equation}
+    AP = \int_{0}^{1} P(R),dR
+\end{equation}
+La precisión promedio media del modelo (mAP), considerando $n$ categorías, se define como:
+\begin{equation}
+    mAP=\frac{1}{n}\sum_{i=1}^{n}AP_{i}
+\end{equation}
+\parencite{zeng2026deep}
+%% IoU
+%% Precisión/recall
+%% mAP
+
+\subsection{Detección por Ventana Deslizante}
+Uno de detección de objetos sencillo es el de detección por ventana deslizante, en el cual
+se define una ventana de tamaño fijo que se desliza sobre la imagen, utilizando cada región 
+cubierta como entrada independiente para la red.
+\medskip
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter2/deteccion_sliding_window.pdf} 
+    \caption[Detección de objetos mediante ventana deslizante]{Detección de objetos mediante ventana 
+    deslizante. Cada región es utilizada como entrada para la red convolucional, y la ubicación de 
+    las cajas delimitadoras se infiere a partir de la confianza de la predicción.
+    Fuente: elaboración propia.}
+    \label{fig:detection_sliding_window}
+\end{figure}
+
+La principal desventaja de este método es su ineficiencia, ya que requiere evaluar múltiples
+regiones de la imagen de forma redundante, lo que lo hace poco práctico para aplicaciones en
+tiempo real. Además, el tamaño de los objetos detectables está limitado por el tamaño de la
+ventana \parencite{zhao2019object}.
+
+\subsection{Predicción de Regiones y Escalas}
+Para resolver los problemas presentados por el método de la ventana deslizante, los modelos modernos
+utilizan un enfoque de predicción basado en regiones mediante cajas ancla
+(\textit{anchor boxes}). Estas cajas actúan como referencias iniciales para la detección y 
+consisten en un conjunto de cajas predefinidas de distintas escalas y relaciones de aspecto, 
+que se colocan de forma repetida sobre una cuadrícula derivada del mapa de características de la red.
+\medskip
+
+Cada caja ancla genera una predicción que incluye ajustes de posición y tamaño mediante un desfase 
+(\textit{offset}), así como una puntuación de presencia de objeto y probabilidades de clase.
+\medskip
+
+Finalmente, las predicciones se filtran utilizando estas puntuaciones y técnicas como la supresión 
+de no máximos (\textit{Non-Maximum Suppression}) para obtener las detecciones finales \parencite{matlabanchorboxes}.
+\medskip
+
+Adicionalmente, aprovechando la arquitectura de múltiples capas de los modelos de detección,
+es posible realizar detección multi-escala de objetos de diferentes tamaños al utilizar mapas 
+de características en distintas profundidades de la red.
+\medskip
+
+Las capas más profundas presentan un mayor campo receptivo sobre la entrada, lo que permite 
+detectar objetos de mayor tamaño, mientras que las capas menos profundas tienen un campo 
+receptivo más pequeño y son más adecuadas para detectar objetos de menor tamaño \parencite[pp.~648--649]{zhang2023dive}.
+%% Anchor boxes
+%% prediccion de offset
+%% deteccion multi-escala
+
+\subsection{Supresión de Detecciones Redundantes}
+Al realizar la predicción de múltiples objetos, es posible que múltiples cajas ancla se ajusten al mismo
+objeto, resultando en varias cajas delimitadoras con un solapamiento considerable entre sí.
+Este problema se puede abordar combinando las cajas correspondientes al mismo objeto en una sola mediante
+supresión de no máximos (\textit{non-maximum suppression}, o \textit{NMS}).
+\medskip
+
+El algoritmo NMS funciona de la siguiente forma:
+\begin{itemize}
+    \item[1.] Para cada caja delimitadora predicha $B$, se asigna la clase con mayor probabilidad y
+    se utiliza dicha probabilidad $p$ como puntuación de $B$.
+    \item[2.] Se ordenan las cajas en una lista de forma descendente según el valor $p$.
+    \item[3.] Se toma la caja $B$ con mayor puntuación $p$ como referencia y se descartan de la lista
+    todas aquellas cajas cuyo valor de IoU respecto a $B$ sea mayor que un umbral predefinido.
+    \item[4.] Se repite el paso 3 con la siguiente caja de mayor puntuación $p$, hasta que todas las cajas
+    hayan sido procesadas. De este modo, la lista final contiene únicamente cajas con alta puntuación y bajo solapamiento entre sí.
+    \item[5.] La lista resultante corresponde al conjunto final de detecciones.
+\end{itemize}
+La NMS permite suprimir detecciones redundantes y simplificar la salida del modelo \parencite{zhang2023dive}.
+Su principal desventaja aparece cuando el modelo predice dos objetos distintos con un solapamiento considerable
+(por ejemplo, cuando uno ocluye parcialmente a otro), lo que puede provocar que una de las detecciones sea
+eliminada de forma errónea.
+%% NMS
+%% Problema de multiples predicciones
+%% Idea general del algoritmo
+
+
+\subsection{Detección de Dos Etapas}
+Modelos de detección modernos se pueden clasificar en uno de dos tipos, uno de ellos siendo
+la detección de dos etapas.
+\medskip
+
+La detección de objetos en dos etapas es un método
+que divide la tarea de detección en dos etapas principales: la propuesta de regiones,
+que busca identificar regiones de interés en la entrada, y la fase de clasificación,
+que realiza la clasificación por cada región utilizando redes convolucionales. La detección de dos
+etapas ofrece una presición superior al metodo de una etapa discutido posteriormente, pero al coste de
+un mayor tiempo de computación. 
+\medskip
+
+Tres modelos notables que utilizan este método son R-CNN, Fast R-CNN, y Faster R-CNN.
+
+\subsubsection{R-CNN}
+R-CNN (\textit{Regions with CNN features}) es un modelo de detección de objetos que combina 
+propuestas de regiones con redes neuronales convolucionales. R-CNN se divide en tres módulos: 
+el primero genera propuestas de regiones independientes de la categoría, el segundo utiliza una 
+red convolucional para extraer vectores de características, y el tercero emplea un conjunto de 
+máquinas de vectores de soporte (\textit{support vector machines}, o SVM) específicos por clase.
+\medskip
+
+Para el primer módulo, R-CNN utiliza búsqueda selectiva para seleccionar aproximadamente dos mil 
+propuestas de regiones. Este algoritmo genera regiones iniciales 
+a partir de bordes y agrupaciones perceptuales en la imagen, y posteriormente combina regiones 
+adyacentes mediante un algoritmo codicioso basándose en su similitud \parencite{uijlings2013selective}.
+\medskip
+
+Para el módulo de extracción de características, se emplea una red convolucional de cinco capas 
+convolucionales y dos capas totalmente conectadas para extraer un vector de características de 
+4096 dimensiones por cada región propuesta. Dado que la red requiere entradas de tamaño fijo, 
+cada región es distorsionada para ajustarse a las dimensiones esperadas por la red.
+\medskip
+
+Finalmente, para cada clase se asigna una puntuación a cada vector de características utilizando 
+el SVM correspondiente, y posteriormente se aplica supresión no máxima (NMS) codiciosa con un umbral 
+aprendido para eliminar detecciones redundantes.
+\medskip
+
+Este modelo destacó por su rendimiento en PASCAL VOC 2012, logrando una mejora superior al 3
+0\% respecto al mejor resultado previo. Este desempeño fue posible gracias al uso 
+de propuestas de regiones y al preentrenamiento supervisado de la red sobre grandes conjuntos 
+de datos con anotaciones a nivel de imagen, seguido de un ajuste fino para la tarea 
+de detección de objetos \parencite{girshick2014rich}.
+
+\subsubsection{Fast R-CNN}
+Fast R-CNN es un modelo de detección de objetos propuesto para resolver varias de las limitaciones de 
+R-CNN, particularmente la complejidad de su entrenamiento y su alto costo computacional en inferencia.
+\medskip
+
+A diferencia de R-CNN, Fast R-CNN procesa la imagen completa una sola vez mediante una red convolucional 
+para obtener un mapa de características. A partir de este mapa y de un conjunto de propuestas de región 
+externas, el modelo proyecta cada propuesta como una región de interés (\textit{Region of Interest}, o RoI) 
+y extrae de ella un vector de características de tamaño fijo mediante una capa de agrupamiento RoI 
+(\textit{RoI pooling}). Cada vector es posteriormente procesado por capas totalmente conectadas que se 
+ramifican en dos salidas: una distribución de probabilidad sobre las clases y un conjunto de regresores 
+para refinar las posiciones de las cajas delimitadoras.
+\medskip
+
+El modelo logra un procesamiento considerablemente más rápido al compartir el cómputo convolucional 
+entre múltiples RoI de una misma imagen, evitando reevaluar la red completa para cada propuesta como 
+ocurre en R-CNN. Además, el entrenamiento se simplifica al realizar una sola etapa de ajuste fino 
+(\textit{fine-tuning}), en contraste con el entrenamiento multietapa de R-CNN. Fast R-CNN también 
+mejora la precisión, alcanzando un mAP de 66\% en PASCAL VOC 2012, y reduce significativamente el 
+tiempo de inferencia a aproximadamente 0.3 segundos por imagen, sin considerar el tiempo requerido 
+para generar propuestas de región \parencite{girshick2015fast}.
+
+\subsubsection{Faster R-CNN}
+Faster R-CNN fue introducido con el propósito de proponer un método de generación de regiones candidato 
+más rápido que los existentes, ya que, a pesar de que modelos previos como Fast R-CNN alcanzaban velocidades 
+cercanas al tiempo real en inferencia, aún se veían limitados por el costo computacional de la etapa 
+de propuesta de regiones.
+\medskip
+
+Para resolver este problema, Faster R-CNN introduce las redes de propuesta de regiones 
+(\textit{region proposal networks}, o RPN). Estas reutilizan los mapas de características generados por 
+la red convolucional principal y añaden una pequeña red totalmente convolucional para predecir propuestas 
+de región de manera eficiente. Esta red produce, para cada ubicación, tanto una estimación de objetividad 
+como ajustes de regresión para refinar cajas delimitadoras candidatas. Además, 
+las RPN pueden entrenarse de extremo a extremo específicamente para la tarea de propuesta de regiones.
+\medskip
+
+Las redes de propuesta de regiones se implementan como una red totalmente convolucional sobre el mapa de 
+características compartido. Como entrada toman la salida de una capa convolucional y la procesan 
+mediante una ventana deslizante. Cada ventana es proyectada a una representación de menor 
+dimensionalidad mediante una convolución, y posteriormente se procesa mediante dos capas 
+convolucionales paralelas: una para clasificación y otra para regresión. 
+Estas capas producen, respectivamente, puntajes de objetividad y propuestas de 
+regiones en forma de cajas de ancla para múltiples escalas y relaciones de aspecto \parencite{ren2016faster}.
+
+%% R-CNN
+%% Fast R-CNN
+%% Faster R-CNN
+
+\subsection{Detección de Una Etapa}
+La detección de objetos de una etapa es otro modelo de detección de objetos.
+\medskip
+
+A diferencia del metodo de dos etapas, el de una etapa realiza la detección y clasificación en una sola etapa,
+basandose en regresión y clasificación global, y mapeando directamente de pixeles a coordenadas de cajas
+delimitadoras y probabilidades de clases. Esto reduce el tiempo requerido para detectar objetos, volviendo
+este metodo ideal para detección de objetos en tiempo real, pero al costo de una menor presición.
+\medskip
+
+Dos familias de modelos representativos de este método son SSD y YOLO.
+
+\subsubsection{SSD}
+El modelo \textit{Single Shot MultiBox Detector} (SSD) fue propuesto en 2016 para atender las limitaciones 
+de los modelos de detección de dos etapas, como Faster R-CNN. Este modelo logra una mayor velocidad y 
+precisión de detección (59 fotogramas por segundo con 74.3\% mAP) en comparación con Faster R-CNN 
+(7 fotogramas por segundo con 73.2\% mAP), al eliminar la etapa explícita de propuesta de regiones y el 
+remuestreo de características.
+\medskip
+
+SSD utiliza una red convolucional de clasificación de imágenes como base, eliminando sus capas finales de 
+clasificación y agregando capas convolucionales adicionales para la detección de objetos. Estas extensiones 
+incluyen mapas de características de tamaño progresivamente menor para permitir la detección multiescala, 
+así como capas convolucionales que predicen, para cada ubicación, tanto probabilidades de clase como 
+desplazamientos con respecto a un conjunto de cajas predeterminadas asociadas a cada mapa de 
+características \parencite{liu2016ssd}.
+
+\subsubsection{YOLO }
+YOLO (\textit{You Only Look Once}) es un modelo de detección de objetos de una etapa propuesto en 2015. 
+A diferencia de los enfoques de dos etapas, YOLO formula la detección de objetos como un problema de 
+regresión unificada, prediciendo directamente, a partir de la imagen completa, probabilidades de clase 
+y coordenadas de cajas delimitadoras.
+\medskip
+
+YOLO logra altas velocidades de detección al unificar localización y clasificación en una sola pasada, 
+lo que simplifica considerablemente el pipeline de detección y permite alcanzar velocidades de hasta 150 
+fotogramas por segundo. Además, el modelo analiza la imagen de forma global, incorporando información 
+contextual sobre las clases y sus apariciones, lo que reduce aproximadamente a la mitad los errores de 
+fondo en comparación con otros modelos. Adicionalmente, YOLO aprende representaciones que generalizan mejor 
+a nuevos dominios y entradas inesperadas \parencite{redmon2016you}.
+\medskip
+
+A partir de esta propuesta surgieron múltiples iteraciones que extendieron y refinaron la arquitectura 
+original. El enfoque de este trabajo se centra en YOLOv8.
+
+%% SSD
+%% YOLO
+

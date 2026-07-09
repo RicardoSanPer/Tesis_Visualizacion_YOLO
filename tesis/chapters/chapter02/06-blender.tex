@@ -1,0 +1,255 @@
+\section{Blender y Visualización}
+Blender es un programa de creación 3D de código abierto y libre con herramientas para el 
+\textit{pipeline} completo, incluyendo modelado, animación, simulación, renderizado y edición de video.
+\medskip
+
+Al ser un programa de creación 3D, Blender permite la interacción con los elementos de una escena
+a través de la interfaz de usuario, nodos de programación visual y una API para su interacción
+mediante \textit{scripts}. 
+
+\subsection{Arquitectura de Blender}
+Blender organiza los datos en escenas, las cuales definen los objetos visibles, cámaras, luces y
+opciones de renderizado. Un archivo \textit{.blend} ---el formato nativo de Blender--- puede contener
+múltiples escenas, y los datos contenidos en una de ellas pueden ser vinculados a otra, 
+permitiendo su reúso y organización \parencite{blendersceneintro}.
+\medskip
+
+Los objetos, por su parte, son las entidades contenidas en la escena, tales como mallas 3D, esqueletos,
+luces, cámaras y curvas. Cada tipo de objeto está compuesto de dos partes:
+\begin{description}
+    \item[Objeto] Contiene los datos de la transformación espacial.
+    \item[Datos de objeto] Contiene los datos específicos del tipo de objeto. Por ejemplo, un
+    objeto de malla almacena información de la geometría, materiales y grupos de vértices, mientras
+    que una cámara, en su lugar, guarda configuraciones como la longitud focal o el tamaño del
+    sensor.
+\end{description}\parencite{blenderobjectintro}
+\medskip
+
+Finalmente, las colecciones son agrupaciones de objetos dentro de la escena cuyo objetivo principal
+es la organización de los elementos, además de permitir la manipulación conjunta de algunos parámetros de sus 
+contenidos. Las colecciones pueden contener otras colecciones, pero todas están integradas 
+dentro de la colección raíz de la escena \parencite{blendercollectionintro}.
+
+\subsection{Elementos de gráficos 3D}
+Al ser un programa de creación 3D, Blender comparte los elementos fundamentales de cualquier motor gráfico.
+Estos incluyen:
+\begin{description}
+    \item[Modelos] Son colecciones de vértices, aristas y caras que describen la malla de un
+    objeto tridimensional. Blender pone a disposición del usuario primitivas básicas como
+    cubos y esferas; no obstante, se pueden construir objetos de mayor complejidad.
+    \item[Texturas] Son imágenes utilizadas para modificar el aspecto de la superficie de
+    una malla. En conjunto, diversas texturas pueden definir un material, el cual determina atributos
+    superficiales como la rugosidad, metalicidad, color base y normales. Las texturas también pueden ser
+    3D, en cuyo caso definen el aspecto del volumen contenido en la malla.
+    \item[Iluminación] Las luces iluminan la escena y, en conjunto con las texturas y materiales,
+    definen un modelo de iluminación PBR (\textit{Physically Based Rendering} o renderizado basado en la física), 
+    aunque también se pueden emplear modelos de iluminación no realista.
+    \item[Animación] Blender proporciona herramientas como huesos y esqueletos que permiten modificar la pose de un modelo a través
+    del tiempo. Adicionalmente, la mayoría de los atributos de un objeto se pueden animar mediante el uso de la línea de tiempo.
+    \item[Cámaras] Son modelos virtuales que definen el espacio de la escena visible durante
+    el renderizado. Los parámetros de la cámara son análogos a los de sus contrapartes reales, lo que permite
+    ajustar atributos como el campo de visión y el tamaño del sensor.
+    \item[Renderizado] Consiste en la generación de una imagen bidimensional a partir de los objetos visibles por la cámara. Blender
+    incluye tres motores de renderizado: Workbench, utilizado para visualizar la escena de forma rápida en el editor; 
+    EEVEE, que emplea técnicas de rasterización para la visualización en tiempo real; y Cycles, el cual utiliza técnicas de 
+    trazado de rayos (simulando el comportamiento físico de la luz) para lograr un resultado fotorrealista, a costa de un mayor 
+    tiempo de cómputo y demanda de recursos.
+    \item[Composición] Se utiliza para manipular el resultado del renderizado, abarcando la corrección de color
+    y efectos de posprocesado. También permite combinar el resultado de múltiples renderizados mediante capas y pases.
+    \item[Simulación] Adicionalmente, Blender puede realizar diversos tipos de simulaciones físicas, incluyendo la 
+    dinámica de partículas, cuerpos rígidos, cuerpos blandos, fluidos, cabello y ropa.
+\end{description}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/escena_blender.png} 
+    \caption[Escena en Blender]{Escena en Blender. Contiene varios elementos gráficos en la forma de
+    mallas, una fuente de iluminación, y una cámara.
+    Fuente: elaboración propia, utilizando modelo de tetera proveniente de \parencite{newell1975utah}.}
+    \label{fig:blender_scene}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/blender_render_examples.pdf} 
+    \caption[Renderizado en Blender]{Ejemplos de renderizado en Blender utilizando los motores
+    Workbench (izquierda), EEVEE (centro) y Cycles (derecha).
+    Fuente: elaboración propia, utilizando modelo de tetera proveniente de \parencite{newell1975utah}.}
+    \label{fig:blender_render}
+\end{figure}
+
+\subsection{Editor de nodos}
+Blender pone a disposición editores de nodos de geometría y de materiales, los cuales actúan como
+una interfaz de programación visual para la creación y manipulación procedural de los datos
+de geometría y de materiales, respectivamente.
+\medskip
+
+El editor de nodos se utiliza para manipular la topología al agregar un modificador de grupo de nodos
+al objeto. Los nodos de geometría permiten instanciar, generar y modificar geometría, así como alterar
+sus atributos. Uno de sus usos principales es la generación procedural de geometría, lo que permite 
+crear mallas y objetos complejos de forma parametrizada \parencite{blendergeometryintro}.
+\medskip
+
+El editor de nodos de materiales (o editor de \textit{shaders}), por otra parte, se utiliza para 
+modificar el aspecto de un objeto.
+De forma similar a los nodos de geometría, los nodos de material se emplean para la generación
+procedural de las texturas utilizadas por el material y su parametrización \parencite{blendershaderintro}.
+\medskip
+
+Finalmente, Blender ofrece un editor de nodos de composición para manipular el resultado de una
+renderización (como imágenes o videos). Su propósito está enfocado en la edición de posproducción
+de contenido, por lo que queda fuera del alcance de este trabajo \parencite{blendercompositeintro}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/node_editors_example.png} 
+    \caption[Escena Creada con Editores de Nodos]{Ejemplo de escena creada con los editores de nodos.
+    Los nodos de geometría crean un plano al que aplica perturbaciones para generar terreno y distribuir
+    vegetación. Los nodos de material asignan texturas al terreno para dar un aspecto
+    natural.
+    Fuente: elaboración propia.}
+    \label{fig:node_editor}
+\end{figure}
+
+\subsection{API de Python}
+Blender incluye un intérprete de Python que permanece activo de forma continua para ejecutar \textit{scripts} de usuario
+y otras herramientas del editor \parencite{blenderapioverview}. Adicionalmente, esta API está estructurada como una biblioteca
+de Python independiente, cuyo núcleo se gestiona a través del módulo principal \textit{bpy}. Este módulo actúa como el puente 
+operativo entre el entorno de programación y la arquitectura interna de datos de Blender.
+
+La API de Blender permite utilizar las mismas funciones de la interfaz de usuario a través 
+de \textit{scripts}, además de facilitar la creación de herramientas nuevas y la extensión del 
+motor gráfico \parencite{blenderapiquickstart}. Estas funcionalidades se pueden empaquetar en 
+forma de una extensión para facilitar su distribución e instalación.
+
+\subsection{Visualización Científica}
+Visualización es la comunicación de información mediante el uso de representaciones gráficas. El
+uso de imágenes para transimitir información ha sido usado por su facilidad de transmitir una
+gran cantidad de información de forma paralela y rápida independientemente del lenguaje. %p1
+El
+campo de la visualización está intimamente relacionado con el campo de las gráficas por
+computadora, originalmente siendo un subcampo de esta. Pero mientras las gráficas por
+computadora se enfoca en las primitivas gráficas y su organización, la visualización se enfoca
+en los datos de trasfondo, involucrando otras disciplinas como interacciones entre humanos y computadoras,
+estadística, psicología de la percepción, entro otros \parencite[p.23]{ward2010interactive}.%p23
+La visualización científica se enfoca en la 
+visualización de datos de orígen científico.
+
+La visualización de datos requiere de un mapeo de los datos a una representación, con cada valor
+de los datos usualmente siendo representado por una primitiva gráfica como un punto, linea, o forma
+geométrica, o por sus atributos como tamaño, posición, orientación y color. Métodos de
+visualización moderna consideran tambien la interactividad con la visualización: se proveen controles
+para su visualización y mapeo \parencite[p.30]{ward2010interactive}. %p30
+
+El proceso de visualización se puede definir como un pipeline consistente de los siguientes pasos
+\begin{description}
+    \item[Selección de datos] Consiste en identificar los datos a visualizar.
+    \item[Mapeo visual de datos] Es el mapeo de valores de datos a elementos gráficos o sus atributos.
+    Usualmente involucra también el procesamiento previo de los datos, proceso que transforma los datos
+    a un formato usable por el sistema de visualización.
+    \item[Transformación de vista] Consiste en la especificación de atributos de la visualización
+    independientes de los datos como selección de colores e iluminación.
+    \item[Generación de la visualización] Se genera la imagen final de la visualización, incluyendo
+    información adicional para facilitar su interpretación.
+\end{description} \parencite[p.33]{ward2010interactive}
+%P33
+
+\subsection{Visualización 3D}
+Como se exploró en la sección de redes neuronales convolucionales, los datos de interés para su visualización 
+son los tensores que conforman la salida de las capas de convolución, donde cada valor representa
+una activación de la neurona correspondiente. Estos datos se pueden interpretar formalmente como datos volumétricos.
+\medskip
+
+Los métodos de visualización de datos volumétricos se pueden clasificar en tres categorías generales 
+\parencite[p.~195]{ward2010interactive}:
+
+\subsubsection{Técnicas de rebanado}
+En las técnicas de rebanado se utiliza un plano bidimensional para cortar el volumen y extraer una sección
+de los datos, de manera análoga a un corte transversal médico o estructural.
+
+Esta técnica es la más conveniente para la visualización de los tensores de una red neuronal convolucional,
+pues cada sección transversal de un volumen de activación corresponde directamente a la activación de un filtro 
+en particular de la convolución.
+
+\subsubsection{Técnicas de isosuperficies}
+En estas técnicas se utiliza un valor umbral de corte que define los valores considerados «dentro» y «fuera»
+de un volumen, a partir de los cuales se construye una malla poligonal para visualizar su contorno o superficie externa.
+
+Estas técnicas son ampliamente utilizadas en la simulación de fluidos, donde estos se representan en forma de partículas
+o densidades sobre una rejilla, y algoritmos como \textit{marching cubes} convierten dicho volumen en una malla geométrica.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/marching_cubes.pdf} 
+    \caption[Algoritmo Marching Cubes]{Algoritmo \textit{Marching Cubes} \parencite{lorensen1998marching}en 2D. Para cada combinación de valores vecinos
+    «dentro» (azul) y «fuera» existe un mapeo a una arista (o malla en el caso 3D) correspondiente. 
+    El algoritmo «marcha» sobre cada casilla (o cubo en el caso 3D), insertando el mapeo correspondiente
+    para producir una malla. Algunas implementaciones introducen interpolación lineal para suavizar las superficies resultantes.
+    Fuente: elaboración propia.}
+    \label{fig:marching_cubes}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/simulacion_fluido.png} 
+    \caption[Simulación de Fluido]{Simulación de fluidos en Blender. 
+    El motor físico utiliza un sistema de partículas para calcular la dinámica del fluido, 
+    a partir del cual genera una malla poligonal para representar su superficie.
+    Fuente: elaboración propia.}
+    \label{fig:fluid_sim}
+\end{figure}
+
+\subsubsection{Renderizado de volumen}
+En el renderizado de volumen, los valores se interpretan como una densidad espacial. Utilizando técnicas de
+marchado de rayos (\textit{ray marching}), el volumen se visualiza como una nube densa continua en lugar de una superficie sólida.
+
+Esta técnica es empleada principalmente en la industria de los efectos visuales para renderizar gases y objetos con fronteras
+no definidas, tales como nubes, humo y fuego.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{diagrams/chapter2/volumetric_rendering.pdf} 
+    \caption[Renderizado Volumétrico]{Renderizado volumétrico. Desde la cámara se proyectan rayos que,
+    al intersectar con el volumen, toman muestras en puntos discretos (es decir, «marchan» en intervalos regulares) 
+    para determinar la opacidad y el color final del píxel correspondiente \parencite{perlin1989hypertexture}. Algunas implementaciones avanzadas emiten rayos adicionales 
+    hacia las fuentes de luz a partir de los puntos de muestreo para calcular sombras e iluminación volumétrica realista.
+    Fuente: elaboración propia.}
+    \label{fig:volumetric_rendering}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/visualizacion_openvdb.png} 
+    \caption[Renderizado Volumétrico en Blender]{Renderizado volumétrico en Blender. 
+    El motor gráfico permite la representación de volúmenes tanto a partir de su simulador 
+    nativo de fluidos y gases como de información externa importada en formato OpenVDB. 
+    Fuente: elaboración propia utilizando datos volumétricos de muestra de OpenVDB \parencite{openvdb_sample_data}.}
+    \label{fig:volume_vdb}
+\end{figure}
+
+\subsubsection{OpenVDB}
+OpenVDB es una librería de C++ de código abierto que contiene una estructura de datos jerárquica y herramientas para la
+manipulación de datos volumétricos discretizados en una cuadrícula tridimensional. Está basada
+en VDB, una arquitectura desarrollada por Ken Museth para el estudio de animación DreamWorks Animation \parencite{openvdbabout}.
+\medskip
+
+El formato provisto por OpenVDB ofrece un espacio de indexación tridimensional infinito, almacenamiento compacto para datos dispersos,
+acceso rápido a la memoria y una colección de algoritmos optimizados para su estructura jerárquica. Estas características lo convierten
+en el estándar de la industria para el manejo de datos volumétricos en el campo de los efectos visuales (VFX),
+siendo adoptado por una amplia variedad de programas relacionados con la animación, simulación y gráficos por computadora en tiempo real.
+\medskip
+
+Blender forma parte del conjunto de herramientas que integran este soporte. El programa permite la importación nativa de datos volumétricos 
+en formato OpenVDB, visualizándolos por defecto como un volumen disperso continuo (véase la figura~\ref{fig:volume_vdb}); no obstante, 
+mediante el uso de nodos de geometría es posible convertirlos y visualizarlos como mallas poligonales, 
+o bien, procesarlos como una secuencia de secciones transversales sólidas utilizando los nodos de 
+materiales. 
+\medskip
+
+OpenVDB también ofrece soporte para Python en forma de un módulo con funciones para la
+manipulación básica de volúmenes. Este componente, en conjunto con el intérprete de Python integrado en Blender, 
+permite la creación, lectura y modificación de datos volumétricos mediante scripts directamente dentro del editor.
+% Fundamentos de visualizacion 3d
+% mapeo de datos a atributos visuales (shaders y materiales)
+% generacion procedural de estructuras masivas mediante nodos de geometria
+% automatización de renderizado en 2do plano

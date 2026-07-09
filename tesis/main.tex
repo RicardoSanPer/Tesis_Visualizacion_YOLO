@@ -1,0 +1,60 @@
+\documentclass[12pt, letterpaper, twoside, final]{book}
+
+\usepackage{fontspec}
+\usepackage{amsmath}
+
+% Imagenes
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+% Lenguaje
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+\setotherlanguage{english}
+\usepackage{csquotes}
+
+% Biblatex
+\usepackage[style=apa,backend=biber, language=spanish]{biblatex}
+\addbibresource{referencias.bib}
+\addbibresource{bibliografia.bib}
+
+% Cross-references
+\usepackage[hidelinks]{hyperref}
+\usepackage[spanish]{cleveref}
+
+% Bookmarks (tabla de navegacion)
+\usepackage{bookmark}
+
+
+\title{
+{Sistema Automatizado de Visualización Tridimensional Interactiva para la
+Interpretación de Redes Neuronales Convolucionales utilizando Python y Blender
+aplicado a Modelo YOLOv8
+}\\
+{\large Universidad Nacional Autónoma de México}\\
+%{\includegraphics{university.jpg}}
+}
+\author{Ricardo Sánchez Pérez}
+\date{Day Month Year}
+
+\allowbreak
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\listoffigures
+
+\chapter{Introducción}
+\input{chapters/chapter1.tex}
+
+\chapter{Marco Teórico}
+\input{chapters/chapter02/chapter2.tex}
+
+\printbibliography[title={Referencias}, notkeyword={extra}]
+
+\nocite{*}
+\printbibliography[title={Bibliografía}, keyword={extra}]
+
+
+\end{document}
