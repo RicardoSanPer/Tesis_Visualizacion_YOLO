@@ -1,1 +1,36 @@
 \section{Justificación}
+La presente investigación se fundamenta en la necesidad crítica de resolver la opacidad operativa de los 
+modelos de aprendizaje profundo, abordando el problema desde una perspectiva interdisciplinaria que converge 
+entre la Inteligencia Artificial Explicable y la computación gráfica avanzada. La relevancia de este trabajo 
+se sustenta en tres dimensiones principales:
+
+\begin{itemize}
+    \item \textbf{Dimensión social y ética (Impacto de la XAI):} El despliegue masivo de sistemas de visión 
+    artificial en entornos que impactan directamente la vida cotidiana y laboral, tales como la conducción 
+    autónoma o el diagnóstico médico, exige mecanismos rigurosos de auditoría y rendición de cuentas. 
+    Al abrir la «caja negra» de los algoritmos mediante representaciones volumétricas comprensibles, esta 
+    investigación proporciona una base metodológica para que desarrolladores, reguladores y usuarios finales 
+    puedan desmitificar el comportamiento interno de las redes, evaluar sus límites y garantizar un uso más 
+    seguro y confiable de la tecnología.
+    
+    \item \textbf{Dimensión técnica y computacional:} Las aproximaciones convencionales para auditar capas 
+    convolucionales suelen recurrir a la abstracción de datos en formatos planos bidimensionales. Este 
+    enfoque obliga a los desarrolladores a generar y gestionar cientos de archivos de imagen independientes 
+    (como formatos PNG individuales por cada canal) si se desea preservar la información numérica, lo que 
+    fragmenta el análisis y resulta en un flujo de trabajo computacionalmente ineficiente y desarticulado. 
+    Esta investigación resuelve dicha problemática al proponer un pipeline integrado que unifica la 
+    información en un único entorno espacial interactivo. Para ello, se emplea el formato OpenVDB como 
+    una solución técnica de conveniencia que encapsula la densidad del tensor en una estructura volumétrica 
+    unificada, evitando la saturación del sistema por almacenamiento masivo de archivos planos. Esto permite 
+    rescatar la continuidad espacial y la topología tridimensional nativa de los filtros convolucionales, 
+    garantizando una exploración continua del dato científico sin los cuellos de botella logísticos de 
+    los métodos tradicionales.
+    
+    \item \textbf{Dimensión metodológica e informática:} Academicamente, esta tesis construye un puente 
+    directo entre dos ecosistemas de software que tradicionalmente han operado de forma aislada: las 
+    herramientas de desarrollo de IA en Python y los entornos de renderizado y modelado procedural 
+    tridimensional en Blender. El diseño de este pipeline procedural e interactivo dota a la comunidad de 
+    ingeniería de un nuevo entorno de diagnóstico visual de vanguardia, estableciendo un precedente sobre 
+    cómo las suites de gráficos 3D contemporáneas pueden transformarse en potentes plataformas de análisis, 
+    pedagogía y exploración científica de datos complejos.
+\end{itemize}
