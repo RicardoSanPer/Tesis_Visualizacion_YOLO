@@ -1,0 +1,41 @@
+\section{Alcances y limitaciones}
+
+A continuación, se delimitan las fronteras teóricas y técnicas que gobiernan el desarrollo del presente trabajo de investigación, estableciendo el alcance del flujo de trabajo diseñado y las restricciones bajo las cuales opera.
+
+\subsection{Alcances}
+El proyecto contempla el cumplimiento de los siguientes puntos estratégicos:
+\begin{itemize}
+    \item \textbf{Arquitectura de red específica:} El pipeline de extracción de datos se implementa y valida 
+    utilizando la arquitectura convolucional YOLOv2, sirviendo como modelo base para demostrar la viabilidad 
+    de la visualización volumétrica.
+    \item \textbf{Flujo de trabajo integrado:} Se desarrolla un pipeline funcional y automatizado que abarca 
+    desde la captura de los tensores en Python hasta su importación, procesamiento procedural y renderizado en 
+    la suite Blender.
+    \item \textbf{Consolidación de datos:} Se implementa el formato OpenVDB como el contenedor volumétrico 
+    unificado para almacenar los mapas de activación tridimensionales de las capas, eliminando la necesidad 
+    de gestionar múltiples secuencias de imágenes 2D independientes.
+    \item \textbf{Entorno de exploración procedural:} Se diseña un sistema interactivo basado en nodos de 
+    geometría (\textit{Geometry Nodes}) en Blender que permite al usuario inspeccionar visualmente la 
+    topología, realizar rebanados dinámicos (\textit{slicing}) y aplicar mapas de color a la densidad 
+    de los datos.
+\end{itemize}
+
+\subsection{Limitationes}
+El desarrollo del sistema se encuentra sujeto a las siguientes restricciones técnicas y conceptuales:
+\begin{itemize}
+    \item \textbf{Dependencia de la API de Blender:} Debido a que el pipeline se diseña utilizando las 
+    capacidades procedurales intrínsecas de Blender y su API de Python, el flujo de trabajo no es exportable 
+    directamente de forma nativa a otros motores de renderizado o videojuegos (como Unreal Engine o Unity).
+    \item \textbf{Exclusión de optimización algorítmica en OpenVDB:} El formato OpenVDB se utiliza 
+    estrictamente como un formato de conveniencia para la encapsulación y transferencia de datos 
+    tridimensionales. La investigación no propone modificaciones al algoritmo de compresión de datos 
+    dispersos ni optimizaciones a nivel de código fuente en la librería gráfica.
+    \item \textbf{Restricción a capas convolucionales:} La visualización tridimensional interactiva se 
+    limita a las capas intermedios de la red que preservan propiedades espaciales (convoluciones y mapas de 
+    activación). Las capas completamente conectadas (\textit{Fully Connected Layers}), al perder la topología 
+    dimensional original, quedan fuera del alcance del renderizado volumétrico tridimensional propuesto.
+    \item \textbf{Evaluación de usabilidad no formal:} La validación de la herramienta como material 
+    didáctico o recurso ilustrativo para el público general se aborda desde una perspectiva cualitativa 
+    conceptual en las conclusiones; no se contempla un estudio estadístico formal de experiencia de usuario 
+    (UX) con grupos de control humanos.
+\end{itemize}
