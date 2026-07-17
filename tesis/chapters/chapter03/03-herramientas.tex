@@ -1,4 +1,94 @@
 \section{Herramientas Utilizadas}
 El producto final del trabajo de investigación es el desarrollo de un add-on de Blender. 
 Por ello, las herramientas a utilizar consisten principalmente de software para el
-desarrollo. 
+desarrollo.
+
+\subsection{Visual Studio Code}
+Visual Studio Code (o solo Code) es un editor de texto y ambiente de desarrollo integrado
+(IDE) desarrollado por Microsoft. Code presenta varias características como soporte
+para múltiples lenguajes de programación, herramientas de debug, integración con Git,
+integración con la linea de comandos y extensiones que extienden la funcionalidad base 
+del editor.
+\medskip
+
+Algunas de las extensiones que se usan incluyen Pylance, Python, Python Debugger y 
+Python Environments (por Microsoft) para integrar funcionalidad específica de Python.
+
+\subsection{Python}
+Python es un lenguaje de programación orientado a objetos de uso general, siendo una
+opción popular para desarrollo relacionado a inteligencia artificial. Además, es el
+lenguaje de scripting usado por Blender.
+\medskip
+
+Python utiliza pip, un administrador de paquetería para desarrollo.
+Permite la fácil instalación de bibliotecas y módulos como PyTorch y Numpy para su uso
+en scripts de Python.
+\medskip
+
+Las librerías a usar incluyen:
+\begin{description}
+    \item[] \textit{Pytorch}, una biblioteca de código abierto desarrollado por Meta y sucesor
+    de Torch. Pytorch provee funcionalidades y APIs para el desarrollo relacionado al
+    aprendizaje profundo y constituye la base de muchas implementaciones de inteligencia
+    artificial.
+    \item[] \textit{Numpy}, una biblioteca matemática que implementa funcionalidad para
+    arreglos matemáticos grandes y multidimensionales, así como su manipulación. Es
+    una de las bibliotecas más utilizadas en el desarrollo científico con Python, y es usado
+    en conjunto con Pytorch por su integración con los tensores.
+    \item[] {Blender Python API (bpy)} es la bibliteca de Blender para Python que ofrece una
+    API para interactuar con el motor gráfico y crear scripts para extender la funcionalidad
+    de Blender.
+    \item[] {pyopenvdb} es la implementación de OpenVDB para Python, permitiendo trabajar
+    con los datos volumétricos en Python.
+    \item[] {venv} es una utilidad de Python para utilizar ambientes virtuales. Los ambientes
+    virtuales sirven de ambientes aislados del sistema con su propio interprete de Python
+    y paquetes, funcionando de forma independiente a otras instalaciones y evitando
+    problemas de compatibilidad relacionados a diferentes versiones.
+\end{description}
+
+\subsection{Blender}
+Blender es una suite de modelado 3D de código abierto, desarrollado por la comunidad
+y coordinado por la fundación Blender. Blender cuenta con un interprete de Python integrado
+que permite la ejecución de scripts para extender su funcionalidad.
+\medskip
+
+Se utilizará la version 5.2 LTS de Blender por dos razones principales:
+\begin{description}
+    \item[] A partir de la versión 5.0 Blender integra en el editor de nodos las cuadrículas
+    como un tipo de dato nativo, así como nuevos nodos para la manipulación de estas cuadrículas,
+    lo cual en conjunto facilita en comparación a versiones anteriores flujos de trabajo
+    procedural con datos volumétricos como OpenVDB.
+    \item[] Al ser una versión LTS (Long Term Support, o soporte de largo plazo) se
+    garantíza la estabilidad del programa así como su soporte a largo plazo.
+\end{description}
+
+Blender 5.2 LTS utiliza Python versión 3.13.13.
+
+\subsection{Git}
+Git es un software de control de versión altamente utilizado en el desarrollo de software.
+Mediante el uso de ramas, permite a un desarrollador trabajar en distintas características de
+un programa, de forma segura, sin que interfieran entre sí al realizar cambios. En consecuencia asegura
+un desarrollo seguro de software al ser capaz de aislar diferentes versiones del código,
+permitiendo separar versiones funcionales de las experimentales, así como revertir
+cambios.
+\medskip
+
+GitHub es una plataforma en linea para alojar codigo, basado en Git, pero con un mayor
+enfoque colaborativo y con herramientas extendidas para operaciones de desarrollo como
+CI/CD. Git y GitHub suelen utilizarse en conjunto, con Git actuando como el administrador
+de los cambios locales y Github actuando como repositorio remoto.
+
+\subsection{Hardware}
+Para el desarrollo del proyecto de investigación se utilizará una computadora personal con las
+siguientes características:
+
+\begin{description}
+    \item[] Sistema operativo Windows 11 Home.
+    \item[] Procesador Intel i7 de 12va generación, con velocidad base de 2.3 GHz.
+    \item[] 16 GB de memoria RAM.
+    \item[] Tarjeta gráfica NVIDIA RTX 3050 Ti (Laptop), con 4 GB de VRAM dedicada.
+    \item[] 1TB de almacenamiento SSD
+\end{description}
+
+El uso de una tarjeta gráfica es particularmente beneficioso para ejecutar modelos de
+inteligencia artificial, operaciones de convolución y programación grafica.
