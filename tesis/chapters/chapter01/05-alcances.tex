@@ -23,9 +23,15 @@ El proyecto contempla el cumplimiento de los siguientes puntos estratégicos:
 \subsection{Limitationes}
 El desarrollo del sistema se encuentra sujeto a las siguientes restricciones técnicas y conceptuales:
 \begin{itemize}
+    \item \textbf{Implementación y alcance del modelo:} El objetivo central de la investigación reside en la 
+    visualización volumétrica de la red y no en su entrenamiento, optimización de hiperparámetros o 
+    despliegue en producción. Por consiguiente, el modelo YOLOv2 se utiliza estrictamente como un caso de 
+    estudio para la extracción de tensores y la validación del flujo de trabajo, por lo que las métricas de 
+    precisión inferencial y el comportamiento de las activaciones extraídas no pretenden ser representativos 
+    de un modelo optimizado para aplicaciones industriales en tiempo real.
     \item \textbf{Dependencia de la API de Blender:} Debido a que el pipeline se diseña utilizando las 
     capacidades procedurales intrínsecas de Blender y su API de Python, el flujo de trabajo no es exportable 
-    directamente de forma nativa a otros motores de renderizado o videojuegos (como Unreal Engine o Unity).
+    directamente de forma nativa a otros motores de renderizado.
     \item \textbf{Exclusión de optimización algorítmica en OpenVDB:} El formato OpenVDB se utiliza 
     estrictamente como un formato de conveniencia para la encapsulación y transferencia de datos 
     tridimensionales. La investigación no propone modificaciones al algoritmo de compresión de datos 
