@@ -1,0 +1,65 @@
+\section{Arquitectura General del Sistema}
+El sistema se diseña bajo una arquitectura modular compuesta por dos componentes principales: el 
+\textbf{componente de extracción} y el \textbf{componente de visualización}.
+\medskip
+
+El \textbf{componente de extracción} se encarga de cargar y ejecutar el modelo convolucional YOLOv2, 
+capturar las activaciones internas y transformar dicha información a un formato de intercambio intermedio. 
+Específicamente, este componente se estructura en tres módulos funcionales:
+
+\begin{itemize}
+    \item \textbf{Módulo de ejecución:} Gestiona la carga de la arquitectura y los pesos del modelo YOLOv2, 
+    controlando la ejecución de la inferencia sobre las imágenes de entrada.
+    \item \textbf{Módulo de extracción:} Configura e intercepta los mecanismos de captura (\textit{hooks}) 
+    para extraer los mapas de activación, tensores intermedios y metadatos relevantes durante el procesamiento 
+    de la red.
+    \item \textbf{Módulo de formato e intercambio:} Procesa y empaqueta las matrices numéricas hacia estructuras 
+    de datos estandarizadas (archivos JSON para metadatos y volúmenes OpenVDB para tensores 3D), facilitando la 
+    persistencia y el transporte de información entre componentes.
+\end{itemize}
+\medskip
+
+Por su parte, el \textbf{componente de visualización} se consolida como un complemento (\textit{add-on}) 
+integrado en Blender. Su función es consumir los datos del formato intermedio, generar las representaciones 
+volumétricas correspondientes y proveer una interfaz interactiva para su exploración. Este componente consta 
+de los siguientes módulos:
+
+\begin{itemize}
+    \item \textbf{Módulo de lectura y preparación (\textit{Parsing}):} Carga e interpreta las estructuras de 
+    datos procedentes del formato intermedio (JSON y OpenVDB), deserializando y preparando los tensores para 
+    su manipulación dentro del motor gráfico.
+    \item \textbf{Módulo de mapeo y representación visual:} Traduce proceduralmente los atributos volumétricos 
+    y metadatos en entidades geométricas, materiales y nodos dentro de Blender, habilitando la inspección e 
+    interacción tridimensional con el modelo.
+\end{itemize}
+
+Cada componente se desarrollará y ejecutará en un entorno independiente. Esta decisión de diseño 
+responde a las siguientes consideraciones técnicas:
+
+\begin{itemize}
+    \item \textbf{Gestión de recursos y estabilidad:} Aunque técnicamente es factible instalar y ejecutar 
+    modelos de inteligencia artificial dentro del intérprete de Python integrado en Blender, la ejecución 
+    simultánea de tareas computacionalmente intensivas (como el cálculo matricial de inferencia y el renderizado 
+    gráfico) puede saturar la VRAM/RAM y comprometer la estabilidad del sistema operativo.
+    \item \textbf{Aislamiento de entornos y viabilidad técnica:} En entornos de producción e investigación, 
+    la ejecución de modelos de IA se realiza habitualmente en hardware especializado y en entornos controlados. 
+    Acoplar la inferencia del modelo y el motor de Blender dentro de un mismo ecosistema de ejecución introduce 
+    fricciones de compatibilidad de dependencias y complejidad técnica innecesaria.
+    \item \textbf{Modularidad y extensibilidad del software:} La separación de responsabilidades entre la 
+    extracción y la visualización simplifica el desarrollo y depuración de ambos componentes. Esta arquitectura 
+    desacoplada permite extender, actualizar o sustituir módulos de forma independiente 
+    (por ejemplo, adaptar el extractor para otro modelo de visión sin modificar el complemento de Blender).
+    \item \textbf{Gestión de artefactos y reproductibilidad:} El uso de un formato de intercambio intermedio 
+    facilita la persistencia y administración de las activaciones extraídas. Esto permite a los usuarios 
+    auditar inferencias previas sin necesidad de reejecutar el modelo con los parámetros originales, 
+    funcionando como un registro histórico de versiones para evaluar la evolución del algoritmo. Asimismo, 
+    habilita la portabilidad de datos entre colaboradores, permitiendo la exploración sin requerir 
+    la ejecución local de la red de IA.
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{diagrams/chapter3/general_architecture.pdf} 
+    \caption[Arquitectura general del sistema]{Diagrama de la arquitectura general del sistema.}
+    \label{fig:arquitectura_general_sistema}
+\end{figure}
