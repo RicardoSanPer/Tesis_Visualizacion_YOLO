@@ -1,0 +1,27 @@
+\section{Visualización en Blender}
+El componente de visualización consiste en un complemento (\textit{add-on}) integrado en Blender, cuyo propósito es 
+importar la información extraída del modelo para su representación gráfica e inspección interactiva. Este 
+componente se estructura funcionalmente en dos bloques principales: el \textbf{módulo de lectura y preparación} y 
+el \textbf{módulo de mapeo y representación visual}.
+\medskip
+
+El \textbf{módulo de lectura y preparación} se implementa principalmente mediante scripts de Python utilizando la 
+API nativa de Blender (\textit{bpy}). Su función primaria es cargar, deserializar y validar los datos en formatos 
+\textit{JSON} y \textit{OpenVDB} provenientes del componente de extracción, preparándolos para su consumo dentro del 
+motor gráfico. Asimismo, este módulo es responsable de provisionar e integrar los elementos de la interfaz de 
+usuario (\textit{UI}) en los paneles de Blender para el control del sistema.
+\medskip
+
+Por su parte, el \textbf{módulo de mapeo y representación visual} opera mediante una arquitectura híbrida compuesta 
+por scripts de Python, nodos de geometría (\textit{Geometry Nodes}) y nodos de materiales volumétricos. La lógica en 
+Python se encarga de instanciar las entidades y objetos base en la escena 3D, asignar los árboles de nodos 
+correspondientes, transferir los parámetros de densidad y actuar como la interfaz de interacción de alto nivel. 
+Complementariamente, los sistemas de nodos procesan procedimentalmente el mapeo numérico de los datos y parámetros 
+hacia las propiedades geométricas, de sombreado y de opacidad del volumen renderizado.
+\medskip
+
+El resultado final de este componente es la generación de una representación geométrica e interactiva dentro del 
+entorno de Blender. A través de este sistema, el usuario no solo es capaz de inspeccionar la topología de la red 
+neuronal convolucional y sus representaciones intermedias, sino que también puede aprovechar el ecosistema nativo 
+de Blender para producir renderizados de alta fidelidad, generar animaciones cinemáticas de los tensores o manipular 
+procedimentalmente la geometría mediante las herramientas del motor gráfico.

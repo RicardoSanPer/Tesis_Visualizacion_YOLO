@@ -1,0 +1,40 @@
+\section{Planteamiento del problema}
+Los modelos de inteligencia artificial modernos son estructuras matemáticas altamente complejas. Al constar de un gran 
+número de capas, cada una con cientos o miles de neuronas que a su vez se interconectan entre sí, conforman un entramado 
+matemático difícil de visualizar y comprender. Esto provoca que a menudo la inteligencia artificial sea interpretada como 
+una «caja negra»: se reconoce que el sistema produce una salida específica a partir de una entrada determinada, pero los 
+mecanismos del procesamiento interno se ignoran por conveniencia o simplicidad metodológica. 
+\medskip
+
+Este problema se agrava significativamente en las redes neuronales convolucionales (CNN), las cuales generan un gran volumen 
+de datos intermedios estructurados en tensores tridimensionales, lo que por sí solo ya representa un desafío crítico para su 
+visualización. Las herramientas de diagnóstico visual contemporáneas se ven obligadas a simplificar estos datos tridimensionales 
+al aplanarlos a dos dimensiones (usualmente en forma de imágenes planas) para obtener una única representación promediada. 
+Por el contrario, si se desea preservar la integridad de los datos numéricos individuales, dichas herramientas deben generar 
+cientos de imágenes bidimensionales independientes. En ambos escenarios se rompe irreversiblemente la continuidad espacial y 
+la topología geométrica original de los datos.
+\medskip
+
+El empleo de estas representaciones bidimensionales alternativas suele derivar en una pérdida drástica de precisión debido a las 
+limitaciones técnicas de los formatos de archivo convencionales, así como en un desperdicio severo de recursos de almacenamiento.
+El formato PNG, por ejemplo, utiliza típicamente una profundidad de 8 bits por canal para registrar la información de color, 
+lo cual trunca y limita severamente la precisión de punto flotante nativa de los tensores científicos. Asimismo, este enfoque 
+incurre en redundancia de datos al replicar el mismo valor escalar en los tres canales cromáticos (RGB) cuando la imagen solo 
+almacena la información de una única rebanada o filtro del tensor. Adicionalmente, gestionar la inmensa cantidad de archivos de 
+imagen requeridos para cubrir las capas intermedias da como resultado un uso ineficiente de los recursos de cómputo y memoria 
+del sistema.
+\medskip
+
+Consecuentemente, en el estado del arte actual no existe un flujo de trabajo estandarizado para la representación volumétrica 
+tridimensional directa de los datos tensoriales. Los entornos de desarrollo y entrenamiento de IA se encuentran completamente 
+desacoplados de los ecosistemas de computación gráfica y renderizado, lo que dificulta la exploración interactiva, procedural 
+y tridimensional de los datos internos del modelo.
+\medskip
+
+Por consiguiente, el problema fundamental que aborda esta investigación radica en la pérdida de información geométrica y 
+continuidad espacial al inspeccionar los tensores intermedios de las redes convolucionales mediante herramientas de 
+visualización bidimensionales convencionales. A esto se suma la ineficiencia computacional implícita en el manejo de mapas de 
+activación dispersos y la falta de un flujo de trabajo integrado que conecte los entornos de aprendizaje profundo con los 
+motores de gráficos tridimensionales. Debido a esta brecha, los desarrolladores carecen de metodologías interactivas y 
+volumétricas eficaces para auditar la estructura interna de modelos como YOLOv2, lo que perpetúa la opacidad de los sistemas de 
+visión artificial y limita el alcance práctico de la Inteligencia Artificial Explicable.
