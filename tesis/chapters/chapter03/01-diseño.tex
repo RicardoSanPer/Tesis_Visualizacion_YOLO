@@ -1,0 +1,59 @@
+\section{Diseño de la investigación}
+
+En esta sección se establece el marco metodológico que rige el desarrollo del presente trabajo, definiendo la 
+tipología de la investigación, el enfoque de ingeniería adoptado para el desarrollo del software y la estrategia 
+de validación del sistema.
+
+\subsection{Naturaleza y tipo de investigación}
+El presente trabajo se clasifica como una \textbf{investigación aplicada con enfoque tecnológico y desarrollo 
+experimental}. Es aplicada porque busca resolver un problema concreto en el área de la Inteligencia Artificial 
+Explicable (XAI): la limitación de la representación bidimensional para la inspección de capas convolucionales. 
+Asimismo, es de carácter tecnológico y experimental, ya que el resultado principal consiste en la formulación 
+de una metodología y la construcción de una herramienta de software funcional (\textit{artifact}) mediante la 
+integración de Python, PyTorch, OpenVDB y Blender.
+
+\subsection{Metodología de desarrollo de software}
+Para la concepción, diseño e implementación del complemento y el pipeline de extracción, se adoptó una 
+adaptación del ciclo de vida iterativo basado en el \textbf{Diseño Basado en Componentes} y el modelo de 
+prototipado rápido:
+
+\begin{enumerate}
+    \item \textbf{Fase de Análisis de Requerimientos:} Identificación de los tipos de datos tensoriales en 
+    YOLOv2 y las necesidades de interpolación espacial y visualización volumétrica en Blender.
+    \item \textbf{Fase de Diseño Arquitectónico:} Definición del protocolo de intercambio desacoplado 
+    (manifiesto JSON y volúmenes OpenVDB) y la separación de responsabilidades entre el componente de 
+    extracción y el de visualización.
+    \item \textbf{Fase de Desarrollo Iterativo (Prototipado):} 
+    \begin{itemize}
+        \item \textit{Iteración 1:} Construcción de los scripts de extracción (\textit{forward hooks}) en 
+        PyTorch y exportación a matrices numéricas.
+        \item \textit{Iteración 2:} Implementación del convertidor a OpenVDB y diseño de la estructura del 
+        manifiesto JSON.
+        \item \textit{Iteración 3:} Desarrollo del \textit{add-on} en Blender (API \textit{bpy}) para la 
+        lectura del manifiesto y la instanciación de nodos.
+        \item \textit{Iteración 4:} Diseño de los materiales volumétricos y el sistema de rebanado 
+        (\textit{slicing}) en \textit{Geometry Nodes}.
+    \end{itemize}
+    \item \textbf{Fase de Integración y Pruebas:} Verificación de la consistencia de los datos importados 
+    frente a los tensores originales y optimización de rendimiento en la GPU.
+\end{enumerate}
+
+\subsection{Estrategia de prueba y validación}
+Dado que el propósito central de la investigación es demostrar la **viabilidad técnica del flujo de trabajo 
+de visualización** y no evaluar el desempeño del modelo predictivo en producción, la validación del sistema 
+se realiza mediante un \textbf{estudio de caso técnico}:
+
+\begin{itemize}
+    \item \textbf{Sujeto de prueba:} La arquitectura convolucional YOLOv2 procesando imágenes fijas de prueba.
+    \item \textbf{Criterios de evaluación técnica:} 
+    \begin{enumerate}
+        \item \textit{Fidelidad de los datos:} Comprobación de que las dimensiones, la topología y la densidad 
+        escalar representadas en el volumen 3D coincidan numéricamente con los mapas de activación extraídos en 
+        PyTorch.
+        \item \textit{Resiliencia y robustez:} Verificación de la capacidad del complemento para manejar errores 
+        de archivos o capas faltantes degradando la representación de forma segura.
+        \item \textit{Interactividad y control visual:} Evaluación cualitativa de la capacidad de respuesta de 
+        los nodos de Blender para manipular el mapa de color, la opacidad y los cortes transversales del tensor 
+        en tiempo real.
+    \end{enumerate}
+\end{itemize}

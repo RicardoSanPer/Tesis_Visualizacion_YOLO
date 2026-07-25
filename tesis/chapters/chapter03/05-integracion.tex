@@ -1,0 +1,48 @@
+\section{Integración entre Blender y Python}
+En este contexto, se define la integración entre Blender y Python como el mecanismo de comunicación e 
+interoperabilidad entre el entorno externo de ejecución en Python (utilizado por el componente de extracción) 
+y el intérprete de Python embebido dentro de la arquitectura de Blender.
+\medskip
+
+La vinculación entre ambos entornos se concreta mediante un protocolo de intercambio basado en la persistencia 
+de datos en disco y una estructura jerárquica de directorios. Este procedimiento opera bajo la siguiente lógica:
+
+\begin{itemize}
+    \item \textbf{Gestión de espacio de trabajo y proyectos:} El componente de extracción permite definir una 
+    ruta de destino y un identificador único de proyecto, facilitando la organización, versión y diferenciación 
+    entre distintas ejecuciones de la red.
+    \item \textbf{Estructura de metadatos (JSON):} En la raíz del directorio del proyecto se genera un archivo de 
+    configuración en formato \textit{JSON}. Este documento registra la topología de la arquitectura, la 
+    secuencia de capas convolucionales, sus parámetros operativos y la ruta de acceso a los volúmenes 
+    dispersos asociados, así como las métricas finales del modelo y otros metadatos.
+    \item \textbf{Encapsulación de tensores (OpenVDB):} Los datos volumétricos derivados de los mapas de 
+    activación y la salida del modelo se almacenan en archivos con formato \textit{OpenVDB}. La asociación 
+    entre cada archivo de volumen y su correspondiente capa en la red se gestiona mediante una convención 
+    estandarizada de nomenclatura.
+\end{itemize}
+
+El propósito de emplear el archivo \textit{JSON} es actuar como el manifiesto o archivo de configuración 
+central del proyecto, concentrando la información estructural que Blender requiere para instanciar 
+procedimentalmente la visualización. Al tratarse de un formato de texto plano y legible por humanos, 
+facilita una auditoría rápida de la red previa a su renderizado. Asimismo, posibilita una visualización 
+desacoplada y flexible, permitiendo generar esquemas de alto nivel de la topología sin necesidad de cargar 
+la totalidad de los datos volumétricos en memoria.
+\medskip
+
+Esto ofrece la ventaja de permitir que el manifiesto actúe como un mecanismo de validación de datos. De forma 
+previa a la generación gráfica, Blender emplea este archivo como el único punto de verdad 
+(\textit{single source of truth}) para verificar la integridad estructural del proyecto. En caso de detectar 
+anomalías, tales como archivos volumétricos faltantes o discrepancias en las dimensiones de los tensores, el 
+manifiesto permite aplicar estrategias de resiliencia. En este escenario, el sistema puede sustituir el dato 
+dañado por una representación geométrica abstracta alternativa, preservando la continuidad del flujo de trabajo 
+y la visualización de la topología general sin interrumpir la ejecución del complemento.
+\medskip
+
+En secciones anteriores se detallaron las ventajas de emplear el formato OpenVDB para la encapsulación de los 
+datos tensoriales extraídos en comparación con los formatos de imagen bidimensionales convencionales. 
+Un beneficio técnico adicional reside en que, al tratarse de un estándar desarrollado originalmente para la 
+industria de la animación y los efectos visuales, OpenVDB integra soporte nativo para secuencias temporales 
+de cuadrículas volumétricas dentro de un mismo contenedor o serie de archivos (\textit{VDB Cache Sequences}). 
+Esta capacidad técnica amplía las fronteras del sistema, abriendo la posibilidad de visualizar la evolución 
+dinámica del modelo a través del tiempo, como el proceso de ajuste de pesos durante el entrenamiento, o bien 
+auditar la respuesta topológica de las capas al procesar secuencias de datos continuos o video de entrada.

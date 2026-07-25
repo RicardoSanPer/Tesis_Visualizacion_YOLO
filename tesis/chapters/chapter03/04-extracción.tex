@@ -1,0 +1,30 @@
+\section{Extracción de datos}
+El componente de extracción consiste en un módulo independiente de Python encargado de la captura, procesamiento y 
+empaquetado de la información interna del modelo. Este componente se articula en tres módulos funcionales: el 
+\textbf{módulo de ejecución}, el \textbf{módulo de extracción} y el \textbf{módulo de formato e intercambio}.
+\medskip
+
+El \textbf{módulo de ejecución} contempla la arquitectura estándar para la carga y evaluación de la red neuronal 
+convolucional. Dado que el alcance del proyecto se enfoca en la fase de inferencia, este módulo gestiona la 
+inicialización de la topología y la carga de los pesos sinápticos pre-entrenados del modelo YOLOv2. El módulo 
+recibe como entradas los datos de prueba (imágenes), los parámetros operativos y los pesos guardados, generando 
+como resultado la predicción o detección del modelo.
+\medskip
+
+El \textbf{módulo de extracción} se encarga de interceptar y almacenar la información interna de la red durante 
+el paso hacia adelante (\textit{forward pass}). Para ello, implementa ganchos de ejecución posterior 
+(\textit{forward hooks}) en PyTorch, permitiendo capturar las representaciones intermedias, los mapas de activación 
+y la topología de las capas, así como los metadatos contextuales de entrada y salida.
+\medskip
+
+Finalmente, el \textbf{módulo de formato e intercambio} transforma las estructuras matriciales a los formatos 
+intermedios estandarizados. Este módulo organiza la topología y metadatos en un esquema estructurado para su 
+serialización en un manifiesto \textit{JSON}, mientras que convierte los tensores de activación en arreglos 
+multidimensionales compatibles con la librería \textit{pyopenvdb} para su exportación volumétrica. Asimismo, 
+provee una interfaz de configuración básica que permite definir el identificador del proyecto y el directorio 
+de destino para los archivos generados.
+\medskip
+
+En síntesis, este componente recibe como insumos el modelo convolucional y los datos de entrada, produciendo 
+como salida una estructura jerárquica de directorios que contiene el manifiesto de metadatos y las secuencias 
+volumétricas de datos.

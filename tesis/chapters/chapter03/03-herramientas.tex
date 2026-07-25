@@ -1,0 +1,118 @@
+\section{Herramientas utilizadas}
+El producto final de este trabajo de investigación es el desarrollo de un complemento 
+(\textit{add-on}) para Blender. Por consiguiente, el conjunto de herramientas seleccionadas 
+consiste principalmente en software especializado para el diseño, programación y despliegue 
+del mismo.
+
+\subsubsection{Visual Studio Code}
+Visual Studio Code (VS Code) es un editor de código fuente y entorno de desarrollo 
+integrado (IDE) desarrollado por Microsoft. Este entorno destaca por ofrecer soporte 
+nativo y modular para múltiples lenguajes de programación, herramientas avanzadas de 
+depuración (\textit{debugging}), integración nativa con Git, control mediante la línea 
+de comandos y un ecosistema de extensiones que amplían su funcionalidad base.
+\medskip
+
+Para el desarrollo de este proyecto, se emplean extensiones específicas distribuidas por 
+Microsoft, tales como \textit{Python}, \textit{Pylance}, \textit{Python Debugger} y 
+\textit{Python Environments}, las cuales optimizan el flujo de trabajo al proveer 
+análisis estático de código, autocompletado inteligente y gestión de entornos para
+el lenguaje de programación de Python.
+
+\subsubsection{Python}
+Python es un lenguaje de programación de alto nivel, orientado a objetos y de uso general, 
+consolidado como el estándar principal en el desarrollo de soluciones ligadas a la 
+inteligencia artificial. Asimismo, constituye el lenguaje de scripting embebido en la 
+suite de Blender.
+\medskip
+
+El ecosistema de Python utiliza \textit{pip}, un sistema de gestión de paquetes que automatiza la instalación, 
+actualización y administración de módulos de software. A través de esta herramienta se gestionan librerías 
+científicas esenciales para el procesamiento de tensores, tales como:
+
+\begin{itemize}
+    \item \textbf{PyTorch:} Biblioteca de código abierto desarrollada originalmente por 
+    Meta AI. Provee funcionalidades fundamentales y diversas interfaces 
+    de programación de aplicaciones (APIs) para el diseño de arquitecturas de 
+    aprendizaje profundo (\textit{deep learning}). En este proyecto, sirve como base 
+    estructural para la ejecución y manipulación del modelo convolucional YOLOv2.
+    \item \textbf{NumPy:} Biblioteca matemática que implementa estructuras de datos 
+    eficientes para arreglos numéricos multidimensionales de gran escala, así como un 
+    catálogo robusto de funciones algebraicas de alto rendimiento. Se utiliza en estrecha 
+    correlación con PyTorch debido a su compatibilidad directa para la conversión mutua 
+    entre arreglos numéricos y tensores.
+    \item \textbf{Blender Python API (\textit{bpy}):} Interfaz de programación nativa de 
+    Blender que permite interactuar con el núcleo del motor gráfico a nivel procedural, 
+    facilitando la automatización de escenas y el desarrollo de extensiones personalizadas.
+    \item \textbf{pyopenvdb:} Implementación e interfaz de la librería de código abierto 
+    OpenVDB para el entorno de Python, la cual hace posible la lectura, manipulación y 
+    exportación de las estructuras de datos volumétricas dispersas.
+    \item \textbf{JSON (\textit{JavaScript Object Notation}):} Formato de texto ligero y 
+    estructurado para el intercambio de datos que se utilizará para almacenar los metadatos 
+    y la configuración de las inferencias extraídas. El módulo nativo de \textit{JSON} en Python 
+    facilita la serialización y deserialización directa de objetos y diccionarios, ofreciendo una 
+    estructura legible por humanos e ideal para agrupar información jerárquica con un bajo 
+    costo de procesamiento.
+    \item \textbf{venv:} Módulo estándar de Python diseñado para la creación y gestión de 
+    entornos virtuales aislados. Esta herramienta provee un intérprete y un directorio de 
+    paquetes independientes para el proyecto, mitigando conflictos de dependencias y 
+    asegurando la replicabilidad del flujo de trabajo sin interferir con las librerías 
+    globales del sistema operativo.
+\end{itemize}
+
+\subsubsection{Blender}
+Blender es una suite de computación gráfica y modelado 3D de código abierto, desarrollada 
+por la comunidad y coordinada por la Fundación Blender. El software cuenta con un 
+intérprete de Python integrado que permite la ejecución de scripts procedurales para 
+extender su funcionalidad nativa.
+\medskip
+
+Para el desarrollo de este proyecto se seleccionó la versión 5.2 LTS de Blender, sustentada 
+en dos razones metodológicas principales:
+\begin{itemize}
+    \item \textbf{Soporte nativo de cuadrículas volumétricas:} A partir de la versión 5.0, 
+    Blender integra las cuadrículas dispersas (\textit{grids}) como un tipo de dato nativo 
+    dentro de su sistema de nodos. Asimismo, incorpora nuevos nodos especializados para 
+    la manipulación procedural de volúmenes, lo cual optimiza y simplifica 
+    significativamente los flujos de trabajo con formatos como OpenVDB en comparación con 
+    versiones arquitectónicas anteriores.
+    \item \textbf{Estabilidad y soporte de largo plazo:} Al tratarse de una distribución 
+    LTS (\textit{Long Term Support}), se garantiza la estabilidad operativa del entorno 
+    informático y la continuidad de soporte técnico frente a errores críticos durante 
+    el ciclo de vida del proyecto.
+\end{itemize}
+
+La distribución de Blender 5.2 LTS incorpora de manera embebida el intérprete de Python en 
+su versión 3.13.13.
+
+\subsubsection{Git}
+Git es un sistema de control de versiones distribuido ampliamente utilizado en la ingeniería 
+de software. Mediante el uso de ramas (\textit{branches}), permite gestionar características 
+del programa de forma aislada y segura, evitando interferencias mutuas durante la 
+integración de cambios. En consecuencia, Git asegura la trazabilidad del desarrollo al 
+segmentar las versiones estables de las ramas experimentales, facilitando la reversión del 
+código ante eventuales regresiones.
+\medskip
+
+Por su parte, GitHub es una plataforma en línea basada en Git diseñada para el alojamiento 
+de repositorios de código fuente, caracterizada por un enfoque colaborativo y la integración 
+de herramientas para flujos de trabajo avanzados de desarrollo, tales como Integración 
+Continua y Despliegue Continuo (CI/CD). Ambas tecnologías operan en conjunto: Git gestiona 
+el historial de cambios en el entorno local, mientras que GitHub actúa como el servidor y 
+repositorio remoto seguro.
+
+\subsubsection{Hardware}
+Para la implementación, pruebas y ejecución del flujo de trabajo de la investigación, se 
+utiliza una estación de trabajo personal con las siguientes especificaciones técnicas:
+\begin{itemize}
+    \item \textbf{Sistema operativo:} Microsoft Windows 11 Home.
+    \item \textbf{Procesador:} Intel Core i7 de 12.ª generación (frecuencia base de 2.3 GHz).
+    \item \textbf{Memoria RAM:} 16 GB de memoria de acceso aleatorio.
+    \item \textbf{Unidad de procesamiento gráfico (GPU):} NVIDIA GeForce RTX 3050 Ti Laptop 
+    GPU (4 GB de VRAM dedicada).
+    \item \textbf{Almacenamiento:} Unidad de estado sólido (SSD) de 1 TB.
+\end{itemize}
+
+La incorporación de una GPU dedicada es un factor crítico y altamente beneficioso para el 
+proyecto, ya que acelera el cálculo matricial en los modelos de inteligencia artificial, 
+las operaciones matemáticas de convolución y el procesamiento de renderizado gráfico 
+volumétrico en tiempo real.
