@@ -1,0 +1,47 @@
+\section{Configuración del Entorno de Desarrollo}
+La Configuración del entorno de desarrollo consisten principalmente en la instalación y configuración
+del software a utilizar, siendo estos Blender y Python.
+
+\subsubsection{Configuración del IDE}
+Se realizó una instalación estandar del editor de Visual Studio Code, agregando las extensiones de 
+Python, Pylance, Python Debugger y Python Environment para compatibilidad con Python y sus herramientas
+de desarrollo, así también como las extensiones de Remote Repositories y GitHub pull requests para la
+administración de repositorios remotos de GitHub dentro del editor. 
+
+\subsubsection{Configuración de Python}
+Para el desarrollo del proyecto se utilizarán dos versiones de Python. La versión 3.13.13 se instala
+por ser la misma versión utilizada por Blender 5.2 LTS, mientras que se instala la versión 3.12
+por ofrecer el mejor equilibrio entre compatibilidad y modernidad para utilizar Pytorch y otras
+bibliotecas utilizadas para el componente de extracción. Para ambas versiones se realiza una instalación
+estandar en el sistema y se indica la instalación específica para cada ambiente.
+
+\subsubsection{Ambientes virtuales}
+Se crea un ambiente virtual para cada componente desarrollado. Ambos ambientes son creados bajo el diretorio \textit{.venv} 
+como es convención, omitiendo la instalación de paqueterías por defecto. 
+Los ambientes son administrados a través de las extensiones de Python para Visual Studio Code.
+\medskip
+
+El ambiente virtual del componente
+de extracción se crea utilizando Python 3.12 como el binario de ejecución, bajo el nombre \textit{venv-extraccion}.
+Bajo este ambiente se instalaron las librerias torch (pytorch), numpy, y openvdb.
+\medskip
+
+El ambiente virtual del componente de visualización se crea con Python 3.13, bajo el nombre \textit{venv-visualización}.
+Bajo este ambiente se instaló la libreria de bpy y openvdb. Este ambiente es meramente de desarrollo,
+la ejecución de los scripts generados será a través del interprete del ambiente integrado de
+Python en Blender.
+\medskip
+
+Cabe hacer mención que la distribución oficial de la biblioteca de OpenVDB no ha sido actualizada desde la
+versión 3.8 de Python, por lo que se optó por compilar manualmente para las versiones 3.12 y 3.13. Las
+instrucciones de compilación e instalación en el ambiente, junto con los archivos generados y bibliotecas
+requeridas, son incluidos como anexos.
+
+\subsubsection{Blender}
+Se realizó una instalación estandar de Blender 5.2. En las preferencias de Blender se configuró para que
+utilizar CUDA como backend de renderizado de Cycles y la tarjeta gráfica dedicada del sistema como dispositivo 
+de renderizado. Se configuró Vulkan como backend de gráficos, utilizando también la tarjeta gráfica dedicada.
+\medskip
+
+Adicionalmente se configuró la ubicación del código fuente del componente de visualización como directorio adicional 
+de scripts para facilitar su descubrimiento y ejecución por parte de Blender.
