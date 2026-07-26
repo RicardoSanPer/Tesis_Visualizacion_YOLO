@@ -1,47 +1,73 @@
-\section{Configuración del Entorno de Desarrollo}
-La Configuración del entorno de desarrollo consisten principalmente en la instalación y configuración
-del software a utilizar, siendo estos Blender y Python.
+\section{Configuración del entorno de desarrollo}
+La configuración del entorno de desarrollo consiste principalmente en la instalación y acondicionamiento 
+del software base a utilizar, siendo estos Blender y Python.
+
+\subsubsection{Estructura de directorios}
+En el directorio raíz del proyecto se crearon las siguientes carpetas:
+\begin{itemize}
+    \item \textit{.venv}: contiene los ambientes virtuales utilizados para el desarrollo.
+    \item \textit{data}: contiene datos relacionados al aejecución del modelo YOLOv2, como
+    los pesos de la red o las imagenes de entrada.
+    \item \textit{src}: directorio que alberga el código fuente de los scripts de Python. 
+    Incluye los subdirectorios \textit{componente-extraccion} y \textit{componente-visualizacion}, 
+    los cuales contienen los módulos correspondientes a cada componente.
+\end{itemize}
+
+Adicionalmente, se incluyeron los archivos \textit{README.md} y \textit{.gitignore}, los cuales por 
+convención se integran en repositorios de Git para proveer la documentación general del proyecto y 
+definir la exclusión de archivos dentro del control de versiones, respectivamente.
 
 \subsubsection{Configuración del IDE}
-Se realizó una instalación estandar del editor de Visual Studio Code, agregando las extensiones de 
-Python, Pylance, Python Debugger y Python Environment para compatibilidad con Python y sus herramientas
-de desarrollo, así también como las extensiones de Remote Repositories y GitHub pull requests para la
-administración de repositorios remotos de GitHub dentro del editor. 
+Se realizó una instalación estándar del entorno de desarrollo Visual Studio Code, añadiendo las 
+extensiones de \textit{Python}, \textit{Pylance}, \textit{Python Debugger} y 
+\textit{Python Environment Manager} para la compatibilidad con el ecosistema de Python y sus 
+herramientas de depuración. Asimismo, se integraron las extensiones \textit{Remote Repositories} y 
+\textit{GitHub Pull Requests and Issues} para la administración y control de versiones de repositorios 
+remotos de GitHub directamente desde el editor.
 
 \subsubsection{Configuración de Python}
-Para el desarrollo del proyecto se utilizarán dos versiones de Python. La versión 3.13.13 se instala
-por ser la misma versión utilizada por Blender 5.2 LTS, mientras que se instala la versión 3.12
-por ofrecer el mejor equilibrio entre compatibilidad y modernidad para utilizar Pytorch y otras
-bibliotecas utilizadas para el componente de extracción. Para ambas versiones se realiza una instalación
-estandar en el sistema y se indica la instalación específica para cada ambiente.
+Para el desarrollo del proyecto se utilizan dos versiones de Python. La versión 3.13 se instaló por ser 
+la misma versión integrada en el entorno ejecutable de Blender 5.2 LTS. Por otra parte, se instaló la 
+versión 3.12 debido a que ofrece el mejor equilibrio entre compatibilidad, estabilidad y modernidad para 
+la ejecución de PyTorch y el resto de las bibliotecas asociadas al componente de extracción. Para ambas 
+versiones se realizó una instalación estándar en el sistema operativo, reservando su uso específico según 
+las necesidades de cada módulo.
 
 \subsubsection{Ambientes virtuales}
-Se crea un ambiente virtual para cada componente desarrollado. Ambos ambientes son creados bajo el diretorio \textit{.venv} 
-como es convención, omitiendo la instalación de paqueterías por defecto. 
-Los ambientes son administrados a través de las extensiones de Python para Visual Studio Code.
+Se configuró un ambiente virtual independiente para cada componente desarrollado. Ambos entornos fueron 
+creados dentro del directorio \textit{.venv}, omitiendo la instalación de paquetes globales por defecto. 
+La gestión y selección de estos ambientes se realiza a través de las extensiones de Python instaladas en
+Visual Studio Code.
 \medskip
 
-El ambiente virtual del componente
-de extracción se crea utilizando Python 3.12 como el binario de ejecución, bajo el nombre \textit{venv-extraccion}.
-Bajo este ambiente se instalaron las librerias torch (pytorch), numpy, y openvdb.
+El ambiente virtual correspondiente al **componente de extracción** se configuró utilizando Python 3.12 
+como ejecutable base, bajo la denominación \textit{venv-extraccion}. En este entorno se instalaron las 
+bibliotecas \textit{torch} (PyTorch), \textit{numpy}, \textit{torchvision} y la compilación nativa de \textit{openvdb}.
 \medskip
 
-El ambiente virtual del componente de visualización se crea con Python 3.13, bajo el nombre \textit{venv-visualización}.
-Bajo este ambiente se instaló la libreria de bpy y openvdb. Este ambiente es meramente de desarrollo,
-la ejecución de los scripts generados será a través del interprete del ambiente integrado de
-Python en Blender.
+El ambiente virtual del **componente de visualización** se estructuró con Python 3.13, bajo la denominación 
+\textit{venv-visualizacion}. En este entorno se instalaron los módulos de desarrollo de 
+\textit{bpy} y \textit{openvdb}. Cabe destacar que este ambiente opera exclusivamente para asistencia en 
+desarrollo (auto-completado y comprobación de tipos), dado que la ejecución real de los scripts se realiza 
+a través del intérprete de Python embebido dentro de la arquitectura de Blender.
 \medskip
 
-Cabe hacer mención que la distribución oficial de la biblioteca de OpenVDB no ha sido actualizada desde la
-versión 3.8 de Python, por lo que se optó por compilar manualmente para las versiones 3.12 y 3.13. Las
-instrucciones de compilación e instalación en el ambiente, junto con los archivos generados y bibliotecas
-requeridas, son incluidos como anexos.
+Es preciso mencionar que la distribución binaria oficial de la biblioteca \textit{pyopenvdb} en el índice 
+de paquetes de Python (PyPI) no se encuentra actualizada para las versiones recientes del intérprete, por 
+lo que se optó por compilar manualmente el módulo nativo para las versiones 3.12 y 3.13. Las 
+instrucciones de compilación, el procedimiento de vinculación de las bibliotecas dinámicas (DLLs) 
+requeridas y los artefactos binarios generados se adjuntan en los anexos técnicos de este documento.
 
 \subsubsection{Blender}
-Se realizó una instalación estandar de Blender 5.2. En las preferencias de Blender se configuró para que
-utilizar CUDA como backend de renderizado de Cycles y la tarjeta gráfica dedicada del sistema como dispositivo 
-de renderizado. Se configuró Vulkan como backend de gráficos, utilizando también la tarjeta gráfica dedicada.
+Se realizó la instalación estándar de Blender 5.2 LTS. En el panel de preferencias del sistema, 
+se configuró el motor de renderizado Cycles para utilizar la API \textit{CUDA} respaldada por la tarjeta 
+gráfica dedicada (GPU) como dispositivo de cómputo principal. Adicionalmente, se seleccionó la API gráfica 
+\textit{Vulkan} como backend de procesamiento del sistema de visualización en el \textit{viewport}, 
+asignando el procesamiento a la GPU dedicada.
 \medskip
 
-Adicionalmente se configuró la ubicación del código fuente del componente de visualización como directorio adicional 
-de scripts para facilitar su descubrimiento y ejecución por parte de Blender.
+Finalmente, se vinculó la ruta del código fuente del componente de visualización como directorio externo 
+de scripts dentro de las preferencias de Blender, facilitando el descubrimiento, actualización e inspección 
+automática de los módulos del complemento durante la fase de desarrollo. Dentro del directorio se crearon 
+los subdirectorios \textit{startup} y \textit{modules}, de acuerdo con las especificaciones de Blender 
+para descubrir automáticamente scripts y módulos de programación \parencite{blender_scripts_structure}.

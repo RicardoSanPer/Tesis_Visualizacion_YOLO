@@ -565,6 +565,9 @@ modelos/preentrenados/*.pt
 tesis/notas.md
 tesis/images
 tesis/main.pdf
+data/weights
+data/images
+src/componente-extraccion/TinyYoloV2
 
 # Graficas
 *.bkp
