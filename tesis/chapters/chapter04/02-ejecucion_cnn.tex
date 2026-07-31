@@ -14,11 +14,10 @@ El módulo de ejecución debe exponer la instancia del modelo, sus datos de entr
 resultante y un método para disparar la inferencia. La finalidad de esta estructura es permitir 
 la configuración de los ganchos de ejecución posterior (\textit{forward hooks}) y la extracción 
 de los metadatos de configuración. Este módulo se diseñó de la forma más independiente posible 
-con el propósito de ser no intrusivo y adaptable a diversos entornos de ejecución. En otras
-palabras, actúa como una abstracción de la implementación de un modelo.
+con el propósito de ser no intrusivo y adaptable a diversos entornos de ejecución.
 \medskip
 
-Para lograr esta abstracción, el módulo se estructuró mediante la clase \textit{ModelExecution}, 
+Para lograr esta abstracción, el módulo se estructuró mediante la clase \textit{ModelExecutor}, 
 la cual encapsula las estructuras de datos de la red y las funciones operativas de la 
 implementación. Esta clase cuenta con un constructor que recibe como parámetro la ruta del archivo 
 correspondiente a la imagen de entrada, realizando la carga y preprocesamiento de la imagen junto 
@@ -26,3 +25,12 @@ con los pesos del modelo pre-entrenado. Asimismo, el método \textit{execute} ef
 adelante (\textit{forward pass}) para obtener la inferencia y almacenar el resultado en un 
 atributo de la instancia. Mediante este esquema es posible inicializar la red y rastrear su 
 flujo de ejecución para acoplar los \textit{forward hooks} que capturan los tensores intermedios.
+\medskip
+
+El modelo se ejecuta correctamente, recibiendo 
+como argumentos la ruta de la imagen de entrada y generando como resultado una 
+imagen con las predicciones del modelo. Cabe mencionar que este módulo se mantuvo conciso debido 
+a que actúa como un controlador de interfaz entre la implementación específica del modelo y el 
+módulo de extracción. Si bien la implementación en un entorno de producción real podría variar, 
+este módulo sirve como una arquitectura de referencia para definir las estructuras de datos y 
+los métodos que deben ser expuestos.
