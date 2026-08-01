@@ -20,4 +20,4 @@ if __name__=="__main__":
     model = Exe.ModelExecutor(args.image_path)
     extractor = Ext.ModelExtractor(model)
     model.execute()
-    print(extractor.layers_data)
+    print(extractor.get_data())

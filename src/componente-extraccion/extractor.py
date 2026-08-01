@@ -2,7 +2,16 @@ import torch
 from torch.fx import symbolic_trace
 
 class ModelExtractor:
+    """Clase para extraer los datos del modelo de la red YOLOv2, incluyendo
+    tensores de capas de interés, configuraciones de las capas, y la arquitectura
+    de la red en la forma de las conexiones entre capas.
+    """
     def __init__(self, model):
+        """Constructor
+
+        Args:
+            model (ModelExecutor): Módulo de ejecución del modelo
+        """
         self.modelexe = model
         self.model = model.model
         self.layers = {}
@@ -15,10 +24,18 @@ class ModelExtractor:
             "connections": []
         }
 
-        self._set_hooks()
-        self._get_connections()
+        self._get_layer_data()
+        self._get_layer_connections()
 
     def _hook(self, module, input, output):
+        """Hook para el paso hacia adelante. Extrae los tensores de las capas de 
+        interés.
+
+        Args:
+            module (torch.nn.modules): Modulo de la capa
+            input (torch.Tensor): Tensor de entrada de la capa
+            output (torch.Tensor): Tensor de salida de la capa
+        """
         for name, layer in self.model.named_modules():
             # Omitir raíz
             if name == '':
@@ -26,13 +43,17 @@ class ModelExtractor:
             # Omitir capas para las cuales no se extraen datos
             if not self.layers_data[name]["data"]:
                 continue
+            # Guardar tensor de salida
             if layer is module:
                 self.layers[name] = output.detach().cpu()
                 break
                 
 
 
-    def _set_hooks(self):
+    def _get_layer_data(self):
+        """ Extrae datos de las capas y configura los hooks para las capas con datos
+        intermedios de interés
+        """
         ## Extrae configuración de las capas y crea el forward hook
         for name, layer in self.model.named_modules():
             # Obtener nombre correcto de la capa
@@ -70,11 +91,12 @@ class ModelExtractor:
                     "connections"    : []
                     }
 
-    def _get_connections(self):
+    def _get_layer_connections(self):
+        """ Obtiene las conexiones entre capas
+        """
         gm = symbolic_trace(self.model)
         for node in gm.graph.nodes:
             dst = self._node_name(node)
-
             if dst is None:
                 continue
             for inp in node.all_input_nodes:
@@ -84,16 +106,30 @@ class ModelExtractor:
                 self.layers_data[src]["connections"].append(dst)
 
     def _node_name(self, node):
+        """Funcion auxiliar para obtener el nombre de un nodo del grafo de la red
+
+        Args:
+            node (torch.fx.node.Nose): Nodo del grafo de la red generado por torch.fx
+
+        Returns:
+            _type_: _description_
+        """
+        # Para el nodo de la entrada
         if node.op == "placeholder":
             return "input"
+        # Para otros nodos, con el nombre correcto
         elif node.op == "call_module":
             return node.target
         return None
 
     def get_data(self):
+        """Obtener los datos de la red en un formato estructurado
+
+        Returns:
+            dict: datos de la red
+        """
         return {
             "confidence"    : self.modelexe.conf_threshold,
             "nms"           : self.modelexe.nms_threshold,
             "layers_data"   : self.layers_data
-
         }

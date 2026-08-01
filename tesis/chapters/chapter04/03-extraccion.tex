@@ -1,5 +1,23 @@
 \section{Extracción de Salidas Intermedias}
 Teniendo el módulo de ejecución el siguiente modulo a implementar es el de extracción. La función principal de este módulo es
 establecer los forward-hooks del modelo para extraer las salidas intermedias de la red, así como otros metadatos de la red como 
-la arquitectura, detalles de las capas, y entradas y salidas de la red, para convertirlos a un formato de datos intermedio
+la arquitectura, detalles de las capas, y entradas y salidas de la red, para convertirlos a un formato intermedio
 dentro de Python.
+\medskip
+
+Similar al módulo de ejecución, el módulo de extracción se concibió como una clase \textit{ModelExtractor}.
+Tomando como parámetro una instancia de la clase \textit{ModelExecutor}, esta clase realiza dos funciones
+principales.
+\medskip
+
+La primera consiste en configurar los forward-hooks sobre el modelo para capturar los tensores
+de capas intermedias de interés, como lo son las capas convolucionales y las capas de Max-Pooling.
+Estos tensores son guardados en un diccionario, indexados por el nombre de la capa de origen.
+\medskip
+
+La segunda función se encarga de extraer metadatos de la red, indexados por capa. Estos metadatos incluyen
+la arquitectura de la red (particularmente las conexiones entre capas) y los parámetros
+de las capas, como el tipo de capa, número de canales de entrada y salida o el tamaño 
+del kernel de convolución. En común los datos de cada capa indica las capas subsecuentes con las
+que tiene conexiones, y si se capturan los tensores de la capa.
+% Revisar ortografía
