@@ -30,7 +30,7 @@ class ModelExecutor:
                'sheep', 'sofa', 'train', 'TVmonitor']
 
     def __init__(self, input_path: Path):
-        """Constructor de la clase de ejecución
+        """Constructor de la clase de ejecución.
 
         Args:
             input_path (Path): Ruta de archivo de entrada del modelo
@@ -41,7 +41,7 @@ class ModelExecutor:
         self._load_input_tensor()
 
     def execute(self):
-        """Ejecuta el modelo
+        """Ejecuta el modelo.
         """
         self.model.eval()
         with torch.no_grad():
@@ -55,7 +55,7 @@ class ModelExecutor:
 
 
     def _load_image(self):
-        """Carga una imagen dada la ruta de entrada
+        """Carga una imagen dada la ruta de entrada.
         """
         if self._file_validation(self.input_path):
             self.input_image = Image.open(self.input_path)
@@ -80,7 +80,7 @@ class ModelExecutor:
         self.input_tensor = transform(self.input_image).unsqueeze(0).to(self.device)
 
     def _file_validation(self, path: Path):
-        """Valida la ruta de archivo
+        """Valida la ruta de archivo.
 
         Args:
             path (Path): Ruta de archivo

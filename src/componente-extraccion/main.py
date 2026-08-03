@@ -19,5 +19,5 @@ if __name__=="__main__":
     # Crear y ejecutar el modelo
     model = Exe.ModelExecutor(args.image_path)
     extractor = Ext.ModelExtractor(model)
-    model.execute()
+    extractor.extract()
     print(extractor.get_data())

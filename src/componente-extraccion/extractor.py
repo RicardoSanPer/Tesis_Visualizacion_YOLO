@@ -52,7 +52,7 @@ class ModelExtractor:
 
     def _get_layer_data(self):
         """ Extrae datos de las capas y configura los hooks para las capas con datos
-        intermedios de interés
+        intermedios de interés.
         """
         ## Extrae configuración de las capas y crea el forward hook
         for name, layer in self.model.named_modules():
@@ -92,7 +92,7 @@ class ModelExtractor:
                     }
 
     def _get_layer_connections(self):
-        """ Obtiene las conexiones entre capas
+        """ Obtiene las conexiones entre capas.
         """
         gm = symbolic_trace(self.model)
         for node in gm.graph.nodes:
@@ -106,7 +106,7 @@ class ModelExtractor:
                 self.layers_data[src]["connections"].append(dst)
 
     def _node_name(self, node):
-        """Funcion auxiliar para obtener el nombre de un nodo del grafo de la red
+        """Funcion auxiliar para obtener el nombre de un nodo del grafo de la red.
 
         Args:
             node (torch.fx.node.Nose): Nodo del grafo de la red generado por torch.fx
@@ -121,9 +121,17 @@ class ModelExtractor:
         elif node.op == "call_module":
             return node.target
         return None
+    
+    def extract(self):
+        """Ejecuta el modelo y extrae la imagen de entrada y salida.
+        """
+        self.modelexe.execute()
+        self.input_image = self.modelexe.input_image
+        self.output_image = self.modelexe.output_image
+
 
     def get_data(self):
-        """Obtener los datos de la red en un formato estructurado
+        """Obtener los datos de la red en un formato estructurado.
 
         Returns:
             dict: datos de la red
