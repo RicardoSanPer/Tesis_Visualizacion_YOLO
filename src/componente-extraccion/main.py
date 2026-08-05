@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 import ejecucion as Exe
 import extractor as Ext
+import exportar as Exp
 
 if __name__=="__main__":
     """Funcion main para el componente de extracción. Toma como entrada la ruta de archivo de la entrada de la red.
@@ -20,4 +21,5 @@ if __name__=="__main__":
     model = Exe.ModelExecutor(args.image_path)
     extractor = Ext.ModelExtractor(model)
     extractor.extract()
-    print(extractor.get_data())
+    exporter = Exp.ModelExporter(extractor)
+    exporter.export()
