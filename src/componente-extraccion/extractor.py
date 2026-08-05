@@ -46,6 +46,7 @@ class ModelExtractor:
             # Guardar tensor de salida
             if layer is module:
                 self.layers[name] = output.detach().cpu()
+                self.layers_data[name]["dimensions"] = self.layers[name].shape
                 break
                 
 
@@ -128,6 +129,7 @@ class ModelExtractor:
         self.modelexe.execute()
         self.input_image = self.modelexe.input_image
         self.output_image = self.modelexe.output_image
+        self.boxes = self.modelexe.boxes
 
 
     def get_data(self):
