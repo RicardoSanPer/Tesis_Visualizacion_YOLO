@@ -51,7 +51,7 @@ class ModelExecutor:
                                           self.model.anchors, self.model.num_anchors)[0]
         self.boxes = utils.nms(self.boxes, self.nms_threshold)
         output_file = self.input_path.parent / "output.jpg"
-        self.output_image = utils.plot_boxes(self.input_image, self.boxes, savename=None, class_names=self.class_names)
+        self.output_image = utils.plot_boxes(self.input_image.copy(), self.boxes, savename=None, class_names=self.class_names)
 
 
     def _load_image(self):
