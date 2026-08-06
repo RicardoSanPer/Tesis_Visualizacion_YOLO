@@ -6,12 +6,32 @@ y exportarlos como archivos al disco.
 \medskip
 
 Para transformar los tensores, el módulo convierte los tensores extraídos a un
-arreglo de numpy de floats de 32 bits, y elimina la dimensión extra que los tensores
-suelen tener para obtener un arreglo tridimensional. Posteriormente crea una
+arreglo tridimensional de numpy de números de punto flotante de 32 bits, y elimina la
+ dimensión extra que los tensoressuelen. Posteriormente crea una
 cuadrícula de OpenVDB a partir de este arreglo, aplica algunas transformaciones lineares
 para que se conforme con el sistema de coordenadas de Blender, y exporta la cuadrícula
 como un archivo \textit{.vdb} bajo el nombre de la capa.
 \medskip
 
 Por su parte, los metadatos de las capas y la red son exportados en formato JSON
-bajo el nombre de archivo \textit{manifest}.
+bajo el nombre de archivo \textit{manifest}. Las imagenes de entrada y salida de la red,
+a su vez, son guardadas bajo los respectivos nombres \textit{input} y 
+\textit{output} con el formato PNG.
+
+Finalmente el modelo produce como salida un arreglo de cajas, en el que cada caja es una
+tupla:
+\begin{equation}\label{eq:cajas_salida}
+    (x, y, w, h, confidence, class probability, class id)
+\end{equation}
+donde
+\begin{itemize}
+    \item \textit{x, y} son las coordenadas del centro de la caja.
+    \item \textit{w, h} son dimensiones de la caja.
+    \item \textit{confidence} es la certeza de la existencia de un objeto dentro de la caja.
+    \item \textit{class probability} es la probabilidad de que el objeto es de la clase detectada.
+    \item \textit{class id} es el identificador de la clase a la que pertenece el objeto en la caja.
+\end{itemize}
+Este arreglo de cajas se codifica como una cuadricula tridimensional de OpenVDB, siendo el volumen
+generado una única "rebanada". En esta rebanada cada columna corresponde a los datos de una caja,
+y cada fila corresponde secuencialmente a los datos de cada caja dada por \ref{eq:cajas_salida}.
+De este modo los datos de la caja pueden ser facilmente indexados en Blender para su visualización.

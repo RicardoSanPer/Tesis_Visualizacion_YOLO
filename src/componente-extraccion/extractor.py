@@ -1,5 +1,6 @@
 import torch
 from torch.fx import symbolic_trace
+import torch.nn.functional as F
 
 class ModelExtractor:
     """Clase para extraer los datos del modelo de la red YOLOv2, incluyendo
@@ -141,5 +142,6 @@ class ModelExtractor:
         return {
             "confidence"    : self.modelexe.conf_threshold,
             "nms"           : self.modelexe.nms_threshold,
+            "n_boxes"       : len(self.boxes),
             "layers_data"   : self.layers_data
         }

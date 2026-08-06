@@ -22,7 +22,7 @@ class ModelExecutor:
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     weight_path = Path.cwd() / "data" / "weights" / "yolov2-tiny-voc.weights"
 
-    conf_threshold = 0.66
+    conf_threshold = 0.55
     nms_threshold = 0.55
     class_names = ['aeroplane', 'bicycle', 'bird', 'boat', 'bottle',
                'bus', 'car', 'cat', 'chair', 'cow', 'diningtable',

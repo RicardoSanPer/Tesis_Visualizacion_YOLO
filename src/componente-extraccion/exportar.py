@@ -1,40 +1,64 @@
 import extractor
 from pathlib import Path
+import numpy as np
 import openvdb
 import json
 
 class ModelExporter:
+    """_summary_
+
+    Raises:
+        ValueError: Cuando la ruta de destino está vacía
+        NotADirectoryError: Si la ruta de destuno es de un archivo y no un directorio
+    """
     output_path = Path.cwd() / "data" / "output"
     output_data_file = "manifest"
     transform_matrix = [
         [1.0,   0.0,   0.0, 0.0],
-        [0.0,   0.0,  -1.0, 0.0],  # Inverted Y-to-Z mapping to un-flip vertical axis
-        [0.0,  -1.0,   0.0, 0.0],  # Z moves to -Y
+        [0.0,   0.0,  -1.0, 0.0],
+        [0.0,  -1.0,   0.0, 0.0],
         [0.0,   0.0,   0.0, 1.0]
     ]
     def __init__(self, extractor):
         self.model_extractor = extractor
 
     def export(self):
+        """Exporta los datos extraidos del modelo a JSON y OpenVDB
+        """
         self._file_validation(self.output_path)
 
         with open(str(self.output_path / f"{self.output_data_file}.json"), "w", encoding="utf-8") as file:
-            json.dump(self.model_extractor.layers_data, file, indent=4)
+            json.dump(self.model_extractor.get_data(), file, indent=4)
 
         for key in self.model_extractor.layers.keys():
             self._convert_tensor(key)
 
         self._save_io_images()
-        #self._convert_boxes()
+        self._convert_boxes()
 
     def _save_io_images(self):
+        """Exporta las imagenes de entrada y salida
+        """
         self.model_extractor.input_image.save(str(self.output_path / "input.png"))
         self.model_extractor.output_image.save(str(self.output_path / "output.png"))
 
-    def _convert_boxes(self, box):
-        pass
+    def _convert_boxes(self):
+        """Convierte las cajas de salida a formato openvdb
+        """
+        #Cada caja tiene formato (x, y, w, h, confidence, class probability, class id)
+        data = np.array([[[t.item() for t in row] for row in self.model_extractor.boxes]])
+        grid = openvdb.FloatGrid()
+        grid.copyFromArray(data)
+        grid.name = "density"
+        openvdb.write(str(self.output_path / "boxes.vdb"), grid)
 
-    def _convert_tensor(self, layer):
+    def _convert_tensor(self, layer:str):
+        """Convierte un tensor a cuadrícula OpenVDB y guarda el archivo
+
+        Args:
+            layer (str): nombre de la capa del tensor
+        """
+        
         # Convertir tensores a arreglo de numpy
         data = self.model_extractor.layers[layer].numpy()
         data = data.astype("float32")
