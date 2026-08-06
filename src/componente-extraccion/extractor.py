@@ -17,6 +17,7 @@ class ModelExtractor:
         self.model = model.model
         self.layers = {}
         self.layers_data = {}
+        self.classes = model.class_names
 
         # Placeholder para la entrada
         self.layers_data["input"] = {
@@ -143,5 +144,6 @@ class ModelExtractor:
             "confidence"    : self.modelexe.conf_threshold,
             "nms"           : self.modelexe.nms_threshold,
             "n_boxes"       : len(self.boxes),
+            "classes"       : ",".join(self.classes),
             "layers_data"   : self.layers_data
         }
