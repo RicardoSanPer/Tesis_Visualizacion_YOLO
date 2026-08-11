@@ -8,9 +8,8 @@ Para la transformación de los tensores, el módulo convierte cada tensor extra�
 tridimensional de \textit{NumPy} con precisión de punto flotante de 32 bits (\textit{float32}), 
 eliminando las dimensiones adicionales que suelen incorporar los tensores de PyTorch (e.g., la 
 dimensión de lote o \textit{batch}). Posteriormente, se genera una cuadrícula volumétrica de OpenVDB 
-a partir de dicho arreglo, aplicando las transformaciones lineales requeridas para ajustar el volumen 
-al sistema de coordenadas de Blender, y exportando finalmente la cuadrícula como un archivo con extensión 
-\textit{.vdb} nombrado según la capa correspondiente.
+a partir de dicho arreglo, aplicando las transformaciones lineales para ajustar el volumen, 
+y exportando finalmente la cuadrícula como un archivo con extensión \textit{.vdb} nombrado según la capa correspondiente.
 \medskip
 
 Por su parte, los metadatos estructurales de las capas y la red se exportan en formato JSON bajo el nombre 

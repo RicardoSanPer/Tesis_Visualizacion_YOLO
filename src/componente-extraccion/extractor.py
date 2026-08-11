@@ -82,6 +82,7 @@ class ModelExtractor:
                     "kernel_size"    : layer.kernel_size,
                     "stride"         : layer.stride,
                     "padding"        : layer.padding,
+                    "ceiling"        : layer.ceil_mode,
                     "data"           : True,
                     "connections"    : []
                     }

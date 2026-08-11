@@ -13,12 +13,7 @@ class ModelExporter:
     """
     output_path = Path.cwd() / "data" / "output"
     output_data_file = "manifest"
-    transform_matrix = [
-        [1.0,   0.0,   0.0, 0.0],
-        [0.0,   0.0,  -1.0, 0.0],
-        [0.0,  -1.0,   0.0, 0.0],
-        [0.0,   0.0,   0.0, 1.0]
-    ]
+    
     def __init__(self, extractor):
         self.model_extractor = extractor
 
@@ -68,7 +63,6 @@ class ModelExporter:
         #Convertir a OpenVDB
         grid = openvdb.FloatGrid()
         grid.copyFromArray(data)
-        grid.transform = openvdb.createLinearTransform(matrix=self.transform_matrix)
         grid.transform = openvdb.createLinearTransform(voxelSize=0.1)
         grid.name = "density"
         openvdb.write(str(self.output_path / f"{layer}.vdb"), grid)

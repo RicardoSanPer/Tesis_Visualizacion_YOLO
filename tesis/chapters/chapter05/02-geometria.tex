@@ -1,0 +1,131 @@
+\section{Creación de Geometría}
+La creación de la geometría se realiza utilizando grupos de nodos de geometría, creados a través
+del editor de nodos de geometría. Cada grupo contiene parametros expuestos que controlan
+proceduralmente la creación de la geometría, y por lo tanto, son valores que pueden ser
+animados en el editor de Blender. Por consecuencia, los grupos actúan también como
+controles de animación.
+
+\subsection{Visualización de Volumenes}
+La visualización de volúmenes se realiza a través de un grupo de nodos \textit{Volume Viewer}.
+Siendo que los tensores son codificados en la forma de volúmenes de OpenVDB, su visualización consiste
+principalmente en el muestreo de los valores en la cuadrícula tridimensional.
+\medskip
+
+El grupo de nodos toma como parámetros:
+\begin{itemize}
+    \item \textit{Volume File}: El archivo OpenVDB con el tensor capturado de una capa de la red.
+    \item \textit{Resolution}: La resolución de una rebanada del tensor. Se asume que las
+    rebanadas son cuadradas.
+    \item \textit{Slice Count}: El número de rebanadas del tensor, o el número de canales que produce.
+    \item \textit{World Size}: El tamaño físico que la visualización tendrá en la escena de Blender. Las dimensiones
+    X, Y y Z corresponden a la anchura, altura y grosor de la visualización del volumen dentro de la escena.
+    \item \textit{Slice Selection}: El índice de la rebanada a visualizar. La visualización oculta todas
+    las rebanadas frente a la selección.
+    \item \textit{Single Slice}: Opción para ocultar todas las rebanadas excepto la seleccionada.
+\end{itemize}
+
+El nodo de geometría genera instancias de planos que actúan como las visualizaciones de cada revanada. 
+Las dimensiones de cada plano estan dadas por los valores especificados por \textit{World Size}, y subidivido 
+de acuerdo a la resolución. Se intancia uno de estos planos por rebanada en el volumen y se le asigna un índice
+correspondiente.
+\medskip
+
+Seguido, haciendo uso del mapa UV autogenerado por cada plano y su índice de rebanada se muestrea en
+el volumen el voxel correspondiente. El valor obtenido, correspondiente a un valor de activacion, 
+es pasado al material asignado a los planos, un valor por cada subdivisión, para mapear el valor a un color.
+\medskip
+
+Con lógica adicional el nodo de geometría genera una malla para visualizar los límites físicos del volumen
+y selectivamente ocultar capas. Y finalmente se almacenan como atributos del objeto las dimensiones físicas
+del volumen, las dimensiones del tensor (resolución y número de capas) y el índice de la capa seleccionada.
+
+\subsection{Visualización de Conexiones}
+La visualización de conexiones se implementa a través del grupo de nodos \textit{Volume Connection}, el cual
+realiza dos tareas principales: visualiza físicamente las conexiones entre capas, y visualiza el flujo de 
+datos entre estas.
+\medskip
+
+El grupo toma como parámetros:
+\begin{itemize}
+    \item \textit{Input Layer, Output Layer}: Referencias a los objetos de visualización de volúmenes
+    corespondientes a capas.
+    \item \textit{View Convolution}: Muestra la animación procedural de una convolución, mostrando un kernel
+    iterando sobre las capas de entrada y salida.
+    \item \textit{T}: Valor de progresión de la animación de la convolución.
+    \item \textit{Kernel Size}: Tamaño del kernel.
+    \item \textit{Stride}: Stride de la convolucion.
+    \item \textit{Ceiling Mode}: Modo de redondeo cuando el tamaño del tensor es reducido debido al stride.
+    Por defecto utiliza la operación \textit{ceiling}, siendo la otra opción \textit{floor}.
+    \item \textit{Operation Mode}: Indica el modo de la operación de convolución, siendo los valores \textit{One to One},
+    \textit{Many to One} y \textit{Many to Many}.
+\end{itemize}
+
+Para visualizar las conexiones físicas simplemente genera aristas entre las esquinas correspondientes de los 
+volumenes, utilizando el atributo de las dimensiones físicas almacenadas por el nodo de geometría de visualización 
+de volumenes de los objetos que representan las capas de entrada y salida.
+\medskip
+
+Para visualizar el flujo de datos los nodos generan una representación de la celda que la capa de entrada está 
+evaluando y una representadión de la celda en la capa de salida con el valor de salida correspondiente. Utilizando
+los atributos de las dimensiones físicas del volumen y las dimensiones del tensor se calcula el tamaño
+físico de las celdas de una rebanada y la posición de la primera celda (en la esquina superior izquierda).
+En el caso de la capa de entrada se genera también una representación de la localidad del kernel.
+\medskip
+
+Utilizando un valor \textit{T} se controla la progresión, de izquierda a derecha y de arriba a abajo, 
+del kernel sobre las celdas de una rebanada, donde un valor de 0 indica la posición inicial y 1 la posición final 
+(en la esquina inferior derecha). Utilizando los valores de la
+resolución de la capa y el valor de stride se calcula la cuadrícula de iteración para representar los valores que
+la capa evalúa, y utilizando el tamaño físico de las celdas se obtiene el desfase físico para trasladar correctamente 
+el kernel. Cabe mencionar que las iteraciones de las capas de entrada y salida son realizadas independientemente,
+y se asumie que los tamaños de tensores de entrada y salida son correctos para los parametros de \textit{stride} y 
+\textit{ceil mode}.
+
+Adicionalmente los kernels se pueden visualizar cubriendo todas las rebanadas (para operaciones que realizan 
+operaciones sobre todas las capas, como la convolución), o solo la rebanada seleccionada 
+(para capas que realizan operaciones por canal, como \textit{Max-Pooling}). A partir de estos se implementan
+tres modos de visualización de las operaciones:
+\begin{itemize}
+    \item \textit{One to One}: Operaciones que se realizan canal a canal: cada canal produce un canal de salida,
+    como en el caso de la operación de \textit{Max-Pooling}.
+    \item \textit{Many to One}: La operación se aplica a todos los canales de entrada y produce un solo canal de
+    salida, como en el caso de las capas convolucionales.
+    \item \textit{Many to Many}: La intención de este modo es abstraer la visualización del flujo de datos entre
+    capas, para simplemente visualizar la entrada y salida de las capas.
+\end{itemize}
+
+El kernel genera también un "fatasma", una copia del kernel posicionada directamente sobre la rebanada seleccionada
+para auxiliar en la visualización de los valores que se evalúan.
+
+\subsection{Visualización de Cajas}
+El grupo de nodos \textit{Box Viewer} se utiliza para visualizar las cajas de salida de la red. Este grupo de nodos de 
+geometría toma como parámetros:
+\begin{itemize}
+    \item \textit{Box File}: El archivo OpenVDB que contiene los datos codificados de las cajas.
+    \item \textit{Box Count}: El número total de cajas de predicción producidas por la red.
+    \item \textit{Class List}: La lista de etiquetas de clases usadas por la red, separadas por comas.
+    \item \textit{Box Selection}: Control para visualizar cajas individuales o por parámetros.
+    \item \textit{Confidence}: Filtro de visualización de cajas en base a su objetividad (\textit{Objectiveness}).
+    \item \textit{Class Probability}: Filtro de visualización de cajas en base a su probabilidad de clase.
+\end{itemize}
+Para generar las cajas primero se genera una "libreria" de mallas de texto con las etiquetas de las clases
+a partis de la lista de etiquetas de los parametros.
+Se instancian cuadrados que representan cada una de las cajas, cada uno con un índice. Con este índice se indexa
+del volúmen OpenVDB loa datos codificados de cada caja. Con ellos, se aplican transformaciones a los cuadros
+para colocarlos en las coordenadas de predicción y para escalarlos a las dimensiones apropiadas. Utilizando 
+el ID de clase de las cajas se insancia la malla de texto de la etiqueta de clase correspondiente sobre la
+caja, y se asigna un color a la etiqueta y caja para facilitar la distinción de clases y se guarda como 
+atributo la objetividad y probabilidad de clase por cada par de etiqueta/caja.
+Finalmente se instancia un plano con la imagen de entrada sobre el cual se superponen las cajas y etiquetas
+para visualizar la salida de la red.
+\medskip
+
+Para visualizar las caja hay tres opciones dependiendo del valor de \textit{Box Selection}:
+\begin{itemize}
+    \item \textit{-1}: Muestra todas las cajas, pero filtrando de acuerdo al valor de \textit{Confidence}
+    y \textit{Class Probability}.
+    \item \textit{0 - (N-1)}: Muestra únicamente la caja con el indice seleccionado, para una cuenta total de
+    \textit{N} cajas.
+    \item \textit{N}: Muestra todas las cajas, ignorando los valores de \textit{Confidence} y 
+    \textit{Class Probability}.
+\end{itemize}
