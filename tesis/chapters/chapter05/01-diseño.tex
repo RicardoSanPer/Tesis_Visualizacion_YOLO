@@ -1,3 +1,74 @@
-\section{Diseño del Mapeo Visual}
+\section{Diseño del mapeo visual}
+El diseño de la representación tridimensional tiene como objetivo transformar las estructuras 
+abstractas y los tensores multidimensionales de la red neuronal en primitivas geométricas e 
+interactivas dentro de Blender. Para lograr una interpretación intuitiva del modelo, el mapeo 
+visual se articula en tres dominios fundamentales: la \textbf{geometría de las capas}, la 
+\textbf{topología de la red} y la \textbf{reconstrucción de la salida}.
 
+\subsection{Mapeo de capas y tensores de activación}
+Cada capa convolucional o de agrupamiento (\textit{Max-Pooling}) se representa como un 
+paralelepípedo contenedor (\textit{bounding volume}), cuyas dimensiones físicas de ancho, 
+alto y profundidad en el espacio 3D son proporcionales a la resolución espacial y número de 
+canales del tensor correspondiente.
+\medskip
 
+Dentro de estos contenedores, la información volumétrica proveniente de los archivos 
+\textit{OpenVDB} se renderiza mediante un esquema de rebanado dinámico (\textit{planar slicing}). 
+Este mecanismo permite al usuario interpolar a través de la profundidad del tensor para inspeccionar 
+mapas de activación específicos. En ausencia de datos volumétricos o con fines de abstracción 
+arquitectónica, el contenedor puede representarse como un cuerpo sólido simplificado para reducir 
+la carga de renderizado. Asimismo, los metadatos de la capa (identificador, tipo de operación, 
+dimensiones del tensor y tamaño del \textit{kernel}) se proyectan en la escena mediante etiquetas
+de texto 3D vinculadas a la posición de la capa.
+
+\subsection{Mapeo de la topología y flujo de datos}
+La topología de la red se formaliza mediante un grafo dirigido en el espacio tridimensional. 
+Las conexiones entre capas consecutivas se representan mediante cuatro aristas geométricas que unen 
+las esquinas correspondientes de sus volúmenes delimitadores; específicamente, conectan la cara 
+posterior del paralelepípedo de la capa de entrada con la cara frontal del paralelepípedo de la capa 
+de salida. Esta representación en cuadrilátero proyectado define un volumen de transición claro que 
+delimita visualmente el flujo de datos entre capas.
+\medskip
+
+Para representar el flujo de procesamiento, el sistema modela el comportamiento del kernel 
+como una primitiva geométrica secundaria que se desplaza o proyecta 
+iterativamente sobre las rebanadas del tensor, evidenciando las relaciones de dependencia espacial y 
+las operaciones de submuestreo entre capas conectadas.
+
+\subsection{Mapeo de la salida y predicciones}
+La representación de la salida del modelo integra la imagen de entrada en el plano focal de la escena 
+y superpone las predicciones geométricas filtradas. Los valores de confianza (\textit{confidence}) y 
+probabilidad de clase (\textit{class probability}) extraídos por el modelo no poseen una primitiva 
+geométrica directa; en su lugar, para filtrar y 
+discriminar las cajas que superan los umbrales configurados, ocultando de la visualización las 
+detecciones no significativas.
+\medskip
+
+Las cajas delimitadoras (\textit{bounding boxes}) resultantes del filtrado se instancian sobre la 
+imagen como mallas alámbricas a las que se les aplican las transformaciones geométricas de posición y 
+escala requeridas según sus parámetros $(x, y, w, h)$. Finalmente, la categoría o clase detectada 
+se visualiza mediante dos elementos explícitos: el color asignado a la estructura de la caja y 
+una malla de texto 3D que despliega la etiqueta correspondiente sobre el volumen delimitador.
+
+\subsection{Resumen de primitivas visuales}
+En la Cuadro \ref{tab:mapeo_visual} se sintetiza la correspondencia entre los elementos de la red 
+neuronal y sus primitivas de representación gráfica en el entorno 3D.
+
+\begin{table}[htbp]
+    \centering
+    \small
+    \begin{tabular}{lll}
+        \hline
+        \textbf{Elemento de la Red} & \textbf{Atributo / Datos} & \textbf{Primitiva / Representación en Blender} \\ \hline
+        Capas & Dimensiones del tensor & Paralelepípedo 3D (Escala proporcional) \\
+        Tensores de activación & Salidas volumétricas & Malla OpenVDB con \textit{slicing} de densidad \\
+        Metadatos de capa & Nombre, Kernel, Stride & Etiquetas tipográficas \\
+        Conexiones inter-capa & Topología de red & 4 aristas entre esquinas de caras opuestas \\
+        Operación del Kernel & Paso / Desplazamiento & Primitiva iterativa de barrido \\
+        Cajas de predicción & $(x, y, w, h)$ & Malla alámbrica superpuesta (\textit{Bounding Box}) \\
+        Confianza y Probabilidad & \textit{Confidence, Class Prob.} & Criterio de filtrado (Sin primitiva directa) \\
+        Categoría / Clase & ID de Clase / Etiqueta & Mapeo de color de caja y malla de texto 3D \\ \hline
+    \end{tabular}
+    \caption{Matriz de mapeo entre los elementos de la red y las primitivas visuales en Blender.}
+    \label{tab:mapeo_visual}
+\end{table}
