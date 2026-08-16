@@ -16,12 +16,14 @@ en la cuadrícula tridimensional (\textit{grid}).
 El grupo de nodos recibe como parámetros de entrada:
 \begin{itemize}
     \item \textit{Volume File}: el archivo \textit{OpenVDB} que contiene el tensor capturado de la capa.
+    \item \textit{Simplified Volume}: indica si visualizar el objeto como un objeto sólido.
+    \item \textit{Color}: color del objeto simplificado.
+    \item \textit{World Size}: las dimensiones físicas $(X, Y, Z)$ que adoptará el objeto dentro 
+    del espacio de la escena en Blender (ancho, alto y profundidad).
     \item \textit{Resolution}: la resolución espacial $(X, Y)$ de cada rebanada del tensor. 
     Se asume que las rebanadas presentan una topología cuadrada.
     \item \textit{Slice Count}: la profundidad o número total de rebanadas del tensor, equivalente 
     al número de canales de activación generados.
-    \item \textit{World Size}: las dimensiones físicas $(X, Y, Z)$ que adoptará el objeto dentro 
-    del espacio de la escena en Blender (ancho, alto y profundidad).
     \item \textit{Slice Selection}: el índice numérico de la rebanada activa. La visualización 
     oculta dinámicamente las rebanadas posteriores al índice seleccionado.
     \item \textit{Single Slice}: indicador booleano para aislar la rebanada seleccionada, 

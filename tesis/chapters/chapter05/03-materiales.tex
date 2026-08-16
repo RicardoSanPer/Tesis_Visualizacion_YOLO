@@ -1,1 +1,40 @@
-\section{Materiales y Shaders}
+\section{Materiales y sombreadores (Shaders)}
+Para la visualización de la geometría se optó por un modelo de renderizado no basado en física (\textit{Non-PBR}, 
+por sus siglas en inglés), en virtud de que el objetivo central es facilitar la interpretación y el análisis cuantitativo d
+e los tensores de la red. Al prescindir del renderizado fotorrealista, el sistema prioriza la fidelidad cromática y la 
+legibilidad de los datos sobre efectos estéticos complejos, adoptando el estándar habitual de la visualización científica. 
+Con este propósito, todos los sombreadores del sistema se fundamentan en nodos de emisión pura (\textit{Emission Shaders}).
+\medskip
+
+En computación gráfica, los materiales emisivos representan superficies que proyectan luz propia. Como resultado, estos 
+sombreadores omiten el cómputo de sombras, oclusiones o reflexiones especulares dependientes de fuentes de luz externas, 
+garantizando que los valores de color se desplieguen de forma homogénea e invariable respecto a las fuentes de iluminación
+de la escena. Dicha propiedad convierte a los materiales emisivos en la solución idónea para presentar texturas y 
+mapas escalares bajo su valor cromático directo (color real o \textit{albedo}).
+\medskip
+
+El material \textbf{Volume Slice} se encarga del sombreado de las rebanadas volumétricas. Este material recibe como atributo 
+geométrico un valor escalar normalizado en el intervalo $[0, 1]$, y mediante un nodo de rampa de color (\textit{Color Ramp}) 
+mapea dicho escalar a un gradiente predefinido. El valor transferido corresponde a la magnitud de activación del tensor en 
+la celda evaluada, generando así un mapa de calor (\textit{heatmap}) que refleja la intensidad de las activaciones intermedias.
+\medskip
+
+El material \textbf{Simplified Volume} se emplea para el sombreado de las capas en su modo de representación compacta. A 
+partir de un color base asignado por el nodo de geometría (utilizado para clasificar visualmente el tipo de capa u operación), 
+el sombreador aplica un gradiente vertical sutil para dotar de profundidad y contraste al cuerpo geométrico simplificado.
+\medskip
+
+Por su parte, el material \textbf{Volume BB} se destina a los delimitadores de volumen (\textit{bounding boxes}), las aristas 
+de conexión entre capas y las geometrías de los kernels. Este material aplica una emisión blanca uniforme para establecer un 
+contraste visual nítido frente al fondo neutro del espacio de trabajo y las superficies texturizadas de las rebanadas.
+\medskip
+
+El material \textbf{Box Class} permite mapear proceduralmente las etiquetas de clase a un espectro de color identificativo. 
+De manera análoga a \textbf{Volume Slice}, recibe como parámetro un valor normalizado en el rango $[0, 1]$, correspondiente 
+al identificador numérico de la clase (\textit{class\_id}) escalado por el número total de categorías. Con este valor se 
+modula directamente el matiz (\textit{hue}) en el espacio de color HSV del material, garantizando una codificación cromática 
+determinista y diferenciable por cada clase detectada.
+\medskip
+
+Finalmente, el material \textbf{Input Image} proyecta la imagen de entrada de la red sobre el plano focal mediante un mapeo 
+de textura con emisión directa, sirviendo como marco de referencia visual para la superposición de las cajas delimitadoras.

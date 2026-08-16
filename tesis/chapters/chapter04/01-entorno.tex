@@ -66,8 +66,15 @@ gráfica dedicada (GPU) como dispositivo de cómputo principal. Adicionalmente, 
 asignando el procesamiento a la GPU dedicada.
 \medskip
 
-Finalmente, se vinculó la ruta del código fuente del componente de visualización como directorio externo 
-de scripts dentro de las preferencias de Blender, facilitando el descubrimiento, actualización e inspección 
-automática de los módulos del complemento durante la fase de desarrollo. Dentro del directorio se crearon 
-los subdirectorios \textit{startup} y \textit{modules}, de acuerdo con las especificaciones de Blender 
-para descubrir automáticamente scripts y módulos de programación \parencite{blender_scripts_structure}.
+Finalmente, se vinculó la ruta del código fuente del componente de visualización como repositorio local
+de extensiones dentro de las preferencias de Blender, facilitando el descubrimiento, actualización e inspección 
+automática de los módulos del complemento durante la fase de desarrollo. Adicionalmente se agregó
+la ubicación del directorio de instalación de Blender a las variables del entorno del sistema para
+facilitar el uso de las herramientas de la linea de comandos de Blender para facilitar la
+validación de los scripts.
+
+%Finalmente, se vinculó la ruta del código fuente del componente de visualización como directorio externo 
+%de scripts dentro de las preferencias de Blender, facilitando el descubrimiento, actualización e inspección 
+%automática de los módulos del complemento durante la fase de desarrollo. %Dentro del directorio se crearon 
+%los subdirectorios \textit{startup} y \textit{modules}, de acuerdo con las especificaciones de Blender 
+%para descubrir automáticamente scripts y módulos de programación \parencite{blender_scripts_structure}.
