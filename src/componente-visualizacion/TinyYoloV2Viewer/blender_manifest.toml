@@ -1,0 +1,12 @@
+schema_version = "1.0.0"
+
+id = "yolov2_viewer"
+version = "1.0.0"
+name = "YOLOv2 Viewer"
+tagline = "Extensión para visualizar datos intermedios de una red convolucional YOLOv2"
+maintainer = "Ricardo Sanchez Perez"
+type = "add-on"
+blender_version_min = "4.2.0"
+license = [
+  "SPDX:GPL-3.0-or-later",
+]

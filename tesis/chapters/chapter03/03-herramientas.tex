@@ -40,9 +40,15 @@ científicas esenciales para el procesamiento de tensores, tales como:
     catálogo robusto de funciones algebraicas de alto rendimiento. Se utiliza en estrecha 
     correlación con PyTorch debido a su compatibilidad directa para la conversión mutua 
     entre arreglos numéricos y tensores.
-    \item \textbf{Blender Python API (\textit{bpy}):} Interfaz de programación nativa de 
-    Blender que permite interactuar con el núcleo del motor gráfico a nivel procedural, 
-    facilitando la automatización de escenas y el desarrollo de extensiones personalizadas.
+    \item \textbf{Blender Python API (\textit{bpy}):} interfaz de programación de aplicaciones 
+    nativa de Blender que permite interactuar con el núcleo del motor gráfico a nivel procedural, 
+    facilitando la automatización de la escena, la manipulación de datos y el desarrollo de 
+    extensiones personalizadas. Complementariamente, se empleó la librería 
+    \textbf{Fake Blender Python API}, un paquete de módulos simulados 
+    (\textit{stubs}) diseñado para entornos de desarrollo integrados (IDE) externos al 
+    editor integrado de Blender. Su propósito es habilitar herramientas de análisis 
+    estático de código, autocompletado inteligente e inferencia de tipos 
+    (\textit{type hinting}) durante la programación fuera del entorno de ejecución de Blender.
     \item \textbf{pyopenvdb:} Implementación e interfaz de la librería de código abierto 
     OpenVDB para el entorno de Python, la cual hace posible la lectura, manipulación y 
     exportación de las estructuras de datos volumétricas dispersas.
