@@ -1,30 +1,18 @@
 import bpy
-from .import_data import IMPORT_OT_LoadYoloManifest
-from .yolo_properties import YoloDataSettings
+from .operators import register_operators, unregister_operators
+from .properties import register_properties, unregister_properties
+from .ui import register_ui, unregister_ui
 
-classes = (YoloDataSettings, IMPORT_OT_LoadYoloManifest)
-
-def menu_func_import(self, context):
-    self.layout.operator(IMPORT_OT_LoadYoloManifest.bl_idname, text="Load Yolo Manifest (.json)")
-
+# Registrar extensión
 def register():
-    for cls in classes:
-        bpy.utils.register_class(cls)
-
-    bpy.types.Scene.yolo_settings = bpy.props.PointerProperty(
-        type=YoloDataSettings
-    )
-    bpy.types.TOPBAR_MT_file_import.append(menu_func_import)
-
+    register_operators()
+    register_properties()
+    register_ui()
 
 def unregister():
-    bpy.types.TOPBAR_MT_file_import.remove(menu_func_import)
-
-    if hasattr(bpy.types.Scene, "yolo_settings"):
-        del bpy.types.Scene.json_settings
-
-    for cls in classes:
-            bpy.utils.unregister_class(cls)
+    unregister_ui()
+    unregister_properties()
+    unregister_operators()
 
 if __name__=="__main__":
     register()

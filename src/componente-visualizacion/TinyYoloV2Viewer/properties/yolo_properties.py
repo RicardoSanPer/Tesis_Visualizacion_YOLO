@@ -18,12 +18,12 @@ class YoloDataSettings(PropertyGroup):
     )
 
     def get_parsed_json(self):
-        """Helper method to return data as a Python dictionary."""
+        """Función auxiliar para parsear datos JSON"""
         try:
             return json.loads(self.raw_data)
         except json.JSONDecodeError:
             return {}
 
     def set_json(self, data_dict):
-        """Helper method to serialize a dictionary into the raw_data string."""
+        """Función para cargar JSON a los datos"""
         self.raw_data = json.dumps(data_dict)

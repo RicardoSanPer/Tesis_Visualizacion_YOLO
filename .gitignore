@@ -569,6 +569,7 @@ data/weights
 data/images
 data/output
 src/componente-extraccion/TinyYoloV2
+src/componente-visualizacion/TinyYoloV2Viewer/assets
 
 # Graficas
 *.bkp
@@ -576,3 +577,5 @@ src/componente-extraccion/TinyYoloV2
 *.pdf
 *.png
 *.jpg
+*.blend
+*.blend1

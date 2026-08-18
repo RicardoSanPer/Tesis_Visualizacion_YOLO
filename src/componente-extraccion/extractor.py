@@ -42,13 +42,14 @@ class ModelExtractor:
             # Omitir raíz
             if name == '':
                 continue
-            # Omitir capas para las cuales no se extraen datos
-            if not self.layers_data[name]["data"]:
-                continue
+            
             # Guardar tensor de salida
             if layer is module:
-                self.layers[name] = output.detach().cpu()
-                self.layers_data[name]["dimensions"] = self.layers[name].shape
+                # Extraer tensor solo de capas indicadas
+                tensor = output.detach().cpu()
+                if self.layers_data[name]["data"]:
+                    self.layers[name] = tensor
+                self.layers_data[name]["dimensions"] = tensor.shape
                 break
                 
 
@@ -74,7 +75,6 @@ class ModelExtractor:
                     "data"           : True,
                     "connections"    : []
                     }
-                layer.register_forward_hook(self._hook)
             # Max Pooling
             elif isinstance(layer, torch.nn.MaxPool2d):
                 self.layers_data[name] = {
@@ -86,7 +86,6 @@ class ModelExtractor:
                     "data"           : True,
                     "connections"    : []
                     }
-                layer.register_forward_hook(self._hook)
             # Para capas no definidas solo registrar el nombre y tipo
             else:
                 self.layers_data[name] = {
@@ -94,6 +93,7 @@ class ModelExtractor:
                     "data"           : False,
                     "connections"    : []
                     }
+            layer.register_forward_hook(self._hook)
 
     def _get_layer_connections(self):
         """ Obtiene las conexiones entre capas.
