@@ -77,3 +77,5 @@ def configurar_parametros_nodo(obj: bpy.types.Object, modifier_name: str, parame
             getattr(modifier.properties.inputs, socket_id).value = param_value
         except Exception as e:
             print(f"Falló asignar '{param_name}' ({socket_id}) = {param_value}: {e}")
+
+    obj.update_tag()
