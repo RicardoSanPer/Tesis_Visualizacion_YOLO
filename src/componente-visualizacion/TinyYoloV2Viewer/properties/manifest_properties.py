@@ -1,10 +1,11 @@
 import bpy
 import json
-from bpy.props import StringProperty, PointerProperty
+from pathlib import Path
 from bpy.types import PropertyGroup
+from bpy.props import StringProperty
 
 
-class YoloDataSettings(PropertyGroup):
+class ManifestDataSettings(PropertyGroup):
     filepath: StringProperty(
         name="Yolo Manifest Path",
         description="Path to the imported manifest JSON file",
@@ -27,3 +28,6 @@ class YoloDataSettings(PropertyGroup):
     def set_json(self, data_dict):
         """Función para cargar JSON a los datos"""
         self.raw_data = json.dumps(data_dict)
+
+    def get_manifest_location(self):
+        return Path(self.filepath).parent

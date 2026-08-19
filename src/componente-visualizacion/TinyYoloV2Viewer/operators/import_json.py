@@ -30,9 +30,34 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             settings.filepath = self.filepath
             settings.set_json(data)
 
+            self._load_colors(context)
+
             self.report({'INFO'}, f"Loaded: {self.filepath}")
             return {'FINISHED'}
             
         except Exception as e:
             self.report({'ERROR'}, f"Failed to read file: {e}")
             return {'CANCELLED'}
+
+    def _load_colors(self, context):
+        vis_props = context.scene.yolo_visualization_settings
+        vis_props.layer_colors.clear()
+
+        yolo_data = context.scene.yolo_settings
+        parsed = yolo_data.get_parsed_json()
+
+        layer_types = []
+
+        for layer, layer_info in parsed["layers_data"].items():
+            if layer in ("input", "cnn"):
+                continue
+
+            type = layer_info["type"]
+
+            if type in layer_types:
+                continue
+
+            layer_types.append(type)
+
+        for layer_type in layer_types:
+            vis_props.add_layer_color(name=layer_type)

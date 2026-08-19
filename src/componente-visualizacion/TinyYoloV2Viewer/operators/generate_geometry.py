@@ -20,7 +20,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         # Espaciado
         offset_idx = 0
 
-        path = Path(context.scene.yolo_settings.filepath).parent
+        path = context.scene.yolo_settings.get_manifest_location()
 
         # Instanciar geometria de volumenes
         for layer, layer_info in parsed["layers_data"].items():
@@ -38,7 +38,15 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 offset_idx += depth  + 0.5
             else:
                 offset_idx += 0.5
-            self._configurar_volume_viewer(obj, layer, path, layer_info)
+            self._configurar_volume_viewer(obj, layer, path, layer_info, context)
+
+        # Instancias cajas de salida
+        salida = self._instanciar_nodos(context, "YV2 Box Viewer", "boxes")
+        if not obj:
+            return {'CANCELLED'}
+        salida.location = (0.0, offset_idx, 0.0)
+
+        self._configurar_box_viewer(salida, "boxes", path, parsed)
 
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
@@ -70,25 +78,17 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self.report({'ERROR'}, f"Failed to instantiate: {e}")
             return None
 
-    def _configurar_volume_viewer(self, obj: bpy.types.Object, layer_name: str, directory: Path, layer_info: dict):
+    def _configurar_volume_viewer(self, obj: bpy.types.Object, layer_name: str, directory: Path, layer_info: dict, context):
+        vis_props = context.scene.yolo_visualization_settings
+        size_factor = vis_props.size_scale
 
-        colors = {
-            "Conv2d" : (38/255, 31/255, 255/255, 1),           #"#261fff",
-            "BatchNorm2d" : (31/255, 255/255, 150/255, 1),     #"#1fff96",
-            "LeakyReLU" : (255/255, 31/255, 135/255, 1),       #"#ff1f87",
-            "MaxPool2d" : (248/255, 255/255, 31/255, 1),       #"#f8ff1f"
-            "MaxPoolStride1" : (248/255, 255/255, 31/255, 1)
-        }
-
-        size_factor = 0.01
         resolution = layer_info["dimensions"][2]*size_factor
         depth = layer_info["dimensions"][1]*size_factor
         size = (resolution, resolution, 0.05)
         params = {
             "Simplified Volume": True,
             "World Size" : size,
-            "Color" : colors[layer_info.get("type")]
-
+            "Color" : vis_props.get_layer_color(layer_info.get("type"))
         }
 
         if layer_info["data"]:
@@ -98,38 +98,16 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             params["Volume File"] = str(file)
             params["World Size"] = (resolution, resolution, depth)
 
-        self._configurar_parametros_nodo(obj, "Geometry Nodes", params)
+        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
 
-    def _configurar_parametros_nodo(self, obj: bpy.types.Object, modifier_name: str, parameters: dict):
-        if not obj or not parameters:
-            return
+    def _configurar_box_viewer(self, obj: bpy.types.Object, layer_name: str, directory: Path, config: dict):
+        file = directory / "boxes.vdb"
+        params = {
+                "Box File" : str(file),
+                "Box Count" : config["n_boxes"],
+                "Class Labels" : config["classes"],
+                "Confidence" : config["confidence"]
+            }
 
-        modifier = obj.modifiers.get(modifier_name)
-        if not modifier or modifier.type != 'NODES' or not modifier.node_group:
-            print(f"[Warning] Modificador '{modifier_name}' no encontrado en {obj.name}")
-            return
+        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
 
-        node_group = modifier.node_group
-
-        # Mapeo de identificador de propiedad a numero de socket
-        socket_name_to_id = {
-            item.name: item.identifier
-            for item in node_group.interface.items_tree
-            if item.item_type == 'SOCKET' and item.in_out == 'INPUT'
-        }
-
-        # Asignar valor a parametros
-        for param_name, param_value in parameters.items():
-            if param_name not in socket_name_to_id:
-                print(f"[Warning] Socket '{param_name}' no existe en '{node_group.name}'")
-                continue
-
-            socket_id = socket_name_to_id[param_name]
-
-            try:
-                getattr(modifier.properties.inputs, socket_id).value = param_value
-            except Exception as e:
-                print(f"[Error] Falló asignar '{param_name}' ({socket_id}) = {param_value}: {e}")
-
-    def _get_layer_color(layer_type: str):
-        pass
