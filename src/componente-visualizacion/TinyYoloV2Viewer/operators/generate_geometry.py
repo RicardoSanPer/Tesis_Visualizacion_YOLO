@@ -18,8 +18,9 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             return {'CANCELLED'}
 
         # Espaciado
-        spacing = 5.0
         offset_idx = 0
+
+        path = Path(context.scene.yolo_settings.filepath).parent
 
         # Instanciar geometria de volumenes
         for layer, layer_info in parsed["layers_data"].items():
@@ -31,9 +32,13 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 return {'CANCELLED'}
 
             # Espaciar
-            obj.location = (0.0, offset_idx * spacing, 0.0)
-            offset_idx += 1
-            self._configurar_volume_viewer(obj, layer_info)
+            depth = layer_info["dimensions"][1] * 0.01
+            obj.location = (0.0, offset_idx , 0.0)
+            if layer_info["data"]:
+                offset_idx += depth  + 0.5
+            else:
+                offset_idx += 0.5
+            self._configurar_volume_viewer(obj, layer, path, layer_info)
 
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
@@ -65,14 +70,33 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self.report({'ERROR'}, f"Failed to instantiate: {e}")
             return None
 
-    def _configurar_volume_viewer(self, obj: bpy.types.Object, layer_info: dict):
+    def _configurar_volume_viewer(self, obj: bpy.types.Object, layer_name: str, directory: Path, layer_info: dict):
 
-        size = (layer_info["dimensions"][2], layer_info["dimensions"][3], layer_info["dimensions"][1]) * 0.01
+        colors = {
+            "Conv2d" : (38/255, 31/255, 255/255, 1),           #"#261fff",
+            "BatchNorm2d" : (31/255, 255/255, 150/255, 1),     #"#1fff96",
+            "LeakyReLU" : (255/255, 31/255, 135/255, 1),       #"#ff1f87",
+            "MaxPool2d" : (248/255, 255/255, 31/255, 1),       #"#f8ff1f"
+            "MaxPoolStride1" : (248/255, 255/255, 31/255, 1)
+        }
+
+        size_factor = 0.01
+        resolution = layer_info["dimensions"][2]*size_factor
+        depth = layer_info["dimensions"][1]*size_factor
+        size = (resolution, resolution, 0.05)
         params = {
             "Simplified Volume": True,
             "World Size" : size,
+            "Color" : colors[layer_info.get("type")]
 
         }
+
+        if layer_info["data"]:
+            file = directory / f"{layer_name}.vdb"
+            params["Resolution"] = layer_info["dimensions"][2]
+            params["Slice Count"] = layer_info["dimensions"][1]
+            params["Volume File"] = str(file)
+            params["World Size"] = (resolution, resolution, depth)
 
         self._configurar_parametros_nodo(obj, "Geometry Nodes", params)
 
