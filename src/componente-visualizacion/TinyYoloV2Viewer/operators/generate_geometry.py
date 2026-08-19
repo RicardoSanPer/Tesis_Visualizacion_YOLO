@@ -23,7 +23,9 @@ class MESH_OT_CreateGeoNodesObject(Operator):
 
         path = context.scene.yolo_settings.get_manifest_location()
 
+        #
         # Instanciar geometria de volumenes
+        #
         for layer, layer_info in parsed["layers_data"].items():
             if layer in ("input", "cnn"):
                 continue
@@ -42,13 +44,32 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self._configurar_volume_viewer(obj, layer, path, layer_info, context)
             yolo_vis.add_layer(layer, obj)
 
+        #
         # Instancias cajas de salida
+        #
         salida = self._instanciar_nodos(context, "YV2 Box Viewer", "boxes")
         if not obj:
             return {'CANCELLED'}
         
         salida.location = (0.0, offset_idx, 0.0)
         self._configurar_box_viewer(salida, "boxes", path, parsed)
+
+        #
+        # Instanciar conexiones
+        #
+
+        for layer, layer_info in parsed["layers_data"].items():
+            if layer in ("input", "cnn"):
+                continue
+            count = 0
+            for child in layer_info["connections"]:
+                con = self._instanciar_nodos(context, "YV2 Volume Connection", layer + str(count))
+                if not con:
+                    return {'CANCELLED'}
+                child_layer_info = parsed["layers_data"][child]
+                self._configurar_conexiones(con, layer, child, child_layer_info, context)
+                count += 1
+
 
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
@@ -90,13 +111,13 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         params = {
             "Simplified Volume": True,
             "World Size" : size,
-            "Color" : vis_props.get_layer_color(layer_info.get("type"))
+            "Color" : vis_props.get_layer_color(layer_info.get("type")),
+            "Resolution" : layer_info["dimensions"][2],
+            "Slice Count" : layer_info["dimensions"][1]
         }
 
         if layer_info["data"]:
             file = directory / f"{layer_name}.vdb"
-            params["Resolution"] = layer_info["dimensions"][2]
-            params["Slice Count"] = layer_info["dimensions"][1]
             params["Volume File"] = str(file)
             params["World Size"] = (resolution, resolution, depth)
 
@@ -112,4 +133,41 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             }
 
         load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
+
+    def _configurar_conexiones(self, obj: bpy.types.Object, parent:str, child:str, layer_info: dict, context):
+        yolo_vis = context.scene.yolo_visualization_settings
+        parent_obj = yolo_vis.get_layer(parent)
+        child_obj = yolo_vis.get_layer(child)
+        kernel_size = 1
+        stride = 1
+        ceil_mode = False
+
+        if layer_info.get("kernel_size"):
+            value = layer_info["kernel_size"]
+            if isinstance(value, list):
+                kernel_size = value[0]
+            else:
+                kernel_size = value
+
+        if layer_info.get("stride"):
+            value = layer_info["stride"]
+            if isinstance(value, list):
+                stride = value[0]
+            else:
+                stride = value
+
+        if layer_info.get("ceiling"):
+            ceil_mode = layer_info["ceiling"]
+
+        params = {
+            "Input Layer": parent_obj,
+            "Output Layer": child_obj,
+            "Kernel Size": kernel_size,
+            "Stride": stride,
+            "Ceiling Mode": ceil_mode
+        }
+
+        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
+
+
 
