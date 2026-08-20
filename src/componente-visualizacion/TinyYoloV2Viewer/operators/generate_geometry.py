@@ -70,7 +70,10 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 self._configurar_conexiones(con, layer, child, child_layer_info, context)
                 count += 1
 
-
+        load.deduplicar_nodos()
+        load.deduplicar_materiales()
+        load.actualizar_imagen_entrada(str(path / "input.png"))
+        
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
 

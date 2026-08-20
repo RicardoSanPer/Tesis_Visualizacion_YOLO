@@ -165,22 +165,3 @@ de las cajas:
     \item \textit{$N$}: muestra la totalidad de las $N$ cajas sin aplicar ningún filtro de 
     discriminación, ignorando los umbrales de \textit{Confidence} y \textit{Class Probability}.
 \end{itemize}
-
-
-\subsection{Automatización}
-Para automatizar la generación de la geometría se desarrolló una extension de Blender. Para ello, los
-grupos de nodos de geometría y los materiales se marcaron como assets y se compilaron en un solo archivo
-\textit{.blend} que sirve como fuente de referencia para la extension.
-\medskip
-
-La extension registra el manifesto con extension \textit{.json} de YOLOv2 como un archivo de fuente de importación.
-Almacena como propiedad de la escena los datos serializados y la ruta de archivo, a partir de los cuales instancia
-objetos, y les añade los nodos de geometría \textit{Volume Viewer}. Configura los parametros y traslada los
-objetos para generar una visualización ordenada de la red convolucional.
-
-%% TODO
-%% Visualizacion de entrada, salida (cajas)
-%% Conexiones
-%% Organizar los objetos en colecciones por categorias de capa, conexion, entrada y salida
-%% Guardar referencia a los objetos, en caso de que se actualice el manifesto
-%% Menu para configurar tamaños, espaciado, colores, visibilidad
