@@ -1,6 +1,6 @@
 import bpy
 from bpy.types import PropertyGroup
-from bpy.props import FloatProperty, StringProperty, FloatVectorProperty, CollectionProperty, PointerProperty
+from bpy.props import FloatProperty, StringProperty, FloatVectorProperty, CollectionProperty, PointerProperty, BoolProperty
 from ..geometry_nodes import load
 
 def update_colors(self, context):
@@ -19,11 +19,28 @@ def update_colors(self, context):
         if parsed["layers_data"][item.layer_name]["type"] == type_name:
             params = {"Color" : new_color}
             load.configurar_parametros_nodo(item.layer_object, "Geometry Nodes", params)
+
+def update_visibility(self, context):
+    type_name = self.name
+    new_visibility = self.visibility
+    vis_props = context.scene.yolo_visualization_settings
+
+    yolo_data = context.scene.yolo_settings
+    parsed = yolo_data.get_parsed_json()
+
+    if "layers_data" not in parsed:
+                self.report({'ERROR'}, "No se encontró datos de capas")
+                return {'CANCELLED'}
+
+    for item in vis_props.cnn_geometry:
+        if parsed["layers_data"][item.layer_name]["type"] == type_name:
+            params = {"Simplified Volume" : new_visibility}
+            load.configurar_parametros_nodo(item.layer_object, "Geometry Nodes", params)
     
-class LayerColor(PropertyGroup):
+class LayerTypeProperty(PropertyGroup):
     name : StringProperty(
         name="Label",
-        default="Color de Capa"
+        default="Propiedades de Capa"
     )
     color : FloatVectorProperty(
         name="Color",
@@ -34,9 +51,16 @@ class LayerColor(PropertyGroup):
         default=(0.5, 0.5, 0.5, 1.0),
         update=update_colors
     )
+    visibility : BoolProperty(
+        name="Visible",
+        default=True,
+        description="Determina si la capa es visible o no",
+        update=update_visibility
+    )
+          
 
 
-class LayerHolder(PropertyGroup):
+class ObjectHolder(PropertyGroup):
     layer_name: StringProperty(
         name="Object Name"
     )
@@ -58,27 +82,48 @@ class VisualizationDataProperties(PropertyGroup):
         default= 0.5,
         soft_min=0.0
     )
-    layer_colors : CollectionProperty(
-        type=LayerColor
+    layer_properties : CollectionProperty(
+        type=LayerTypeProperty
         )
 
     cnn_geometry : CollectionProperty(
-        type=LayerHolder
+        type=ObjectHolder
     )
 
-    def add_layer_color(self, name:str, rgba: tuple = (0.5, 0.5, 0.5, 1.0)):
-        item = self.layer_colors.get(name)
+    def create_layer_properties(self, name:str, rgba: tuple = (0.5, 0.5, 0.5, 1.0), visibility: bool = True):
+        item = self.layer_properties.get(name)
         if not item:
-            item = self.layer_colors.add()
+            item = self.layer_properties.add()
             item.name = name
+        item.visibility = visibility
         item.color = rgba
         return item
 
+    def update_layer_color(self, name:str, rgba: tuple = (0.5, 0.5, 0.5, 1.0)):
+        item = self.layer_properties.get(name)
+        if not item:
+            item = self.create_layer_properties(name)
+        item.color = rgba
+        return item
+
+    def update_layer_visibility(self, name:str, visibility: bool = True):
+        item = self.layer_properties.get(name)
+        if not item:
+            item = self.create_layer_properties(name)
+        item.visibility = visibility
+        return item
+
     def get_layer_color(self, name: str):
-        item = self.layer_colors.get(name)
+        item = self.layer_properties.get(name)
         if item:
             return tuple(item.color)
         return (0.5, 0.5, 0.5, 1.0)
+
+    def get_layer_visibility(self, name: str):
+        item = self.layer_properties.get(name)
+        if item:
+            return item.visibility
+        return True
 
     def add_layer(self, name:str, obj:bpy.types.Object):
         item = self.cnn_geometry.add()

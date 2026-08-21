@@ -116,13 +116,14 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             "World Size" : size,
             "Color" : vis_props.get_layer_color(layer_info.get("type")),
             "Resolution" : layer_info["dimensions"][2],
-            "Slice Count" : layer_info["dimensions"][1]
+            "Slice Count" : 0
         }
 
         if layer_info["data"]:
             file = directory / f"{layer_name}.vdb"
             params["Volume File"] = str(file)
             params["World Size"] = (resolution, resolution, depth)
+            params["Slice Count"] = layer_info["dimensions"][1]
 
         load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
 

@@ -24,9 +24,10 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
         box = layout.box()
         col = box.column(align=True)
 
-        for color in vis_props.layer_colors:
+        for item in vis_props.layer_properties:
             row = col.row()
-            row.prop(color, "color", text=color.name)
+            row.prop(item, "color", text=item.name)
+            row.prop(item, "visibility", text="Simple")
 
         col = layout.column(align=True)
         layout.separator()

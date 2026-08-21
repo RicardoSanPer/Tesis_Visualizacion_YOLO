@@ -1,10 +1,10 @@
 import bpy
 from .manifest_properties import ManifestDataSettings
 from .visualization_properties import VisualizationDataProperties
-from .visualization_properties import LayerColor, LayerHolder
+from .visualization_properties import LayerTypeProperty, ObjectHolder
 from ..utils import utils
 
-CLASSES = [LayerColor, LayerHolder, ManifestDataSettings, VisualizationDataProperties]
+CLASSES = [LayerTypeProperty, ObjectHolder, ManifestDataSettings, VisualizationDataProperties]
 
 def register_properties():
     utils.register_classes(CLASSES)

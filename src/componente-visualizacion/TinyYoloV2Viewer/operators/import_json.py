@@ -30,7 +30,7 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             settings.filepath = self.filepath
             settings.set_json(data)
 
-            self._load_colors(context)
+            self._load_properties(context)
 
             self.report({'INFO'}, f"Loaded: {self.filepath}")
             return {'FINISHED'}
@@ -39,9 +39,9 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             self.report({'ERROR'}, f"Failed to read file: {e}")
             return {'CANCELLED'}
 
-    def _load_colors(self, context):
+    def _load_properties(self, context):
         vis_props = context.scene.yolo_visualization_settings
-        vis_props.layer_colors.clear()
+        vis_props.layer_properties.clear()
 
         yolo_data = context.scene.yolo_settings
         parsed = yolo_data.get_parsed_json()
@@ -60,4 +60,4 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             layer_types.append(type)
 
         for layer_type in layer_types:
-            vis_props.add_layer_color(name=layer_type)
+            vis_props.create_layer_properties(name=layer_type)
