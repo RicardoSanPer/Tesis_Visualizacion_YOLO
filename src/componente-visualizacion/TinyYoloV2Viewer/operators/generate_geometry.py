@@ -12,6 +12,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
     def execute(self, context):
         yolo_data = context.scene.yolo_settings
         yolo_vis = context.scene.yolo_visualization_settings
+        yolo_graph = context.scene.yolo_graph
         parsed = yolo_data.get_parsed_json()
 
         if "layers_data" not in parsed:
@@ -44,6 +45,14 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self._configurar_volume_viewer(obj, layer, path, layer_info, context)
             yolo_vis.add_layer(layer, obj)
 
+            ## GRAPH
+            item = yolo_graph.add_item(layer, layer_info.get("type", "unknown"), obj)
+            node = yolo_graph.add_graph_node_from_item(item)
+            yolo_graph.set_graph_node_children(node, layer_info["connections"])
+
+        yolo_graph.calculate_nodes_depth()
+        for node in yolo_graph.nodes:
+            print(f"Nodo: {node.name}, Profundidad: {node.depth}, Padres: {[p.value for p in node.parents]}, Hijos: {[c.value for c in node.children]}")
         #
         # Instancias cajas de salida
         #

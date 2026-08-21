@@ -19,6 +19,7 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
         col = layout.column(align=True)
         col.prop(vis_props, "size_scale")
         col.prop(vis_props, "layer_gap")
+        col.prop(vis_props, "layer_depth")
 
         #colores
         box = layout.box()

@@ -82,6 +82,12 @@ class VisualizationDataProperties(PropertyGroup):
         default= 0.5,
         soft_min=0.0
     )
+    layer_depth : FloatProperty(
+        name = "Profundidad",
+        description= "Profundidad de las capas de la red",
+        default= 0.01,
+        soft_min=0.0
+    )
     layer_properties : CollectionProperty(
         type=LayerTypeProperty
         )
