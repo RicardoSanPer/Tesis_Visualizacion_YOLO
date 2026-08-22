@@ -12,9 +12,13 @@ class MESH_OT_CreateGeoNodesObject(Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        yolo_data = context.scene.yolo_settings
-        yolo_vis = context.scene.yolo_visualization_settings
-        yolo_graph = context.scene.yolo_graph
+        scene = context.scene
+        root_collection = scene.collection
+
+        yolo_collection = self.get_or_create_scene_collection("YOLOv2", root_collection)
+
+        yolo_data = scene.yolo_settings
+        yolo_graph = scene.yolo_graph
         parsed = yolo_data.get_parsed_json()
 
         if "layers_data" not in parsed:
@@ -39,6 +43,10 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self.configurar_volume_viewer_objects(item)
             yolo_graph.set_graph_node_children(item, layer_info["connections"])
 
+            #Coleccion
+            node_collection = self.get_or_create_scene_collection(layer_info.get("type"), yolo_collection)
+            self.assign_object_to_collection(obj, node_collection)
+
         # Instancias cajas de salida
         salida = self._instanciar_nodos("YV2 Box Viewer", "boxes", context)
         if not salida:
@@ -47,7 +55,12 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         self.configurar_box_viewer(salida, path, parsed)
         yolo_graph.boxes = salida
 
+        io_collection = self.get_or_create_scene_collection("IO", yolo_collection)
+        self.assign_object_to_collection(salida, io_collection)
+
         # Instanciar geometria de conexiones
+        connection_collection = self.get_or_create_scene_collection("Connections", yolo_collection)
+
         for node in yolo_graph.layers:
             for child in node.children:
                 con = self._instanciar_nodos("YV2 Volume Connection", f"{node.name}_{child.value}_CONN", context)
@@ -57,6 +70,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 parent_node = yolo_graph.layers.get(node.name)
                 child_node = yolo_graph.layers.get(child.value)
                 self.configurar_conexiones(con, parent_node, child_node)
+                self.assign_object_to_collection(con, connection_collection)
 
 
         load.deduplicar_nodos()
@@ -192,3 +206,37 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             if datos.get("data"):
                 nodo.slice_count = dim[1]
                 nodo.file = str(path / f"{nodo.name}.vdb")
+
+    def get_or_create_scene_collection(self, name: str, parent: bpy.types.Collection = None):
+        """
+        Obtiene o crea una colección
+        """
+        # Si la colección ya existe
+        col = bpy.data.collections.get(name)
+        if not col:
+            col = bpy.data.collections.new(name)
+
+        # Determinar coleccion padre
+        parent_col = parent if parent is not None else bpy.context.scene.collection
+
+        # Vincular a la jerarquia
+        if col.name not in parent_col.children:
+            parent_col.children.link(col)
+
+        return col
+
+    def assign_object_to_collection(self, obj: bpy.types.Object, target_col: bpy.types.Collection):
+        """
+        Asigna un objeto a una coleccion
+        """
+        if not obj or not target_col:
+            return
+
+        # Vincular a coleccion
+        if obj.name not in target_col.objects:
+            target_col.objects.link(obj)
+
+        # Quitar de otras colecciones como default
+        for col in list(obj.users_collection):
+            if col != target_col:
+                col.objects.unlink(obj)
