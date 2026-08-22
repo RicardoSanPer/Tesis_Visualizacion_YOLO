@@ -2,11 +2,13 @@ import bpy
 from pathlib import Path
 from bpy.types import Operator
 from ..geometry_nodes import load
+from ..properties.graph_properties import LayerItem
+from ..properties.visualization_properties import actualizar_dimensiones
 
 class MESH_OT_CreateGeoNodesObject(Operator):
-    """Create an empty mesh and attach a Geometry Nodes modifier"""
+    """Generar geometría de la red"""
     bl_idname = "mesh.create_geonodes_object"
-    bl_label = "Create GeoNodes Mesh"
+    bl_label = "Generar visualización de red"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -19,74 +21,64 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self.report({'ERROR'}, "No se encontró datos de capas")
             return {'CANCELLED'}
 
-        # Espaciado
-        offset_idx = 0
-
         path = context.scene.yolo_settings.get_manifest_location()
 
-        #
-        # Instanciar geometria de volumenes
-        #
-        for layer, layer_info in parsed["layers_data"].items():
+        # Cargar informacion de las capas
+        for layer, layer_info in parsed.get("layers_data").items():
+            # Omitir entrada y raíz
             if layer in ("input", "cnn"):
                 continue
 
-            obj = self._instanciar_nodos(context, "YV2 Volume Viewer", layer)
+            obj = self._instanciar_nodos("YV2 Volume Viewer", layer, context)
             if not obj:
                 return {'CANCELLED'}
 
-            # Espaciar
-            depth = layer_info["dimensions"][1] * 0.01
-            obj.location = (0.0, offset_idx , 0.0)
-            if layer_info["data"]:
-                offset_idx += depth  + 0.5
-            else:
-                offset_idx += 0.5
-            self._configurar_volume_viewer(obj, layer, path, layer_info, context)
-            yolo_vis.add_layer(layer, obj)
+            ## Grafo
+            item = yolo_graph.add_layer(layer, layer_info.get("type", "unknown"), obj)
+            self.parametros_capa(item, path, layer_info)
+            self.configurar_volume_viewer_objects(item)
+            yolo_graph.set_graph_node_children(item, layer_info["connections"])
 
-            ## GRAPH
-            item = yolo_graph.add_item(layer, layer_info.get("type", "unknown"), obj)
-            node = yolo_graph.add_graph_node_from_item(item)
-            yolo_graph.set_graph_node_children(node, layer_info["connections"])
-
-        yolo_graph.calculate_nodes_depth()
-        for node in yolo_graph.nodes:
-            print(f"Nodo: {node.name}, Profundidad: {node.depth}, Padres: {[p.value for p in node.parents]}, Hijos: {[c.value for c in node.children]}")
-        #
         # Instancias cajas de salida
-        #
-        salida = self._instanciar_nodos(context, "YV2 Box Viewer", "boxes")
-        if not obj:
+        salida = self._instanciar_nodos("YV2 Box Viewer", "boxes", context)
+        if not salida:
             return {'CANCELLED'}
         
-        salida.location = (0.0, offset_idx, 0.0)
-        self._configurar_box_viewer(salida, "boxes", path, parsed)
+        self.configurar_box_viewer(salida, path, parsed)
+        yolo_graph.boxes = salida
 
-        #
-        # Instanciar conexiones
-        #
-
-        for layer, layer_info in parsed["layers_data"].items():
-            if layer in ("input", "cnn"):
-                continue
-            count = 0
-            for child in layer_info["connections"]:
-                con = self._instanciar_nodos(context, "YV2 Volume Connection", layer + str(count))
+        # Instanciar geometria de conexiones
+        for node in yolo_graph.layers:
+            for child in node.children:
+                con = self._instanciar_nodos("YV2 Volume Connection", f"{node.name}_{child.value}_CONN", context)
                 if not con:
                     return {'CANCELLED'}
-                child_layer_info = parsed["layers_data"][child]
-                self._configurar_conexiones(con, layer, child, child_layer_info, context)
-                count += 1
+
+                parent_node = yolo_graph.layers.get(node.name)
+                child_node = yolo_graph.layers.get(child.value)
+                self.configurar_conexiones(con, parent_node, child_node)
+
 
         load.deduplicar_nodos()
         load.deduplicar_materiales()
         load.actualizar_imagen_entrada(str(path / "input.png"))
+
+        actualizar_dimensiones(self, context)
         
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
 
-    def _instanciar_nodos(self, context, group_name: str, name: str):
+    def _instanciar_nodos(self, group_name: str, name: str, context):
+        """Genera un objeto y asigna un grupo de nodos de geometría
+
+        Args:
+            group_name (str): Nombre del grupo de nodos
+            name (str): Nombre del objeto
+            context (_type_): Contexto
+
+        Returns:
+            _type_: Objeto con nodos
+        """
         try:
             # 1. Cargar grupo de nodos
             node_group = load.load_geometry_node_group(group_name)
@@ -105,38 +97,36 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             modifier = obj.modifiers.new(name="Geometry Nodes", type='NODES')
             modifier.node_group = node_group
 
-            #node_group.interface_update(context)
-
             return obj
 
         except Exception as e:
             self.report({'ERROR'}, f"Failed to instantiate: {e}")
             return None
 
-    def _configurar_volume_viewer(self, obj: bpy.types.Object, layer_name: str, directory: Path, layer_info: dict, context):
-        vis_props = context.scene.yolo_visualization_settings
-        size_factor = vis_props.size_scale
+    def configurar_volume_viewer_objects(self, node: LayerItem):
+        """Configura los parametros del grupo de nodos de visualización de volúmenes
+        para visualizar una capa de la red
 
-        resolution = layer_info["dimensions"][2]*size_factor
-        depth = layer_info["dimensions"][1]*size_factor
-        size = (resolution, resolution, 0.05)
+        Args:
+            node (LayerItem): LayerItem con los datos de la capa/volymen
+        """
         params = {
-            "Simplified Volume": True,
-            "World Size" : size,
-            "Color" : vis_props.get_layer_color(layer_info.get("type")),
-            "Resolution" : layer_info["dimensions"][2],
-            "Slice Count" : 0
+            "World Size": node.dimensions,
+            "Resolution": node.resolution,
+            "Slice Count": node.slice_count,
+            "Volume File": node.file,
+            "Simplified Volume": True
         }
+        load.configurar_parametros_nodo(node.object, "Geometry Nodes", params)
 
-        if layer_info["data"]:
-            file = directory / f"{layer_name}.vdb"
-            params["Volume File"] = str(file)
-            params["World Size"] = (resolution, resolution, depth)
-            params["Slice Count"] = layer_info["dimensions"][1]
+    def configurar_box_viewer(self, obj: bpy.types.Object, directory: Path, config: dict):
+        """Configura los parametros del grupo de nodos para la visualizacipn de las cajas
 
-        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
-
-    def _configurar_box_viewer(self, obj: bpy.types.Object, layer_name: str, directory: Path, config: dict):
+        Args:
+            obj (bpy.types.Object): Objeto con grupo de nodos de visualización de cajas
+            directory (Path): Ruta de directorio del manifesto
+            config (dict): Datos
+        """
         file = directory / "boxes.vdb"
         params = {
                 "Box File" : str(file),
@@ -144,43 +134,58 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 "Class Labels" : config["classes"],
                 "Confidence" : config["confidence"]
             }
-
         load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
 
-    def _configurar_conexiones(self, obj: bpy.types.Object, parent:str, child:str, layer_info: dict, context):
-        yolo_vis = context.scene.yolo_visualization_settings
-        parent_obj = yolo_vis.get_layer(parent)
-        child_obj = yolo_vis.get_layer(child)
-        kernel_size = 1
-        stride = 1
-        ceil_mode = False
+    def configurar_conexiones(self, connection:bpy.types.Object, parent: LayerItem, child: LayerItem):
+        """Configura los parametros del grupo de nodos para la visualización de una conexión entre
+        dos capas
 
-        if layer_info.get("kernel_size"):
-            value = layer_info["kernel_size"]
-            if isinstance(value, list):
-                kernel_size = value[0]
-            else:
-                kernel_size = value
-
-        if layer_info.get("stride"):
-            value = layer_info["stride"]
-            if isinstance(value, list):
-                stride = value[0]
-            else:
-                stride = value
-
-        if layer_info.get("ceiling"):
-            ceil_mode = layer_info["ceiling"]
-
+        Args:
+            connection (bpy.types.Object): Objeto con el grupo de nodos de visualización de conexión
+            parent (LayerItem): LayerItem con el padre
+            child (LayerItem): LayerItem con el hijo
+        """
         params = {
-            "Input Layer": parent_obj,
-            "Output Layer": child_obj,
-            "Kernel Size": kernel_size,
-            "Stride": stride,
-            "Ceiling Mode": ceil_mode
+            "Input Layer": parent.object,
+            "Output Layer": child.object,
+            "Kernel Size": parent.kernel_size,
+            "Stride": parent.stride,
+            "Ceiling Mode": parent.ceiling
         }
+        load.configurar_parametros_nodo(connection, "Geometry Nodes", params)
 
-        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
+    def parametros_capa(self, nodo: LayerItem, path: Path, datos: dict):
+        """Configura LayerItem con los datos de la capa correspondiente
 
+        Args:
+            nodo (LayerItem): LayerItem
+            path (Path): Ruta de directorio del manifesto
+            datos (dict): Datos de la capa
+        """
+        #Kernel
+        if datos.get("kernel_size"):
+            kernel_size = datos["kernel_size"]
+            if isinstance(kernel_size, list):
+                kernel_size = kernel_size[0]
+            elif isinstance(kernel_size, int):
+                kernel_size = kernel_size
+        # Stride
+        if datos.get("stride"):
+            stride = datos["stride"]
+            if isinstance(stride, list):
+                stride = stride[0]
+            elif isinstance(stride, int):
+                stride = stride
+        # Ceiling
+        if datos.get("ceiling"):
+            nodo.ceiling = datos["ceiling"]
+        #Dimensiones
+        if datos.get("dimensions"):
+            dim = datos["dimensions"]
 
-
+            nodo.dimensions = (dim[2], dim[3], dim[1])
+            # Dato del volumen
+            if datos.get("data"):
+                nodo.resolution = dim[2]
+                nodo.slice_count = dim[1]
+                nodo.file = str(path / f"{nodo.name}.vdb")

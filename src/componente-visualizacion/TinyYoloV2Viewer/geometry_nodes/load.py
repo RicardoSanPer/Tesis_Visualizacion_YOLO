@@ -102,6 +102,7 @@ def actualizar_imagen_entrada(image_path: str):
     return img
 
 def configurar_parametros_nodo(obj: bpy.types.Object, modifier_name: str, parameters: dict):
+    """Aplica los parametros al grupo de nodos"""
     if not obj or not parameters:
         return
 

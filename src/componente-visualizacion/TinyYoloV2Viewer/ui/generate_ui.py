@@ -15,14 +15,19 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
         scene = context.scene
 
         vis_props = scene.yolo_visualization_settings
-        
-        col = layout.column(align=True)
-        col.prop(vis_props, "size_scale")
-        col.prop(vis_props, "layer_gap")
-        col.prop(vis_props, "layer_depth")
 
-        #colores
+        ## Tamaños
         box = layout.box()
+        box.label(text="Dimensiones", icon="FIXED_SIZE")
+        col = box.column(align=True)
+        col.prop(vis_props, "size_scale")
+        col.prop(vis_props, "layer_depth")
+        col.prop(vis_props, "layer_gap")
+        col.prop(vis_props, "layer_max_depth")
+
+        # Visibilidad
+        box = layout.box()
+        box.label(text="Visibilidad", icon="HIDE_OFF")
         col = box.column(align=True)
 
         for item in vis_props.layer_properties:
@@ -32,5 +37,5 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
 
         col = layout.column(align=True)
         layout.separator()
-        layout.operator("mesh.create_geonodes_object", text="Add GeoNodes Mesh", icon='GEOMETRY_NODES')
+        layout.operator("mesh.create_geonodes_object", text="Generar geometría", icon='GEOMETRY_NODES')
 
