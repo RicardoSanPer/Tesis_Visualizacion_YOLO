@@ -148,9 +148,9 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         params = {
             "Input Layer": parent.object,
             "Output Layer": child.object,
-            "Kernel Size": parent.kernel_size,
-            "Stride": parent.stride,
-            "Ceiling Mode": parent.ceiling
+            "Kernel Size": child.kernel_size,
+            "Stride": child.stride,
+            "Ceiling Mode": child.ceiling
         }
         load.configurar_parametros_nodo(connection, "Geometry Nodes", params)
 
@@ -169,6 +169,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 kernel_size = kernel_size[0]
             elif isinstance(kernel_size, int):
                 kernel_size = kernel_size
+            nodo.kernel_size = kernel_size
         # Stride
         if datos.get("stride"):
             stride = datos["stride"]
@@ -176,6 +177,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 stride = stride[0]
             elif isinstance(stride, int):
                 stride = stride
+            nodo.stride = stride
         # Ceiling
         if datos.get("ceiling"):
             nodo.ceiling = datos["ceiling"]
@@ -184,8 +186,9 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             dim = datos["dimensions"]
 
             nodo.dimensions = (dim[2], dim[3], dim[1])
+            nodo.resolution = dim[2]
+            
             # Dato del volumen
             if datos.get("data"):
-                nodo.resolution = dim[2]
                 nodo.slice_count = dim[1]
                 nodo.file = str(path / f"{nodo.name}.vdb")
