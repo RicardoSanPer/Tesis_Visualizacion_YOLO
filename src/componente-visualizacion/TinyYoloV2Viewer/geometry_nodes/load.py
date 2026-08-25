@@ -1,7 +1,10 @@
 from pathlib import Path
 import bpy
 
-def load_geometry_node_group(group_name: str) -> bpy.types.NodeTree:
+"""Funcionalidad para cargar nodos de geometría
+"""
+
+def cargar_geonodos(group_name: str) -> bpy.types.NodeTree:
     """Carga un grupo de nodos de la librería evitando la duplicación de subgrupos."""
     blend_path = (Path(__file__).parent.parent / "assets" / "library.blend").resolve()
 

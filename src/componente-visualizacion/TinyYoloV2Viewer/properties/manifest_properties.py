@@ -4,6 +4,9 @@ from pathlib import Path
 from bpy.types import PropertyGroup
 from bpy.props import StringProperty
 
+"""Datos del manifesto
+"""
+
 
 class ManifestDataSettings(PropertyGroup):
     filepath: StringProperty(
@@ -30,4 +33,5 @@ class ManifestDataSettings(PropertyGroup):
         self.raw_data = json.dumps(data_dict)
 
     def get_manifest_location(self):
+        """Obtiene la ruta de directorio del manifesto"""
         return Path(self.filepath).parent

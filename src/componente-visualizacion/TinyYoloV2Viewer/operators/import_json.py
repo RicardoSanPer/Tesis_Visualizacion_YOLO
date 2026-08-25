@@ -4,11 +4,14 @@ from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty
 from bpy.types import Operator
 
-# Agrega opción para cargar el manifesto en el menu de importación
+"""Importación del manifesto
+"""
+
 def menu_func_import(self, context):
+    """Opción en menú contextual para agregar importación del manifesto
+    """
     self.layout.operator(IMPORT_OT_LoadJSON.bl_idname, text="YOLOv2 Manifest (.json)")
 
-# Clase para cargar JSON
 class IMPORT_OT_LoadJSON(Operator, ImportHelper):
     """Cargar un archivo JSON con el manifesto de YOLOv2"""
     bl_idname = "import_scene.load_yolo_json"
@@ -30,7 +33,7 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             settings.filepath = self.filepath
             settings.set_json(data)
 
-            self.cargar_propiedades(context)
+            self._cargar_propiedades(context)
 
             self.report({'INFO'}, f"Loaded: {self.filepath}")
             return {'FINISHED'}
@@ -39,7 +42,7 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             self.report({'ERROR'}, f"Failed to read file: {e}")
             return {'CANCELLED'}
 
-    def cargar_propiedades(self, context):
+    def _cargar_propiedades(self, context):
         """Crea las propiedades iniciales de visualización de los tipos de capa"""
         vis_props = context.scene.yolo_visualization_settings
         vis_props.layer_properties.clear()

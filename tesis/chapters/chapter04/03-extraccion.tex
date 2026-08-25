@@ -12,8 +12,8 @@ De forma análoga al módulo de ejecución, el componente de extracción se conc
 \medskip
 
 La primera consiste en configurar los \textit{forward hooks} sobre la arquitectura del modelo 
-para interceptar los tensores generados en las capas de interés, tales como las capas 
-convolucionales y de \textit{Max-Pooling}. Dichos tensores se almacenan 
+para interceptar las activaciones generados en las capas de interés, tales como las capas 
+convolucionales y de \textit{Max-Pooling}. Dichas activaciones se almacenan 
 en una estructura de diccionario indexada por el nombre o identificador de la capa de origen.
 \medskip
 
@@ -22,7 +22,7 @@ información abarca la topología de la red (específicamente las conexiones y f
 capas) y los hiperparámetros de configuración, como el tipo de capa, número de canales de 
 entrada y salida o el tamaño del núcleo (\textit{kernel}) de convolución. Como rasgo común, 
 el registro de cada capa indica las capas subsecuentes con las que se conecta y un atributo 
-booleano que señala si los tensores de dicha capa fueron capturados.
+booleano que señala si las activaciones de dicha capa fueron capturados.
 \medskip
 
 Los datos generales extraídos por el módulo comprenden:
@@ -32,7 +32,7 @@ Los datos generales extraídos por el módulo comprenden:
     utilizado durante la evaluación de las cajas de predicción.
     \item \textit{classes}: la lista de los nombres de clases de la red.
     \item \textit{layers data}: la estructura con los metadatos específicos de cada capa.
-    \item \textit{layers}: el conjunto de tensores extraídos de las capas intermedias durante 
+    \item \textit{layers}: el conjunto de tensores y mapas de activación extraídos de las capas intermedias durante 
     la inferencia.
     \item \textit{boxes}: las cajas delimitadoras de predicción (\textit{bounding boxes}) generadas 
     a la salida del modelo.
@@ -43,9 +43,9 @@ Los datos generales extraídos por el módulo comprenden:
 Por su parte, los atributos específicos extraídos por cada capa incluyen:
 \begin{itemize}
     \item \textit{type}: el tipo o categoría de la capa (e.g., convolucional, \textit{Max-Pooling}).
-    \item \textit{data}: indicador booleano que especifica si se capturaron tensores para esta capa.
+    \item \textit{data}: indicador booleano que especifica si se capturaron activaciones para esta capa.
     \item \textit{connections}: la lista de capas subsecuentes a las que se conecta.
-    \item \textit{dimensions}: las dimensiones del tensor.
+    \item \textit{dimensions}: las dimensiones del volúmen de activación.
     \item \textit{input channels, output channels}: el número de canales de entrada y salida de las 
     capas convolucionales.
     \item \textit{kernel size}: el tamaño del núcleo (\textit{kernel}) de las capas convolucionales 
@@ -55,7 +55,7 @@ Por su parte, los atributos específicos extraídos por cada capa incluyen:
     \item \textit{padding}: el relleno o bordes aplicados en las capas convolucionales y de 
     \textit{Max-Pooling}.
     \item \textit{ceil mode}: Determina si la función redondeo para capas que reducen el tamaño del
-    tensor (como en el caso de las capas de \textit{Max-Pooling}) es la funcion \textit{ceiling} o \textit{floor}.
+    volúmen de activación (como en el caso de las capas de \textit{Max-Pooling}) es la funcion \textit{ceiling} o \textit{floor}.
 \end{itemize}
 
 Adicionalmente se extraen las cajas de detección de salida de la red.

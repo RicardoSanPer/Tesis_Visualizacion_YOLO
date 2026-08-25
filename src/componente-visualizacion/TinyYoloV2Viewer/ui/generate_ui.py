@@ -1,6 +1,9 @@
 import bpy
 from bpy.types import Panel
 
+"""Panel en la UI para controles de visualización de la red.
+"""
+
 
 class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
     """Draws a button in the 3D Viewport N-Panel"""
@@ -8,7 +11,7 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
     bl_idname = "OBJECT_PT_geonodes_generator"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "My Extension"
+    bl_category = "YOLOv2"
 
     def draw(self, context):
         layout = self.layout

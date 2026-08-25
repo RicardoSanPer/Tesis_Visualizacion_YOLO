@@ -7,7 +7,7 @@ En consecuencia, estos grupos operan tanto como generadores de malla como contro
 animación de la escena.
 
 \subsection{Visualización de volúmenes}
-La representación de los tensores volumétricos se realiza mediante el grupo de nodos personalizado 
+La representación de los volúmenes de activación se realiza mediante el grupo de nodos personalizado 
 \textit{Volume Viewer}. Dado que las salidas de las capas se encuentran codificadas en formato 
 \textit{OpenVDB}, su despliegue visual consiste en el muestreo espacial de los valores almacenados 
 en la cuadrícula tridimensional (\textit{grid}).
@@ -15,14 +15,15 @@ en la cuadrícula tridimensional (\textit{grid}).
 
 El grupo de nodos recibe como parámetros de entrada:
 \begin{itemize}
-    \item \textit{Volume File}: el archivo \textit{OpenVDB} que contiene el tensor capturado de la capa.
+    \item \textit{Volume File}: el archivo \textit{OpenVDB} que contiene las activaciones capturadas 
+    de la capa.
     \item \textit{Simplified Volume}: indica si visualizar el objeto como un objeto sólido.
     \item \textit{Color}: color del objeto simplificado.
     \item \textit{World Size}: las dimensiones físicas $(X, Y, Z)$ que adoptará el objeto dentro 
     del espacio de la escena en Blender (ancho, alto y profundidad).
-    \item \textit{Resolution}: la resolución espacial $(X, Y)$ de cada rebanada del tensor. 
+    \item \textit{Resolution}: la resolución espacial $(X, Y)$ de cada rebanada del volúmen de activación. 
     Se asume que las rebanadas presentan una topología cuadrada.
-    \item \textit{Slice Count}: la profundidad o número total de rebanadas del tensor, equivalente 
+    \item \textit{Slice Count}: la profundidad o número total de rebanadas en el volúmen de activación, equivalente 
     al número de canales de activación generados.
     \item \textit{Slice Selection}: el índice numérico de la rebanada activa. La visualización 
     oculta dinámicamente las rebanadas posteriores al índice seleccionado.
@@ -48,7 +49,7 @@ subdivisión de la malla.
 Mediante lógica nodal adicional, el sistema genera un volumen delimitador (\textit{bounding box}) 
 para señalar los límites físicos de la capa y gestionar el ocultamiento selectivo de rebanadas. 
 Finalmente, el nodo almacena en la geometría atributos personalizados que contienen las dimensiones 
-físicas, la resolución del tensor y el índice de la rebanada seleccionada para su consulta desde 
+físicas, la resolución del mapa de activación y el índice de la rebanada seleccionada para su consulta desde 
 otros módulos o controladores.
 
 \subsection{Visualización de conexiones}
@@ -69,7 +70,7 @@ El grupo de nodos recibe como parámetros de entrada:
     \item \textit{Stride}: paso o desplazamiento del \textit{kernel} a lo largo del mapa de 
     características.
     \item \textit{Ceiling Mode}: modo de redondeo para calcular las dimensiones de salida cuando 
-    el tensor se reduce debido al \textit{stride}. Por defecto aplica la función techo 
+    la resolución de la activación se reduce debido al \textit{stride}. Por defecto aplica la función techo 
     (\textit{ceiling}), contando con la función suelo (\textit{floor}) como opción alternativa.
     \item \textit{Operation Mode}: selector del modo operativo de la convolución, cuyos valores 
     posibles son \textit{One to One}, \textit{Many to One} y \textit{Many to Many}.
@@ -82,7 +83,7 @@ previamente almacenados por el nodo de visualización volumétrica en las capas 
 
 Para la animación del flujo de datos, los nodos generan una representación geométrica de la celda 
 que la capa de entrada está evaluando en un instante dado, así como de la celda resultante en la 
-capa de salida. A partir de los atributos de dimensión física y resolución del tensor, el sistema 
+capa de salida. A partir de los atributos de dimensión física y resolución de la activación, el sistema 
 calcula el tamaño de las celdas en el plano de la rebanada y determina la coordenada de origen 
 (esquina superior izquierda). En la capa de entrada se genera, además, una malla auxiliar que delimita 
 la vecindad o región focal del \textit{kernel}.
@@ -94,7 +95,7 @@ y $T = 1$ a la posición final (esquina inferior derecha). Utilizando la resoluc
 el valor de \textit{stride}, el sistema construye la cuadrícula discreta de iteración; posteriormente, 
 con el tamaño físico de la celda, calcula el vector de desplazamiento necesario para trasladar 
 la geometría del \textit{kernel}. Cabe destacar que los cálculos de iteración para las capas de 
-entrada y salida se ejecutan de manera independiente, asumiendo que las dimensiones de los tensores 
+entrada y salida se ejecutan de manera independiente, asumiendo que las dimensiones de las activaciones 
 son compatibles con los parámetros de \textit{stride} y \textit{Ceiling Mode} configurados.
 \medskip
 
@@ -116,17 +117,25 @@ Finalmente, la herramienta genera una geometría proyectada o "fantasma" (\texti
 consiste en una réplica del \textit{kernel} posicionada directamente sobre la rebanada activa para 
 facilitar la inspección visual de las activaciones locales siendo evaluadas.
 
-\subsection{Visualización de cajas}
+\subsection{Visualización de entrada y salida}
+El grupo de nodos \textit{Input Viewer} se utiliza para visualizar la imagen de entrada
+y los canales RGB de la misma. Toma como parámetros de entrada:
+\begin{itemize}
+    \item \textit{World Size}: las dimensiones físicas del objeto en la escena.
+    \item \textit{View Channels}: indica si se deben mostrar los canales RGB de la entrada.
+\end{itemize}
+
 El grupo de nodos \textit{Box Viewer} se utiliza para representar las cajas de predicción 
 (\textit{bounding boxes}) generadas a la salida de la red. Este grupo de nodos de geometría 
 recibe como parámetros de entrada:
 \begin{itemize}
     \item \textit{Box File}: el archivo \textit{OpenVDB} que contiene los datos codificados de 
     las cajas delimitadoras.
-    \item \textit{Box Count}: el número total de cajas de predicción ($N$) producidas por el 
-    modelo durante la inferencia.
+    \item \textit{World Size}: el tamaño del objeto de la visualización en la escena.
     \item \textit{Class List}: la cadena de texto con la lista de etiquetas de clases de la red, 
     delimitadas por comas.
+    \item \textit{Box Count}: el número total de cajas de predicción ($N$) producidas por el 
+    modelo durante la inferencia.
     \item \textit{Box Selection}: selector de modo para desplegar las cajas de forma individual o 
     bajo criterios de filtrado.
     \item \textit{Confidence}: filtro de discriminación para la visualización de cajas con base en 
@@ -165,3 +174,7 @@ de las cajas:
     \item \textit{$N$}: muestra la totalidad de las $N$ cajas sin aplicar ningún filtro de 
     discriminación, ignorando los umbrales de \textit{Confidence} y \textit{Class Probability}.
 \end{itemize}
+
+Ambos grupos de nodos \textit{Input Viewer} y \textit{Box Viewer} almacenan como atributos de los
+objetos las dimensiones de la entrada y salida, similar a \textit{Volume Viewer}, para correctamente
+mapear las conexiones físicas entre las capas.

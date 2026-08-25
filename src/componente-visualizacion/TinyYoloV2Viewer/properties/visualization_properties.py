@@ -3,18 +3,15 @@ from bpy.types import PropertyGroup
 from bpy.props import FloatProperty, StringProperty, FloatVectorProperty, CollectionProperty, PointerProperty, BoolProperty
 from ..geometry_nodes import load
 
+"""Propiedades para la visualización de la red, como colores de capa, escala de tamaño
+y visibilidad
+"""
+
 def actualizar_colores(self, context):
     """Actualiza los colores de las capas en base al tipo"""
     type_name = self.name
     new_color = tuple(self.color)
     graph = context.scene.yolo_graph
-
-    yolo_data = context.scene.yolo_settings
-    parsed = yolo_data.get_parsed_json()
-
-    if "layers_data" not in parsed:
-                self.report({'ERROR'}, "No se encontró datos de capas")
-                return {'CANCELLED'}
 
     for item in graph.layers:
         if item.type == type_name:
@@ -27,13 +24,6 @@ def actualizar_visibilidad(self, context):
     new_visibility = self.visibility
     graph = context.scene.yolo_graph
 
-    yolo_data = context.scene.yolo_settings
-    parsed = yolo_data.get_parsed_json()
-
-    if "layers_data" not in parsed:
-                self.report({'ERROR'}, "No se encontró datos de capas")
-                return {'CANCELLED'}
-
     for item in graph.layers:
         if item.type == type_name:
             params = {"Simplified Volume" : new_visibility}
@@ -45,29 +35,16 @@ def actualizar_dimensiones(self, context):
     yolo_vis = context.scene.yolo_visualization_settings
     yolo_graph = context.scene.yolo_graph
     parsed = context.scene.yolo_settings.get_parsed_json()
-    layer_data = parsed.get("layers_data")
 
-    if not layer_data:
-        self.report({'ERROR'}, "No se encontró datos de capas")
-        return {'CANCELLED'}
-
+    ## Capas
     for layer in yolo_graph.layers:
-        data = layer_data.get(layer.name)
-        if not data:
-             continue
-        
-        dim = data.get("dimensions")
-        if not dim:
-             continue
-
-        x = dim[2] * yolo_vis.size_scale
-        y = dim[3] * yolo_vis.size_scale
-        z = dim[1] * yolo_vis.layer_depth
+        x = layer.dimensions[0] * yolo_vis.size_scale
+        y = layer.dimensions[1] * yolo_vis.size_scale
+        z = layer.dimensions[2] * yolo_vis.layer_depth
 
         if z > yolo_vis.layer_max_depth: z = yolo_vis.layer_max_depth
 
-        layer.dimensions = (x, y, z)
-        params = {"World Size": layer.dimensions}
+        params = {"World Size": (x, y, z)}
 
         load.configurar_parametros_nodo(layer.object, "Geometry Nodes", params)
 
@@ -81,11 +58,16 @@ def actualizar_posiciones(self, context):
 
     offset = 0
     for layer in yolo_graph.layers:
+        if not layer.object:
+            self.report({'ERROR'}, f"No se encontró datos de capas {layer.name}")
+            return {'CANCELLED'}
+        
         layer.object.location = (0, offset, 0)
 
-        offset += layer.dimensions[2] + yolo_vis.layer_gap
+        depth = layer.dimensions[2] * yolo_vis.layer_depth
+        if depth > yolo_vis.layer_max_depth: depth = yolo_vis.layer_max_depth
 
-    yolo_graph.boxes.location = (0, offset, 0)
+        offset += depth + yolo_vis.layer_gap
     
 class LayerTypeProperty(PropertyGroup):
     """Propiedades de los tipos de capa"""

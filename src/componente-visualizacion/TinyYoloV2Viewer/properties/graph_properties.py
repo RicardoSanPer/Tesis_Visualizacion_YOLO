@@ -2,6 +2,10 @@ import bpy
 from bpy.types import PropertyGroup
 from bpy.props import StringProperty, IntProperty, PointerProperty, FloatVectorProperty, BoolProperty, CollectionProperty
 
+"""Propiedades de la red por capa y de la geometría
+"""
+
+
 class StringItem(PropertyGroup):
     """Clase para almacenar un string en una colección de propiedades."""
     value: StringProperty(name="String Value")
@@ -31,12 +35,7 @@ class GraphProperty(PropertyGroup):
         type=LayerItem
     )
 
-    boxes: PointerProperty(
-        name="Boxes",
-        type=bpy.types.Object
-    )
-
-    def add_layer(self, name:str, type:str, obj:bpy.types.Object):
+    def agregar_capa(self, name:str, type:str, obj:bpy.types.Object):
         """Agrega un nuevo nodo al grafo."""
         item = self.layers.get(name)
         if not item:
@@ -48,7 +47,7 @@ class GraphProperty(PropertyGroup):
 
         return item
 
-    def add_graph_node_parent(self, parent: str, child: str):
+    def agregar_nodo_padre(self, parent: str, child: str):
         """Agrega una relación de padre-hijo entre dos nodos en el grafo."""
         child_node = self.layers.get(child)
         if not child_node:
@@ -57,11 +56,23 @@ class GraphProperty(PropertyGroup):
 
         child_node.parents.add().value = parent
 
-    def set_graph_node_children(self, graph_node: LayerItem, children_name:list):
+    def configurar_nodos_hijos(self, graph_node: LayerItem, children_name:list):
         """Establece los hijos de un nodo en el grafo."""
         graph_node.children.clear()
         for child in children_name:
-            self.add_graph_node_parent(graph_node.name, child)
+            self.agregar_nodo_padre(graph_node.name, child)
             graph_node.children.add().value = child
+
+    def empty(self):
+        """Elimina la geometría generada de las capas para regenerar la geometría de la red"""
+        for layer in self.layers:
+            if not layer.object:
+                continue
+            
+            mesh_data = layer.object.data if isinstance(layer.object.data, bpy.types.Mesh) else None
+            bpy.data.objects.remove(layer.object, do_unlink=True)
+            if mesh_data and mesh_data.users == 0:
+                bpy.data.meshes.remove(mesh_data)
+        self.layers.clear()
 
     
