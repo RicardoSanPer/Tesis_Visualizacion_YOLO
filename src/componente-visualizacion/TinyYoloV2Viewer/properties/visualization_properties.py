@@ -144,4 +144,7 @@ class VisualizationDataProperties(PropertyGroup):
         item.color = rgba
         return item
 
-
+    def update_all(self, context):
+        for layer in self.layer_properties:
+            update_colors(layer, context)
+            update_visibility(layer, context)

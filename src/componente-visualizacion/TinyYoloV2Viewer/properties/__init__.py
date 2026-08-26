@@ -1,10 +1,10 @@
 import bpy
 from .manifest_properties import ManifestDataSettings
-from .graph_properties import StringItem, LayerItem, GraphProperty
+from .graph_properties import StringItem, ConnectionItem, LayerItem, GraphProperty
 from .visualization_properties import VisualizationDataProperties, LayerTypeProperty
 from ..utils import utils
 
-CLASSES = [StringItem, LayerItem, GraphProperty, LayerTypeProperty, ManifestDataSettings, VisualizationDataProperties]
+CLASSES = [StringItem, ConnectionItem, LayerItem, GraphProperty, LayerTypeProperty, ManifestDataSettings, VisualizationDataProperties]
 
 def register_properties():
     utils.register_classes(CLASSES)

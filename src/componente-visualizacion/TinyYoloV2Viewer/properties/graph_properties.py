@@ -10,6 +10,12 @@ class StringItem(PropertyGroup):
     """Clase para almacenar un string en una colección de propiedades."""
     value: StringProperty(name="String Value")
 
+class ConnectionItem(PropertyGroup):
+    object: PointerProperty(
+        name="Conexion",
+        type=bpy.types.Object
+    )
+
 class LayerItem(PropertyGroup):
     """Clase para almacenar los objetos que corresponden a cada capa de la red, 
     incluyendo su nombre, tipo y objeto asociado.
@@ -34,6 +40,22 @@ class GraphProperty(PropertyGroup):
         name="Capas",
         type=LayerItem
     )
+
+    connections: CollectionProperty(
+        name="Connections",
+        type=ConnectionItem
+    )
+
+    def add_connection(self, name:str, obj: bpy.types.Object):
+        """Agrega una conexion"""
+        item = self.connections.get(name)
+        if not item:
+            item = self.connections.add()
+
+        item.name = name
+        item.object = obj
+
+        return item
 
     def add_layer(self, name:str, type:str, obj:bpy.types.Object):
         """Agrega un nuevo nodo al grafo."""
@@ -73,6 +95,13 @@ class GraphProperty(PropertyGroup):
             bpy.data.objects.remove(layer.object, do_unlink=True)
             if mesh_data and mesh_data.users == 0:
                 bpy.data.meshes.remove(mesh_data)
+
+        for con in self.connections:
+            mesh_data = con.object.data if isinstance(con.object.data, bpy.types.Mesh) else None
+            bpy.data.objects.remove(con.object, do_unlink=True)
+            if mesh_data and mesh_data.users == 0:
+                bpy.data.meshes.remove(mesh_data)
+
         self.layers.clear()
 
     

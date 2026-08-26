@@ -4,7 +4,6 @@ from bpy.types import Operator
 from ..geometry_nodes import load
 from ..properties.graph_properties import LayerItem
 from ..properties.visualization_properties import update_dimensions
-
 """Generación de la geometría
 """
 
@@ -84,15 +83,17 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         self._assign_object_to_collection(salida, io_collection)
 
         # Conexiones entrada/salida
+        input_layer_data = parsed["layers_data"]["input"]
         yolo_graph.set_children_nodes(last_node, [item_salida.name])
-        yolo_graph.set_children_nodes(item_entrada, [first_node.name])
+        yolo_graph.set_children_nodes(item_entrada, input_layer_data["connections"])
 
         # Instanciar geometria de conexiones
         connection_collection = self._get_or_create_collection("Connections", yolo_collection)
        
         for node in yolo_graph.layers:
             for child in node.children:
-                con = self._instance_nodes("YV2 Volume Connection", f"{node.name}_{child.value}_CONN", context)
+                name = f"{node.name}_{child.value}_CONN"
+                con = self._instance_nodes("YV2 Volume Connection", name, context)
                 if not con:
                     return {'CANCELLED'}
 
@@ -101,11 +102,14 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 self._configure_connections(con, parent_node, child_node)
                 self._assign_object_to_collection(con, connection_collection)
 
+                yolo_graph.add_connection(name, con)
+
         load.deduplicate_nodes()
         load.deduplicate_materials()
         load.update_input_image(str(path / "input.png"))
 
         update_dimensions(self, context)
+        scene.yolo_visualization_settings.update_all(context)
         
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}

@@ -58,4 +58,5 @@ Por su parte, los atributos específicos extraídos por cada capa incluyen:
     volúmen de activación (como en el caso de las capas de \textit{Max-Pooling}) es la funcion \textit{ceiling} o \textit{floor}.
 \end{itemize}
 
-Adicionalmente se extraen las cajas de detección de salida de la red.
+Adicionalmente se extraen las cajas de detección de salida de la red, filtradas en base a los valores de
+supresión del no máximo (nms) y certeza de la clase (confidence).
