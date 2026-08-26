@@ -7,7 +7,7 @@ from ..geometry_nodes import load
 y visibilidad
 """
 
-def actualizar_colores(self, context):
+def update_colors(self, context):
     """Actualiza los colores de las capas en base al tipo"""
     type_name = self.name
     new_color = tuple(self.color)
@@ -16,9 +16,9 @@ def actualizar_colores(self, context):
     for item in graph.layers:
         if item.type == type_name:
             params = {"Color" : new_color}
-            load.configurar_parametros_nodo(item.object, "Geometry Nodes", params)
+            load.set_node_parameters(item.object, "Geometry Nodes", params)
 
-def actualizar_visibilidad(self, context):
+def update_visibility(self, context):
     """Actualiza la visualización simplificada y visibilidad del texto en base al tipo de capa"""
     type_name = self.name
     new_visibility = self.visibility
@@ -29,9 +29,9 @@ def actualizar_visibilidad(self, context):
         if item.type == type_name:
             params = {"Simplified Volume" : new_visibility,
                       "View Type" : new_text_visibility}
-            load.configurar_parametros_nodo(item.object, "Geometry Nodes", params)
+            load.set_node_parameters(item.object, "Geometry Nodes", params)
 
-def actualizar_dimensiones(self, context):
+def update_dimensions(self, context):
     """Actualiza las dimensiones de los objetos de visualización de capas
     en base a la escala y profunidad máxima"""
     yolo_vis = context.scene.yolo_visualization_settings
@@ -47,11 +47,11 @@ def actualizar_dimensiones(self, context):
 
         params = {"World Size": (x, y, z)}
 
-        load.configurar_parametros_nodo(layer.object, "Geometry Nodes", params)
+        load.set_node_parameters(layer.object, "Geometry Nodes", params)
 
-    actualizar_posiciones(self, context)
+    update_positions(self, context)
 
-def actualizar_posiciones(self, context):
+def update_positions(self, context):
     """Actualiza la posición de los objetos de visualización de capas
     en base al espaciado de capas, escala y tamaño máximo"""
     yolo_vis = context.scene.yolo_visualization_settings
@@ -84,20 +84,20 @@ class LayerTypeProperty(PropertyGroup):
         min=0.0,
         max=1.0,
         default=(0.5, 0.5, 0.5, 1.0),
-        update=actualizar_colores
+        update=update_colors
     )
     visibility : BoolProperty(
         name="Visible",
         default=True,
         description="Determina si la usa la visualización simplificada",
-        update=actualizar_visibilidad
+        update=update_visibility
     )
 
     type_visibility : BoolProperty(
         name="Texto Visible",
         default=False,
         description="Determina si el texto que muestra el tipo de capa debe ser visible",
-        update=actualizar_visibilidad
+        update=update_visibility
     )
 
 class VisualizationDataProperties(PropertyGroup):
@@ -107,34 +107,34 @@ class VisualizationDataProperties(PropertyGroup):
         description = "Escala de las capas en relación a la resolución",
         default = 0.01,
         soft_min= 0.0,
-        update=actualizar_dimensiones
+        update=update_dimensions
     )
     layer_depth : FloatProperty(
         name = "Escala de Profundidad",
         description= "Escala de la profunidad en base al numero de capas",
         default= 0.01,
         soft_min=0.0,
-        update = actualizar_dimensiones
+        update = update_dimensions
     )
     layer_gap : FloatProperty(
         name = "Espaciado",
         description= "Espaciado entre capas de la red",
         default= 0.5,
         soft_min=0.0,
-        update= actualizar_posiciones
+        update= update_positions
     )
     layer_max_depth : FloatProperty(
          name="Profundidad Máxima",
          description= "Pofundidad máxima de las capas",
          default=2.0,
          soft_min = 0,
-         update=actualizar_dimensiones
+         update=update_dimensions
     )
     layer_properties : CollectionProperty(
         type=LayerTypeProperty
         )
 
-    def crear_propiedades_capa(self, name:str, rgba: tuple = (0.5, 0.5, 0.5, 1.0), visibility: bool = True):
+    def create_layer_properties(self, name:str, rgba: tuple = (0.5, 0.5, 0.5, 1.0), visibility: bool = True):
         """Crea las propiedades iniciales de un tipo de capa"""
         item = self.layer_properties.get(name)
         if not item:

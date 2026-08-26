@@ -33,7 +33,7 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             settings.filepath = self.filepath
             settings.set_json(data)
 
-            self._cargar_propiedades(context)
+            self._load_properties(context)
 
             self.report({'INFO'}, f"Loaded: {self.filepath}")
             return {'FINISHED'}
@@ -42,7 +42,7 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             self.report({'ERROR'}, f"Failed to read file: {e}")
             return {'CANCELLED'}
 
-    def _cargar_propiedades(self, context):
+    def _load_properties(self, context):
         """Crea las propiedades iniciales de visualización de los tipos de capa"""
         vis_props = context.scene.yolo_visualization_settings
         vis_props.layer_properties.clear()
@@ -64,4 +64,4 @@ class IMPORT_OT_LoadJSON(Operator, ImportHelper):
             layer_types.append(type)
 
         for layer_type in layer_types:
-            vis_props.crear_propiedades_capa(name=layer_type)
+            vis_props.create_layer_properties(name=layer_type)

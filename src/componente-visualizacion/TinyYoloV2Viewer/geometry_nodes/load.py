@@ -4,7 +4,7 @@ import bpy
 """Funcionalidad para cargar nodos de geometría
 """
 
-def cargar_geonodos(group_name: str) -> bpy.types.NodeTree:
+def load_geonode_group(group_name: str):
     """Carga un grupo de nodos de la librería evitando la duplicación de subgrupos."""
     blend_path = (Path(__file__).parent.parent / "assets" / "library.blend").resolve()
 
@@ -33,7 +33,7 @@ def cargar_geonodos(group_name: str) -> bpy.types.NodeTree:
     node_group.use_fake_user = True
     return node_group
 
-def deduplicar_nodos():
+def deduplicate_nodes():
     """
     Detecta grupos de nodos duplicados con sufijos (.001, .002, etc.),
     redirige a todos sus usuarios al grupo base original y elimina el duplicado.
@@ -50,7 +50,7 @@ def deduplicar_nodos():
                 # Eliminar el bloque de datos duplicado
                 bpy.data.node_groups.remove(ng)
 
-def deduplicar_materiales():
+def deduplicate_materials():
     """
     Detecta materiales duplicados (.001, .002, etc.),
     redirige a todos sus usuarios al material base original y elimina el duplicado.
@@ -67,7 +67,7 @@ def deduplicar_materiales():
                 # Eliminar duplicados
                 bpy.data.materials.remove(mat)
 
-def actualizar_imagen_entrada(image_path: str):
+def update_input_image(image_path: str):
     """
     Asigna una imagen al material de entrada como textura
     """
@@ -104,7 +104,7 @@ def actualizar_imagen_entrada(image_path: str):
     print(f"Actualizada textura de '{mat.name}' a '{img.name}'.")
     return img
 
-def configurar_parametros_nodo(obj: bpy.types.Object, modifier_name: str, parameters: dict):
+def set_node_parameters(obj: bpy.types.Object, modifier_name: str, parameters: dict):
     """Aplica los parametros al grupo de nodos"""
     if not obj or not parameters:
         return

@@ -3,7 +3,7 @@ from pathlib import Path
 from bpy.types import Operator
 from ..geometry_nodes import load
 from ..properties.graph_properties import LayerItem
-from ..properties.visualization_properties import actualizar_dimensiones
+from ..properties.visualization_properties import update_dimensions
 
 """Generación de la geometría
 """
@@ -18,7 +18,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         scene = context.scene
 
         root_collection = scene.collection
-        yolo_collection = self._get_or_create_coleccion("YOLOv2", root_collection)
+        yolo_collection = self._get_or_create_collection("YOLOv2", root_collection)
 
         yolo_data = scene.yolo_settings
         yolo_graph = scene.yolo_graph
@@ -34,13 +34,13 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         path = context.scene.yolo_settings.get_manifest_location()
 
          # Entrada
-        input = self._instanciar_nodos("YV2 Input Viewer", "input", context)
+        input = self._instance_nodes("YV2 Input Viewer", "input", context)
         if not input:
             return {'CANCELLED'}
 
-        self._configurar_input_viewer(input)
+        self._configure_input_viewer(input)
 
-        item_entrada = yolo_graph.agregar_capa("input", "Input", input)
+        item_entrada = yolo_graph.add_layer("input", "Input", input)
         item_entrada.dimensions = (416, 416, 4)
 
         # Cargar informacion de las capas
@@ -51,66 +51,66 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             if layer in ("input", "cnn"):
                 continue
 
-            obj = self._instanciar_nodos("YV2 Volume Viewer", layer, context)
+            obj = self._instance_nodes("YV2 Volume Viewer", layer, context)
             if not obj:
                 return {'CANCELLED'}
 
             ## Grafo
-            item = yolo_graph.agregar_capa(layer, layer_info.get("type", "unknown"), obj)
-            self._parametros_capa(item, path, layer_info)
-            self._configurar_volume_viewer_objects(item)
-            yolo_graph.configurar_nodos_hijos(item, layer_info["connections"])
+            item = yolo_graph.add_layer(layer, layer_info.get("type", "unknown"), obj)
+            self._layer_parameters(item, path, layer_info)
+            self._configure_volume_viewer_objects(item)
+            yolo_graph.set_children_nodes(item, layer_info["connections"])
 
             #Coleccion
-            node_collection = self._get_or_create_coleccion(layer_info.get("type"), yolo_collection)
-            self._asignar_objeto_a_coleccion(obj, node_collection)
+            node_collection = self._get_or_create_collection(layer_info.get("type"), yolo_collection)
+            self._assign_object_to_collection(obj, node_collection)
 
             last_node = item
             if first_node is None: first_node = item
 
         # Instancias cajas de salida
-        salida = self._instanciar_nodos("YV2 Box Viewer", "boxes", context)
+        salida = self._instance_nodes("YV2 Box Viewer", "boxes", context)
         if not salida:
             return {'CANCELLED'}
         
-        self._configurar_box_viewer(salida, path, parsed)
+        self._configure_box_viewer(salida, path, parsed)
 
-        item_salida = yolo_graph.agregar_capa("boxes", "Output", salida)
+        item_salida = yolo_graph.add_layer("boxes", "Output", salida)
         item_salida.dimensions = (416, 416, 1)
 
         # Colecciones
-        io_collection = self._get_or_create_coleccion("IO", yolo_collection)
-        self._asignar_objeto_a_coleccion(input, io_collection)
-        self._asignar_objeto_a_coleccion(salida, io_collection)
+        io_collection = self._get_or_create_collection("IO", yolo_collection)
+        self._assign_object_to_collection(input, io_collection)
+        self._assign_object_to_collection(salida, io_collection)
 
         # Conexiones entrada/salida
-        yolo_graph.configurar_nodos_hijos(last_node, [item_salida.name])
-        yolo_graph.configurar_nodos_hijos(item_entrada, [first_node.name])
+        yolo_graph.set_children_nodes(last_node, [item_salida.name])
+        yolo_graph.set_children_nodes(item_entrada, [first_node.name])
 
         # Instanciar geometria de conexiones
-        connection_collection = self._get_or_create_coleccion("Connections", yolo_collection)
+        connection_collection = self._get_or_create_collection("Connections", yolo_collection)
        
         for node in yolo_graph.layers:
             for child in node.children:
-                con = self._instanciar_nodos("YV2 Volume Connection", f"{node.name}_{child.value}_CONN", context)
+                con = self._instance_nodes("YV2 Volume Connection", f"{node.name}_{child.value}_CONN", context)
                 if not con:
                     return {'CANCELLED'}
 
                 parent_node = yolo_graph.layers.get(node.name)
                 child_node = yolo_graph.layers.get(child.value)
-                self._configurar_conexiones(con, parent_node, child_node)
-                self._asignar_objeto_a_coleccion(con, connection_collection)
+                self._configure_connections(con, parent_node, child_node)
+                self._assign_object_to_collection(con, connection_collection)
 
-        load.deduplicar_nodos()
-        load.deduplicar_materiales()
-        load.actualizar_imagen_entrada(str(path / "input.png"))
+        load.deduplicate_nodes()
+        load.deduplicate_materials()
+        load.update_input_image(str(path / "input.png"))
 
-        actualizar_dimensiones(self, context)
+        update_dimensions(self, context)
         
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
 
-    def _instanciar_nodos(self, group_name: str, name: str, context):
+    def _instance_nodes(self, group_name: str, name: str, context):
         """Genera un objeto y asigna un grupo de nodos de geometría
 
         Args:
@@ -123,7 +123,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         """
         try:
             # 1. Cargar grupo de nodos
-            node_group = load.cargar_geonodos(group_name)
+            node_group = load.load_geonode_group(group_name)
             if not node_group:
                 self.report({'ERROR'}, f"No se pudo cargar el grupo '{group_name}'")
                 return None
@@ -145,7 +145,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             self.report({'ERROR'}, f"Failed to instantiate: {e}")
             return None
 
-    def _configurar_volume_viewer_objects(self, node: LayerItem):
+    def _configure_volume_viewer_objects(self, node: LayerItem):
         """Configura los parametros del grupo de nodos de visualización de volúmenes
         para visualizar una capa de la red
 
@@ -160,9 +160,9 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             "Volume File": node.file,
             "Simplified Volume": True
         }
-        load.configurar_parametros_nodo(node.object, "Geometry Nodes", params)
+        load.set_node_parameters(node.object, "Geometry Nodes", params)
 
-    def _configurar_box_viewer(self, obj: bpy.types.Object, directory: Path, config: dict):
+    def _configure_box_viewer(self, obj: bpy.types.Object, directory: Path, config: dict):
         """Configura los parametros del grupo de nodos para la visualizacipn de las cajas
 
         Args:
@@ -178,18 +178,18 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 "Confidence" : config["confidence"],
                 "World Size" : (416, 416, 0)
             }
-        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
+        load.set_node_parameters(obj, "Geometry Nodes", params)
 
-    def _configurar_input_viewer(Self, obj: bpy.types.Object):
+    def _configure_input_viewer(Self, obj: bpy.types.Object):
         """Configura los parametros de la visualización de entrada"""
         params = {
             "World Size" : (416, 416, 3),
             "Resolution" : 416,
             "View Channels" : True
         }
-        load.configurar_parametros_nodo(obj, "Geometry Nodes", params)
+        load.set_node_parameters(obj, "Geometry Nodes", params)
 
-    def _configurar_conexiones(self, connection:bpy.types.Object, parent: LayerItem, child: LayerItem):
+    def _configure_connections(self, connection:bpy.types.Object, parent: LayerItem, child: LayerItem):
         """Configura los parametros del grupo de nodos para la visualización de una conexión entre
         dos capas
 
@@ -205,9 +205,9 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             "Stride": child.stride,
             "Ceiling Mode": child.ceiling
         }
-        load.configurar_parametros_nodo(connection, "Geometry Nodes", params)
+        load.set_node_parameters(connection, "Geometry Nodes", params)
 
-    def _parametros_capa(self, nodo: LayerItem, path: Path, datos: dict):
+    def _layer_parameters(self, nodo: LayerItem, path: Path, datos: dict):
         """Configura LayerItem con los datos de la capa correspondiente
 
         Args:
@@ -246,7 +246,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
                 nodo.slice_count = dim[1]
                 nodo.file = str(path / f"{nodo.name}.vdb")
 
-    def _get_or_create_coleccion(self, name: str, parent: bpy.types.Collection = None):
+    def _get_or_create_collection(self, name: str, parent: bpy.types.Collection = None):
         """
         Obtiene o crea una colección
         """
@@ -264,7 +264,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
 
         return col
 
-    def _asignar_objeto_a_coleccion(self, obj: bpy.types.Object, target_col: bpy.types.Collection):
+    def _assign_object_to_collection(self, obj: bpy.types.Object, target_col: bpy.types.Collection):
         """
         Asigna un objeto a una coleccion
         """

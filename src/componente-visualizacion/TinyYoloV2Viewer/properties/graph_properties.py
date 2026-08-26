@@ -35,7 +35,7 @@ class GraphProperty(PropertyGroup):
         type=LayerItem
     )
 
-    def agregar_capa(self, name:str, type:str, obj:bpy.types.Object):
+    def add_layer(self, name:str, type:str, obj:bpy.types.Object):
         """Agrega un nuevo nodo al grafo."""
         item = self.layers.get(name)
         if not item:
@@ -47,7 +47,7 @@ class GraphProperty(PropertyGroup):
 
         return item
 
-    def agregar_nodo_padre(self, parent: str, child: str):
+    def add_node_parent(self, parent: str, child: str):
         """Agrega una relación de padre-hijo entre dos nodos en el grafo."""
         child_node = self.layers.get(child)
         if not child_node:
@@ -56,11 +56,11 @@ class GraphProperty(PropertyGroup):
 
         child_node.parents.add().value = parent
 
-    def configurar_nodos_hijos(self, graph_node: LayerItem, children_name:list):
+    def set_children_nodes(self, graph_node: LayerItem, children_name:list):
         """Establece los hijos de un nodo en el grafo."""
         graph_node.children.clear()
         for child in children_name:
-            self.agregar_nodo_padre(graph_node.name, child)
+            self.add_node_parent(graph_node.name, child)
             graph_node.children.add().value = child
 
     def empty(self):
