@@ -1,9 +1,31 @@
-\subsection{Integración}
-La integración de los modulos se realiza a traves del script \textit{main.py}. Este archivo actúa
-como ejecutable del componente. Ejecutandose mediante la consola de comandos, toma como
-argumentos de ejecución la ruta de archivo de la imagen de entrada y la ruta de directorio de salida
-donde se exportan los datos extraídos.
+\subsection{Integración y ejecución del componente}
+La integración de los módulos se centraliza en el script ejecutable \textit{main.py}. Al invocarse 
+mediante la interfaz de línea de comandos (CLI), el script expone y procesa los siguientes argumentos 
+de configuración:
 
+\begin{itemize}
+    \item \texttt{--input}: especifica la ruta de archivo de la imagen de entrada para alimentar la red 
+    durante la inferencia. Este parámetro es obligatorio.
+    \item \texttt{--output}: define la ruta del directorio destino donde se exportarán los archivos y 
+    volúmenes generados. Es un argumento opcional; en caso de omitirse, se crea automáticamente un 
+    directorio denominado \textit{output} en la ruta de trabajo actual.
+    \item \texttt{--view-layers}: indicador booleano (\textit{flag}) que instruye al programa a listar 
+    en consola las capas de la arquitectura junto con sus tipos de operación asociados. Esta opción es 
+    de carácter informativo y detiene el flujo antes de generar archivos en disco.
+    \item \texttt{--layers}: lista delimitada por comas con las categorías de capas u operaciones de 
+    las cuales se extraerán los tensores intermedios. Es opcional; por defecto, el sistema captura 
+    los tensores de las capas convolucionales y de agrupamiento (\textit{pooling}).
+    \item \texttt{--include}: lista delimitada por comas con identificadores de capas específicas a 
+    incorporar forzosamente en el proceso de extracción, independientemente del filtro general 
+    asignado en \texttt{--layers}.
+    \item \texttt{--exclude}: lista delimitada por comas con nombres de capas específicas a descartar 
+    de la extracción, teniendo la máxima precedencia sobre los filtros \texttt{--layers} y 
+    \texttt{--include}.
+    \item \texttt{--dry-run}: bandera de simulación que ejecuta el pipeline de inferencia y extracción 
+    omitiendo la escritura física de datos en el disco. Su propósito es verificar la consistencia de 
+    los tensores, previsualizar el registro de archivos resultantes y auditar la ejecución ante posibles 
+    fallos de configuración.
+\end{itemize}
 % Codigo de "main" para ejecutar
 % Agregar: UI   -> Previsualizar capas disponibles
 %               -> Seleccionar capas a extraer

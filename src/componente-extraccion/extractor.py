@@ -139,6 +139,7 @@ class ModelExtractor:
         return None
 
     def print_info(self):
+        """Imprime información de la red"""
         operations = {}
         for name, layer in self.model.named_modules():
             if name == "cnn":

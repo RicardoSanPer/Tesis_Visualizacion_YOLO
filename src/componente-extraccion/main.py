@@ -12,12 +12,12 @@ if __name__=="__main__":
     ## El script toma como argumento una ubicación de archivo de imagen como entrada para la red
     parser = argparse.ArgumentParser(description="Imagen de entrada para la red")
     parser.add_argument(
-        "image_path",
+        "--input",
         type=Path,
         help="Ubicación de archivo de imagen"
     )
     parser.add_argument(
-        "output_path",
+        "--output",
         type=Path,
         help="Directorio de salida",
         nargs="?",
@@ -42,19 +42,24 @@ if __name__=="__main__":
         help="Lista de capas a excluir por nombre"
     )
     parser.add_argument(
-        "--info",
+        "--view-layers",
         action="store_true",
-        help="Mostrar información de red"
+        help="Mostrar capas de la red"
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Mostrar capas de la red"
     )
     args = parser.parse_args()
 
     # Crear y ejecutar el modelo
-    model = Exe.ModelExecutor(args.image_path)
+    model = Exe.ModelExecutor(args.input)
     extractor = Ext.ModelExtractor(model, args.layers, args.include, args.exclude)
-    if args.info:
+    if args.view_layers:
         extractor.print_info()
 
     else:
         extractor.extract()
-        exporter = Exp.ModelExporter(extractor)
-        exporter.export(args.output_path)
+        exporter = Exp.ModelExporter(extractor, args.dry_run)
+        exporter.export(args.output)
