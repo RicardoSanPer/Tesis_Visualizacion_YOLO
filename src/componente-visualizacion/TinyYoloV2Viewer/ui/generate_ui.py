@@ -37,6 +37,7 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
             row = col.row()
             row.prop(item, "color", text=item.name)
             row.prop(item, "visibility", text="Simple")
+            row.prop(item, "type_visibility", text="Texto")
 
         col = layout.column(align=True)
         layout.separator()

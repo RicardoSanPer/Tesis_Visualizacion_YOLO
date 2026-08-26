@@ -154,6 +154,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
         """
         params = {
             "World Size": node.dimensions,
+            "Type": node.type,
             "Resolution": node.resolution,
             "Slice Count": node.slice_count,
             "Volume File": node.file,

@@ -19,14 +19,16 @@ def actualizar_colores(self, context):
             load.configurar_parametros_nodo(item.object, "Geometry Nodes", params)
 
 def actualizar_visibilidad(self, context):
-    """Actualiza la visualización simplificada en base al tipo de capa"""
+    """Actualiza la visualización simplificada y visibilidad del texto en base al tipo de capa"""
     type_name = self.name
     new_visibility = self.visibility
+    new_text_visibility = self.type_visibility
     graph = context.scene.yolo_graph
 
     for item in graph.layers:
         if item.type == type_name:
-            params = {"Simplified Volume" : new_visibility}
+            params = {"Simplified Volume" : new_visibility,
+                      "View Type" : new_text_visibility}
             load.configurar_parametros_nodo(item.object, "Geometry Nodes", params)
 
 def actualizar_dimensiones(self, context):
@@ -34,7 +36,6 @@ def actualizar_dimensiones(self, context):
     en base a la escala y profunidad máxima"""
     yolo_vis = context.scene.yolo_visualization_settings
     yolo_graph = context.scene.yolo_graph
-    parsed = context.scene.yolo_settings.get_parsed_json()
 
     ## Capas
     for layer in yolo_graph.layers:
@@ -89,6 +90,13 @@ class LayerTypeProperty(PropertyGroup):
         name="Visible",
         default=True,
         description="Determina si la usa la visualización simplificada",
+        update=actualizar_visibilidad
+    )
+
+    type_visibility : BoolProperty(
+        name="Texto Visible",
+        default=False,
+        description="Determina si el texto que muestra el tipo de capa debe ser visible",
         update=actualizar_visibilidad
     )
 
