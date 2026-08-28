@@ -64,14 +64,19 @@ class ModelExporter:
             output_path (Path) : Ruta de directorio de salida
         """
         file_path = str(output_path / "boxes.vdb")
-        print(f"Cajas: {file_path}\n")
 
         #Cada caja tiene formato (x, y, w, h, confidence, class probability, class id)
         data = np.array([[[t.item() for t in row] for row in self.model_extractor.boxes]])
+
+        if data.ndim < 3:
+            print("No se detectó ningun objeto. Omitiendo creacion de cajas")
+            return
+
         grid = openvdb.FloatGrid()
         grid.copyFromArray(data)
         grid.name = "density"
 
+        print(f"Cajas: {file_path}\n")
         if self.dry_run: return
         
         openvdb.write(file_path, grid)

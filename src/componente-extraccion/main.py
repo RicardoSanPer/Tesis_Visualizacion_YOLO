@@ -51,10 +51,24 @@ if __name__=="__main__":
         action="store_true",
         help="Mostrar capas de la red"
     )
+    parser.add_argument(
+        "--conf",
+        type=float,
+        default=0.55,
+        help="Umbral de confianza (ejemplo: 0.25)"
+    )
+    parser.add_argument(
+        "--nms",
+        type=float,
+        default=0.55,
+        help="Umbral de nms (ejemplo: 0.25)"
+    )
     args = parser.parse_args()
 
     # Crear y ejecutar el modelo
     model = Exe.ModelExecutor(args.input)
+    model.conf_threshold = args.conf
+    model.nms_threshold = args.nms
     extractor = Ext.ModelExtractor(model, args.layers, args.include, args.exclude)
     if args.view_layers:
         extractor.print_info()
