@@ -1,5 +1,166 @@
-\section{Estudio de Caso}
+\section{Estudio de caso}
 
+\subsection{Caso de detección simple}
+Este escenario de prueba se seleccionó para validar el funcionamiento integral del 
+\textit{pipeline} a partir de un caso de detección nominal exitoso, utilizando la imagen 
+presentada en la Figura~\ref{fig:success_case}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/cases/plant5_416.jpg}
+    \hspace{0.05\textwidth}
+    \includegraphics[width=0.4\textwidth]{images/cases/plant5_416_out.png}
+    \caption[Estudio de caso exitoso]{Estudio de caso exitoso. Izquierda: imagen de entrada 
+    proporcionada a la red. Derecha: resultado de inferencia con la caja delimitadora predicha. 
+    Fuente: elaboración propia.}
+    \label{fig:success_case}
+\end{figure}
+
+El módulo de extracción procesó esta imagen de entrada, capturando los tensores de las capas 
+convolucionales y de agrupamiento máximo (\textit{Max-Pooling}) configuradas por defecto. Se 
+estableció un umbral de confianza de $0.78$, obteniendo una única caja de predicción confirmada.
+\medskip
+
+Posteriormente, el archivo de manifiesto (\textit{manifest.json}) se importó en una escena 
+vacía de Blender. Se ejecutó el operador de generación geométrica y se ajustaron los parámetros 
+globales de visualización, verificando la consistencia en la importación de datos, la reconstrucción 
+volumétrica procedural y la interactividad del panel en la interfaz.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/cases/blender_view.png}
+    \caption[Escena de estudio de caso exitoso en Blender]{Entorno general de la escena en Blender. 
+    Se aprecia la geometría tridimensional generada a partir de los datos extraídos de la red, el 
+    panel de configuración global en la barra lateral (\textit{N-Panel}), la organización jerárquica 
+    de las colecciones en el \textit{Outliner} y los parámetros locales del objeto activo en el panel 
+    de propiedades.}
+    \label{fig:blender_success}
+\end{figure}
+
+Asimismo, se interactuó con los parámetros individuales del grupo de nodos \textit{Volume Viewer} 
+para comprobar el correcto muestreo espacial y la visualización selectiva de las rebanadas del tensor.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/cases/blender_layer_1.png}
+    \vspace{0.3cm}
+    \includegraphics[width=0.8\textwidth]{images/cases/blender_layer_2.png}
+    \caption[Geometría de capas]{Inspección de capas volumétricas. Visualización interactiva de 
+    distintos canales de activación (\textit{slices}) correspondientes a la primera capa convolucional.}
+    \label{fig:blender_layers}
+\end{figure}
+
+Se constató también la instanciación de las entidades de entrada y salida del modelo, comprobando que 
+la textura de la imagen de entrada se mapeara con la fidelidad cromática esperada y que la caja de 
+salida preservara la escala, las coordenadas espaciales y la etiqueta de clase correctas.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/cases/input.png}
+    \vspace{0.3cm}
+    \includegraphics[width=0.8\textwidth]{images/cases/output.png}
+    \caption[Geometría de entrada y salida]{Representación de las entradas y salidas del modelo. 
+    Arriba: plano focal con la imagen de entrada instanciada. Abajo: plano de salida con la caja 
+    delimitadora y la etiqueta de clase superpuesta.}
+    \label{fig:blender_input_output}
+\end{figure}
+
+En cuanto a las conexiones inter-capa, se verificó la correspondencia topológica, el tamaño del núcleo 
+(\textit{kernel}) y el paso (\textit{stride}). En particular, se validó el desplazamiento del 
+\textit{kernel} sobre la cuadrícula bidimensional para diferentes valores de \textit{stride}, 
+así como el centrado geométrico de su vecindad focal en núcleos de dimensiones impares ($3 \times 3$).
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/cases/kernel_size3.png}
+    \vspace{0.3cm}
+    \includegraphics[width=0.8\textwidth]{images/cases/kernel_size2.png}
+    \caption[Geometría del kernel]{Geometría y dinámica del \textit{kernel}. Arriba: escala nominal 
+    y centrado para un núcleo de $3 \times 3$. Abajo: adaptación paramétrica de la malla para un 
+    núcleo de tamaño $2 \times 2$.}
+    \label{fig:blender_connection}
+\end{figure}
+
+\subsection{Caso complejo: Múltiples detecciones}
+Este segundo escenario evalúa la robustez de la herramienta ante condiciones de inferencia de mayor 
+complejidad, caracterizadas por la detección simultánea de múltiples instancias en una misma escena. 
+Para esta prueba se utilizó la imagen ilustrada en la Figura~\ref{fig:complex_case}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/cases/input_2.png}
+    \hspace{0.05\textwidth}
+    \includegraphics[width=0.4\textwidth]{images/cases/output_2.png}
+    \caption[Estudio de caso complejo]{Estudio de caso multi-objeto. Izquierda: imagen de entrada 
+    con múltiples instancias. Derecha: inferencia de la red desplegando las predicciones resultantes. 
+    Fuente: elaboración propia.}
+    \label{fig:complex_case}
+\end{figure}
+
+Se evaluó la generación de las mallas alámbricas mediante el nodo \textit{Box Viewer}, así como la 
+funcionalidad de aislamiento por índice de caja y los mecanismos de discriminación basados en los 
+umbrales de presencia de objeto (\textit{objectness}) y probabilidad condicional de clase.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/cases/case_2.png}
+    \caption[Geometría de cajas]{Instanciación tridimensional de la totalidad de las cajas delimitadoras 
+    predichas sobre el plano focal de la imagen.}
+    \label{fig:box_geometry}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/cases/case_2_i0.png}
+    \vspace{0.2cm}
+    \includegraphics[width=0.8\textwidth]{images/cases/case_2_i1.png}
+    \vspace{0.2cm}
+    \includegraphics[width=0.8\textwidth]{images/cases/case_2_i2.png}
+    \caption[Selección por índice de caja]{Aislamiento e inspección de cajas por índice individual 
+    (\textit{Box Selection}). Arriba: índice 0. Centro: índice 1. Abajo: índice 2.}
+    \label{fig:index_selection}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{images/cases/case_2_conf.png}
+    \vspace{0.3cm}
+    \includegraphics[width=1\textwidth]{images/cases/case_2_prob.png}
+    \caption[Filtrado de cajas]{Discriminación paramétrica de predicciones. Arriba: filtrado por 
+    umbral de confianza ($\text{Confidence} = 0.5$). Abajo: filtrado por probabilidad condicional de clase 
+    ($\text{Class Probability} = 0.002$).}
+    \label{fig:box_filter}
+\end{figure}
+
+\FloatBarrier
+
+\subsection{Caso de diagnóstico: Análisis comparativo de predicción errónea}
+Para evaluar la utilidad del sistema como herramienta de diagnóstico e interpretabilidad (XAI), 
+se analizó un caso de detección errónea (falso positivo). El objetivo de esta prueba consiste en rastrear 
+el flujo de activaciones internas a lo largo de la arquitectura para identificar en qué etapa del 
+procesamiento se originó la confusión del modelo, contrastándolo directamente con las activaciones 
+de un caso de detección exitoso de la misma clase.
+\medskip
+
+Para este estudio de caso se utilizan dos inferencias de red: un falso positivo, en el que la red
+identifica erroneamente la clase de un objeto, y un verdadero positivo en el que identifica correctamente
+la clase del objeto, siendo este la misma clase erroneamente identificada en el falso positivo.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/cases/input_3.png}
+    \includegraphics[width=0.4\textwidth]{images/cases/output_3.png}
+    \caption[Falso positivo]{Caso de falso positivo. Fuente: Elaboración propia}
+    \label{fig:false_positive}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/cases/input_4.png}
+    \includegraphics[width=0.4\textwidth]{images/cases/output_4.png}
+    \caption[Verdadero positivo]{Caso de verdadero positivo. Fuente: \parencite{wikimedia_dog_sample}}
+    \label{fig:true_positive}
+\end{figure}
 % Escenarios de prueba
 % 1.- Caso exitoso: Demostrar que el pipeline funciona correctamente
 % 2.- Caso complejo: Multiples detecciones

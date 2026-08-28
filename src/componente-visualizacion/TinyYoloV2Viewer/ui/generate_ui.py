@@ -7,7 +7,7 @@ from bpy.types import Panel
 
 class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
     """Draws a button in the 3D Viewport N-Panel"""
-    bl_label = "GeoNodes Generator"
+    bl_label = "Geometria YOLOv2"
     bl_idname = "OBJECT_PT_geonodes_generator"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
