@@ -248,7 +248,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             # Dato del volumen
             if datos.get("data"):
                 nodo.slice_count = dim[1]
-                nodo.file = str(path / f"{nodo.name}.vdb")
+                nodo.file = str(path / "openvdb" / f"{nodo.name}.vdb")
 
     def _get_or_create_collection(self, name: str, parent: bpy.types.Collection = None):
         """

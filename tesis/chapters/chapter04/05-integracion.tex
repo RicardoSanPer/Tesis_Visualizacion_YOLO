@@ -25,8 +25,12 @@ de configuración:
     omitiendo la escritura física de datos en el disco. Su propósito es verificar la consistencia de 
     los tensores, previsualizar el registro de archivos resultantes y auditar la ejecución ante posibles 
     fallos de configuración.
-    \item \texttt{--conf}: Umbral de confianza para la detección. Es de caracter opcional, con valor por
+    \item \texttt{--conf}: umbral de confianza para la detección. Es de caracter opcional, con valor por
     defecto de $0.55$.
-    \item \texttt{--nms}: Umbral para la supresión del no-máximo. Es opcional con valor por defecto
+    \item \texttt{--nms}: umbral para la supresión del no-máximo. Es opcional con valor por defecto
     de $0.55$.
+    \item \texttt{--images}: argumento de depuración que recibe una lista delimitada de formatos de imagen 
+    admitidos (\textit{png}, \textit{jpg} o \textit{tiff}) e instruye al programa a exportar los tensores 
+    extraídos en dichos formatos rasterizados, en lugar de generar cuadrículas volumétricas \textit{OpenVDB}. 
+    Los archivos resultantes se estructuran jerárquicamente en directorios organizados por formato y por capa.
 \end{itemize}

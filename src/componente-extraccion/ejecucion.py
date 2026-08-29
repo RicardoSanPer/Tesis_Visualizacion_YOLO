@@ -4,6 +4,7 @@ import TinyYoloV2.utils as utils
 from TinyYoloV2.model import TinyYoloV2
 from PIL import Image
 from pathlib import Path
+from utils import file_validation
 
 """
 Clase de encapsulación para la ejecución del modelo Tiny YoloV2.
@@ -57,13 +58,13 @@ class ModelExecutor:
     def _load_image(self):
         """Carga una imagen dada la ruta de entrada.
         """
-        if self._file_validation(self.input_path):
+        if file_validation(self.input_path):
             self.input_image = Image.open(self.input_path)
 
     def _load_model(self):
         """Carga el modelo y los pesos
         """
-        self._file_validation(self.weight_path)
+        file_validation(self.weight_path)
         self.model = TinyYoloV2()
         self.model.load_weights(self.weight_path)
         self.model = self.model.to(self.device)
@@ -78,25 +79,3 @@ class ModelExecutor:
                     torchvision.transforms.ToTensor()
                     ])
         self.input_tensor = transform(self.input_image).unsqueeze(0).to(self.device)
-
-    def _file_validation(self, path: Path):
-        """Valida la ruta de archivo.
-
-        Args:
-            path (Path): Ruta de archivo
-
-        Raises:
-            ValueError: Si no se proporciona una ruta de archivo para la entrada del modelo o pesos
-            FileNotFoundError: Si se proporciona una ruta de archivo inválida para la entrada o pesos
-            IsADirectoryError: Si se proporciona un directorio en vez de un archivo para la entrada o pesos
-
-        Returns:
-            Path: ruta de archivo
-        """
-        if not path:
-            raise ValueError("No se ingresó ningun archivo.")
-        if not path.exists():
-            raise FileNotFoundError(f"El archivo especificado no existe: {path}")
-        if not path.is_file():
-            raise IsADirectoryError(f"Esperado un archivo, es directorio: {path}")
-        return path

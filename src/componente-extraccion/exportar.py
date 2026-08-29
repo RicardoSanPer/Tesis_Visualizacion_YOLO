@@ -1,5 +1,8 @@
 import extractor
 from pathlib import Path
+from utils import directory_validation
+import torch
+from PIL import Image
 import numpy as np
 import openvdb
 import json
@@ -12,9 +15,10 @@ class ModelExporter:
         NotADirectoryError: Si la ruta de destuno es de un archivo y no un directorio
     """
     
-    def __init__(self, extractor, dry_run = False):
+    def __init__(self, extractor, dry_run = False, extensions = []):
         self.model_extractor = extractor
         self.dry_run = dry_run
+        self.image_extensions = extensions
 
     def export(self, output_path: Path):
         """Exporta los datos extraidos del modelo a JSON y OpenVDB
@@ -22,7 +26,7 @@ class ModelExporter:
         Args:
             output_path (Path) : Ruta de directorio de salida
         """
-        self._file_validation(output_path)
+        directory_validation(output_path)
 
         print(f"Guardando datos en: {output_path}\n")
 
@@ -34,7 +38,11 @@ class ModelExporter:
                 json.dump(self.model_extractor.get_data(), file, indent=4)
 
         for key in self.model_extractor.layers.keys():
-            self._convert_tensor(key, output_path)
+            if len(self.image_extensions) == 0:
+                self._convert_tensor(key, output_path)
+            else:
+                self._tensor_to_image(key, output_path)
+
         print()
 
         self._save_io_images(output_path)
@@ -89,42 +97,52 @@ class ModelExporter:
             output_path (Path) : Ruta de directorio de salida
         """
 
-        file_path = str(output_path / f"{layer}.vdb")
-        print(f"{layer}: {file_path}")
-        
-        # Convertir tensores a arreglo de numpy
-        data = self.model_extractor.layers[layer].numpy()
-        data = data.astype("float32")
-        # Eliminar la dimensión extra
-        data = data.squeeze()
+        file_path = output_path / "openvdb" / f"{layer}.vdb"
+        file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        #Convertir a OpenVDB
+        print(f"{layer}: {file_path}")
+
+        # Convertir tensores a arreglo de numpy
+        data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
+
+        # Convertir a OpenVDB
         grid = openvdb.FloatGrid()
         grid.copyFromArray(data)
         grid.transform = openvdb.createLinearTransform(voxelSize=0.1)
         grid.name = "density"
 
-        if self.dry_run: return
+        if self.dry_run:
+            return
 
-        openvdb.write(file_path, grid)
+        openvdb.write(str(file_path), grid)
 
-    def _file_validation(self, path: Path):
-            """Valida la ruta de directorio para guardar los datos extraidos.
-    
-            Args:
-                path (Path): Ruta de directorio
-    
-            Raises:
-                ValueError: Si no se proporciona una ruta válida.
-                NotADirectoryError: Si se proporciona una ruta de archivo en vez de directorio
-    
-            Returns:
-                Path: ruta de archivo
-            """
-            if not path:
-                raise ValueError("No se ingresó ningun archivo.")
-            if path.is_file():
-                raise NotADirectoryError(f"Esperado un directorio, es archivo: {path}")
-            if not path.exists():
-                path.mkdir(parents=True, exist_ok=True)
-            return path
+    def _tensor_to_image(self, layer:str, output_path: Path):
+        """Guarda el tensor como una secuencia de imagenes."""
+        data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
+
+        # Guardar a disco
+        for ext in self.image_extensions:
+            print(f"{layer}: {output_path}\\{ext}\\{layer}")
+
+        # Creación de imagen
+        for idx, channel in enumerate(data):
+            for ext in self.image_extensions:
+                out_file = output_path / ext / layer / f"frame_{idx:04d}.{ext}"
+                out_file.parent.mkdir(parents=True, exist_ok=True)
+
+                if ext in ("tiff", "tif"):
+                    # Modo 'F': Float32 puro sin escalado ni clipping
+                    img = Image.fromarray(channel, mode="F")
+                    img.save(out_file)
+
+                elif ext == "png":
+                    # PNG no soporta mode='F'; convertimos [0.0, 1.0] -> [0, 255] uint8 sin estirar contraste
+                    arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
+                    img = Image.fromarray(arr, mode="L")
+                    img.save(out_file, compress_level=6)
+
+                elif ext in ("jpg", "jpeg"):
+                    # JPEG requiere uint8; especificamos calidad máxima para evitar artefactos de compresión
+                    arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
+                    img = Image.fromarray(arr, mode="L")
+                    img.save(out_file, quality=95)

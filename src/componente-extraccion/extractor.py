@@ -37,30 +37,20 @@ class ModelExtractor:
         self._get_layer_data()
         self._get_layer_connections()
 
-    def _hook(self, module, input, output):
+    def _hook(self, name):
         """Hook para el paso hacia adelante. Extrae los tensores de las capas de 
         interés.
 
         Args:
-            module (torch.nn.modules): Modulo de la capa
-            input (torch.Tensor): Tensor de entrada de la capa
-            output (torch.Tensor): Tensor de salida de la capa
+            name (str) : nombre de la capa
         """
-        for name, layer in self.model.named_modules():
-            # Omitir raíz
-            if name == '':
-                continue
-            
-            # Guardar tensor de salida
-            if layer is module:
-                # Extraer tensor solo de capas indicadas
-                tensor = output.detach().cpu()
-                if self.layers_data[name].get("data"):
-                    self.layers[name] = tensor
-                self.layers_data[name]["dimensions"] = tensor.shape
-                break
-                
-
+        def hook_fn(module, input, output):
+            # Extraer tensor solo de capas indicadas
+            tensor = output.detach().cpu()
+            if self.layers_data[name].get("data"):
+                self.layers[name] = tensor
+            self.layers_data[name]["dimensions"] = tensor.shape
+        return hook_fn
 
     def _get_layer_data(self):
         """ Extrae datos de las capas y configura los hooks para las capas con datos
@@ -105,7 +95,7 @@ class ModelExtractor:
                 self.layers_data[name]["padding"] = layer.padding
                 self.layers_data[name]["ceiling"] = layer.ceil_mode
             
-            layer.register_forward_hook(self._hook)
+            layer.register_forward_hook(self._hook(name))
 
     def _get_layer_connections(self):
         """ Obtiene las conexiones entre capas.

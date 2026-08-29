@@ -52,6 +52,12 @@ if __name__=="__main__":
         help="Mostrar capas de la red"
     )
     parser.add_argument(
+        "--images",
+        type=lambda s: [item.strip() for item in s.split(",")],
+        default=[],
+        help="Formatos de imagen"
+    )
+    parser.add_argument(
         "--conf",
         type=float,
         default=0.55,
@@ -75,5 +81,5 @@ if __name__=="__main__":
 
     else:
         extractor.extract()
-        exporter = Exp.ModelExporter(extractor, args.dry_run)
+        exporter = Exp.ModelExporter(extractor, args.dry_run, args.images)
         exporter.export(args.output)
