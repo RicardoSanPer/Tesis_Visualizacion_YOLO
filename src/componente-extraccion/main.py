@@ -42,11 +42,6 @@ if __name__=="__main__":
         help="Lista de capas a excluir por nombre"
     )
     parser.add_argument(
-        "--no-io",
-        action="store_true",
-        help="Omitir extracción de imagenes de entrada y salida"
-    )
-    parser.add_argument(
         "--view-layers",
         action="store_true",
         help="Mostrar capas de la red"

@@ -41,16 +41,20 @@ class ModelExporter:
                     print(f"Formato no soportado: '{ext}'")
                     print(f"Soportados: {self.supported_formats}")
 
+        # Guardar manifesto
         if not self.dry_run:
             with open(manifest_file, "w", encoding="utf-8") as file:
                 json.dump(self.model_extractor.get_data(), file, indent=4)
 
+        # Exportar datos de tensores
         for key in self.model_extractor.layers.keys():
-            self._convert_tensor(key, output_path)
-            self._tensor_to_image(key, output_path)
+            self._save_tensor_as_grid(key, output_path)
+            for ext in self.formats:
+                self._save_tensor_as_image_seq(key, output_path, ext)
 
         if self.info: print()
 
+        # Exportar cajas, imagenes de entrada y salida
         self._save_io_images(output_path)
         self._convert_boxes(output_path)
 
@@ -98,19 +102,15 @@ class ModelExporter:
         
         openvdb.write(file_path, grid)
 
-    def _convert_tensor(self, layer:str, output_path: Path):
-        """Convierte un tensor a cuadrícula OpenVDB y guarda el archivo
+    def _convert_tensor(self, layer:str):
+        """Convierte un tensor a cuadrícula OpenVDB
 
         Args:
             layer (str): nombre de la capa del tensor
-            output_path (Path) : Ruta de directorio de salida
+
+        Returns:
+            openvdb: Volumen OpenVDB
         """
-        if 'vdb' not in self.formats: return
-
-        file_path = output_path / "vdb" / f"{layer}.vdb"
-        file_path.parent.mkdir(parents=True, exist_ok=True)
-
-        if self.info: print(f"{layer}: {file_path}")
 
         # Convertir tensores a arreglo de numpy
         data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
@@ -121,38 +121,146 @@ class ModelExporter:
         grid.transform = openvdb.createLinearTransform(voxelSize=0.1)
         grid.name = "density"
 
-        if self.dry_run:
-            return
+        return grid
+
+    def _tensor_to_images(self, layer:str, ext: str):
+        """Convierte el tensor a una secuencia de imagenes en el formato especificado
+        (jpg, jpeg, png, tiff, tif)
+
+        Args:
+            layer (str): Capa a convertir
+            ext (str): Extensión
+
+        Returns:
+            list: Arreglo de imagenes
+        """
+        data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
+        images = []
+        
+        for channel in data:
+            if ext in ("tiff", "tif"):
+                # Modo 'F': Float32 puro sin escalado ni clipping
+                img = Image.fromarray(channel, mode="F")
+                images.append(img)
+
+            elif ext == "png":
+                # PNG no soporta mode='F'; convertimos [0.0, 1.0] -> [0, 255] uint8 sin estirar contraste
+                arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
+                img = Image.fromarray(arr, mode="L")
+                images.append(img)
+
+            elif ext in ("jpg", "jpeg"):
+                # JPEG requiere uint8; especificamos calidad máxima para evitar artefactos de compresión
+                arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
+                img = Image.fromarray(arr, mode="L")
+                images.append(img)
+        return images
+
+    def _save_tensor_as_grid(self, layer:str, output_path: Path):
+        """Convierte el tensor a volumen OpenVDB y exporta a un archivo.
+
+        Args:
+            layer (str): Capa a exportar
+            output_path (Path): Directorio de salida
+        """
+        if 'vdb' not in self.formats: return
+
+        file_path = output_path / "vdb" / f"{layer}.vdb"
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        grid = self._convert_tensor(layer)
+
+        if self.info: print(f"{layer}: {file_path}")
+        if self.dry_run: return
 
         openvdb.write(str(file_path), grid)
 
-    def _tensor_to_image(self, layer:str, output_path: Path):
-        """Guarda el tensor como una secuencia de imagenes."""
-        data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
+    def _save_tensor_as_image_seq(self, layer: str, output_path: Path, ext: str):
+        """Convierte el tensor a secuencias de imagenes en el formato especificado y las 
+        guarda. Formatos: jpeg, jpg, png, tiff, tif
 
-        # Creación de imagen
-        for ext in self.formats:
-            # Omitir extensiones no admitidas o vdb
-            if ext == 'vdb' or ext not in ("tiff", "tif", "png", "jpeg", "jpg"): continue
-            if self.info: print(f"{layer}: {output_path}\\{ext}\\{layer}")
+        Args:
+            layer (str): Capa a guardar
+            output_path (Path): Directorio de salida
+            ext (str): Extension
+        """
+        if ext == 'vdb' or ext not in self.supported_formats: return
+        if self.info: print(f"{layer}: {output_path}\\{ext}\\{layer}")
 
-            for idx, channel in enumerate(data):
-                out_file = output_path / ext / layer / f"frame_{idx:04d}.{ext}"
-                if not self.dry_run: out_file.parent.mkdir(parents=True, exist_ok=True)
+        images = self._tensor_to_images(layer, ext)
+        # Guardar cada imagen individual
+        for idx, img in enumerate(images):
+            out_file = output_path / ext / layer / f"frame_{idx:04d}.{ext}"
+            if not self.dry_run: 
+                out_file.parent.mkdir(parents=True, exist_ok=True)
+                if ext in ("jpg", "jpeg"):
+                    img.save(out_file, quality=95)
+                elif ext in ("png"):
+                    img.save(out_file, compress_level=6)
+                elif ext in ("tiff", "tif"):
+                    img.save(out_file)
 
-                if ext in ("tiff", "tif"):
-                    # Modo 'F': Float32 puro sin escalado ni clipping
-                    img = Image.fromarray(channel, mode="F")
-                    if not self.dry_run: img.save(out_file)
+    def get_exported_volume_as_numpy32(self, layer:str, ext:str):
+        """Reconstruye los datos del volumen exportado a partir del arreglo numpy32
+        utilizado para escribir los datos
+        Args:
+            layer (str): capa de los datos a reconstruir
+            ext (str): extensión utilizada para exportar
 
-                elif ext == "png":
-                    # PNG no soporta mode='F'; convertimos [0.0, 1.0] -> [0, 255] uint8 sin estirar contraste
-                    arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
-                    img = Image.fromarray(arr, mode="L")
-                    if not self.dry_run: img.save(out_file, compress_level=6)
+        Returns:
+            numpy32: Arreglo numpy float32
+        """
+        if ext == "vdb":
+            grid = self._convert_tensor(layer)
+            return self._get_vdb_grid_as_numpy32(grid)
+        elif ext in self.supported_formats:
+            images = self._tensor_to_images(layer, ext)
+            return self._get_images_as_numpy32(images)
 
-                elif ext in ("jpg", "jpeg"):
-                    # JPEG requiere uint8; especificamos calidad máxima para evitar artefactos de compresión
-                    arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
-                    img = Image.fromarray(arr, mode="L")
-                    if not self.dry_run:    img.save(out_file, quality=95)
+    def _get_vdb_grid_as_numpy32(self, grid):
+        """Reconstruye el arreglo numpy32 utilizado para exportar los datos de capa
+        a partir de un volumen openvdb
+
+        Args:
+            grid: Volumen OpenVDB
+
+        Returns:
+            numpy32: Arreglo numpy float32
+        """
+        if grid is None:
+            return
+    
+        min_coord, max_coord = grid.evalActiveVoxelBoundingBox()
+        dim_x = max_coord[0] - min_coord[0] + 1
+        dim_y = max_coord[1] - min_coord[1] + 1
+        dim_z = max_coord[2] - min_coord[2] + 1
+    
+        dense_arr = np.zeros((dim_x, dim_y, dim_z), dtype=np.float32)
+        grid.copyToArray(dense_arr, ijk=min_coord)
+    
+        return dense_arr
+
+    def _get_images_as_numpy32(self, images: list):
+        """A partir de un arreglo de imagenes reconstruye el arreglo numpy32 
+
+        Args:
+            images (list): Arreglo de imagenes
+
+        Returns:
+            numpy32: Arreglo numpy float32
+        """
+        data = []
+        for img in images:
+            arr = None
+            if img.mode in ("F", "I;32F"):
+                # TIFF en formato 32 bit
+                arr = np.array(img, dtype=np.float32)
+            elif img.mode == "I;16":
+                # 16-bit grayscale TIFF/PNG (0 - 65535)
+                arr = np.array(img, dtype=np.float32) / 65535.0
+            else:
+                # 8-bit JPEG/PNG a "F" y normalizar a [0.0, 1.0]
+                arr = np.array(img.convert("F"), dtype=np.float32) / 255.0
+            data.append(arr)
+        return data
+        
