@@ -15,6 +15,8 @@ de configuración:
     \item \texttt{--layers}: lista delimitada por comas con las categorías de capas u operaciones de 
     las cuales se extraerán los tensores intermedios. Es opcional; por defecto, el sistema captura 
     los tensores de las capas convolucionales y de agrupamiento (\textit{pooling}).
+    \item \texttt{--no-boxes}: bandera opcional que omite la exportación de las cajas de salida.
+    \item \texttt{--no-io}: bandera opcional que omite la exportación de las imagenes de entrada y salida.
     \item \texttt{--include}: lista delimitada por comas con identificadores de capas específicas a 
     incorporar forzosamente en el proceso de extracción, independientemente del filtro general 
     asignado en \texttt{--layers}.
@@ -29,8 +31,9 @@ de configuración:
     defecto de $0.55$.
     \item \texttt{--nms}: umbral para la supresión del no-máximo. Es opcional con valor por defecto
     de $0.55$.
-    \item \texttt{--images}: argumento de depuración que recibe una lista delimitada de formatos de imagen 
-    admitidos (\textit{png}, \textit{jpg} o \textit{tiff}) e instruye al programa a exportar los tensores 
-    extraídos en dichos formatos rasterizados, en lugar de generar cuadrículas volumétricas \textit{OpenVDB}. 
-    Los archivos resultantes se estructuran jerárquicamente en directorios organizados por formato y por capa.
+    \item \texttt{--formats}: argumento que recibe una lista delimitada de formatos destino para la exportación
+    de datos, incluyendo \textit{vdb}, \textit{png}, \textit{jpg}, \textit{jpeg}, \textit{tiff} y
+    \textit{tif}. Los archivos resultantes se estructuran jerárquicamente en directorios organizados por 
+    formato y por capa. Por defecto el programa utiliza \textit{vdb}.
+    \item \texttt{--info}: bandera de depuración. Indica al script si imprimir información de los archivos generados.
 \end{itemize}

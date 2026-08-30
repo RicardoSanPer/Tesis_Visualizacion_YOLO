@@ -42,6 +42,11 @@ if __name__=="__main__":
         help="Lista de capas a excluir por nombre"
     )
     parser.add_argument(
+        "--no-io",
+        action="store_true",
+        help="Omitir extracción de imagenes de entrada y salida"
+    )
+    parser.add_argument(
         "--view-layers",
         action="store_true",
         help="Mostrar capas de la red"
@@ -52,9 +57,14 @@ if __name__=="__main__":
         help="Mostrar capas de la red"
     )
     parser.add_argument(
-        "--images",
+        "--info",
+        action="store_true",
+        help="Mostrar información de archivos de salida"
+    )
+    parser.add_argument(
+        "--formats",
         type=lambda s: [item.strip() for item in s.split(",")],
-        default=[],
+        default=["vdb"],
         help="Formatos de imagen"
     )
     parser.add_argument(
@@ -73,13 +83,27 @@ if __name__=="__main__":
 
     # Crear y ejecutar el modelo
     model = Exe.ModelExecutor(args.input)
+    extractor = Ext.ModelExtractor(model)
+
+    # Parametros modelos
     model.conf_threshold = args.conf
     model.nms_threshold = args.nms
-    extractor = Ext.ModelExtractor(model, args.layers, args.include, args.exclude)
+
+    #Parametros extraccion
+    extractor.capture_layers = args.layers
+    extractor.include = args.include
+    extractor.exclude = args.exclude
+
     if args.view_layers:
         extractor.print_info()
 
     else:
         extractor.extract()
-        exporter = Exp.ModelExporter(extractor, args.dry_run, args.images)
+        exporter = Exp.ModelExporter(extractor)
+
+        # Parametros exportacion
+        exporter.dry_run = args.dry_run
+        exporter.info = args.info
+        exporter.formats = args.formats
+
         exporter.export(args.output)

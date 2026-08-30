@@ -30,15 +30,20 @@ class ModelExecutor:
                'dog', 'horse', 'motorbike', 'person', 'pottedplant',
                'sheep', 'sofa', 'train', 'TVmonitor']
 
-    def __init__(self, input_path: Path):
+    def __init__(self, input_path: Path = None):
         """Constructor de la clase de ejecución.
 
         Args:
             input_path (Path): Ruta de archivo de entrada del modelo
         """
         self.input_path = input_path
-        self._load_image()
+
         self._load_model()
+        self.configure_input_image()
+
+    def configure_input_image(self):
+        """Configura la entrada de la red"""
+        self._load_image()
         self._load_input_tensor()
 
     def execute(self):
@@ -51,20 +56,23 @@ class ModelExecutor:
         self.boxes = utils.find_all_boxes(self.output, self.conf_threshold, self.model.num_classes,
                                           self.model.anchors, self.model.num_anchors)[0]
         self.boxes = utils.nms(self.boxes, self.nms_threshold)
-        output_file = self.input_path.parent / "output.jpg"
+        #output_file = self.input_path.parent / "output.jpg"
         self.output_image = utils.plot_boxes(self.input_image.copy(), self.boxes, savename=None, class_names=self.class_names)
 
 
     def _load_image(self):
         """Carga una imagen dada la ruta de entrada.
         """
+        self.input_image = None
+        if self.input_path is None:
+            return
+        
         if file_validation(self.input_path):
             self.input_image = Image.open(self.input_path)
 
     def _load_model(self):
         """Carga el modelo y los pesos
         """
-        file_validation(self.weight_path)
         self.model = TinyYoloV2()
         self.model.load_weights(self.weight_path)
         self.model = self.model.to(self.device)
@@ -73,6 +81,9 @@ class ModelExecutor:
         """Transforma la imagen de entrada al formato y dimensiones requeridas de la red
         y la transforma a un tensor. 
         """
+        if self.input_image is None:
+            return
+        
         self.input_image = self.input_image.convert("RGB")
         transform = torchvision.transforms.Compose([
                     torchvision.transforms.Resize((416, 416)),

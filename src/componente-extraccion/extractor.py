@@ -7,7 +7,20 @@ class ModelExtractor:
     tensores de capas de interés, configuraciones de las capas, y la arquitectura
     de la red en la forma de las conexiones entre capas.
     """
-    def __init__(self, model, capture_layers: list=[], includes: list=[], excludes: list = []):
+
+    # Miembros
+    input_image = None
+    output_image = None
+    boxes = []
+    layers = {}
+    layers_data = {}
+
+    # Includes y exlcudes
+    capture_layers = []
+    include = []
+    exclude = []
+    
+    def __init__(self, model):
         """Constructor
 
         Args:
@@ -18,24 +31,8 @@ class ModelExtractor:
         """
         self.modelexe = model
         self.model = model.model
-        self.layers = {}
-        self.layers_data = {}
         self.classes = model.class_names
-
-        # Includes y exlcudes
-        self.capture_layers = capture_layers
-        self.include = includes
-        self.exclude = excludes
-
-        # Placeholder para la entrada
-        self.layers_data["input"] = {
-            "type": "Input",
-            "data": False,
-            "connections": []
-        }
-
-        self._get_layer_data()
-        self._get_layer_connections()
+        
 
     def _hook(self, name):
         """Hook para el paso hacia adelante. Extrae los tensores de las capas de 
@@ -148,6 +145,18 @@ class ModelExtractor:
     def extract(self):
         """Ejecuta el modelo y extrae la imagen de entrada y salida.
         """
+        self.clear_data()
+        
+        # Placeholder para la entrada
+        self.layers_data["input"] = {
+            "type": "Input",
+            "data": False,
+            "connections": []
+        }
+
+        self._get_layer_data()
+        self._get_layer_connections()
+
         self.modelexe.execute()
         self.input_image = self.modelexe.input_image
         self.output_image = self.modelexe.output_image
@@ -166,3 +175,7 @@ class ModelExtractor:
             "classes"       : ",".join(self.classes),
             "layers_data"   : self.layers_data
         }
+
+    def clear_data(self):
+        self.layers.clear()
+        self.layers_data.clear()
