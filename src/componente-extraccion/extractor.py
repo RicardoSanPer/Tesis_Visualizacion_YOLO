@@ -145,7 +145,7 @@ class ModelExtractor:
     def extract(self):
         """Ejecuta el modelo y extrae la imagen de entrada y salida.
         """
-        self.clear_data()
+        self.clear()
         
         # Placeholder para la entrada
         self.layers_data["input"] = {
@@ -176,6 +176,9 @@ class ModelExtractor:
             "layers_data"   : self.layers_data
         }
 
-    def clear_data(self):
+    def clear(self):
         self.layers.clear()
         self.layers_data.clear()
+        self.boxes.clear()
+        self.input_image = None
+        self.output_image = None

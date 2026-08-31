@@ -7,12 +7,13 @@ from PIL import Image
 
 import time
 import json
-import openvdb
+import gc
 import numpy as np
 
 INPUT_DIR = Path("./data/images/VOC2007")
 OUTPUT_DIR = Path("./data/output/benchmark")
-EXECUTION_COUNT = 50
+EXECUTION_COUNT = 100
+FORMAT = "tiff"
 
 PROGRESS_BAR_WIDTH  = 50
 
@@ -84,7 +85,11 @@ def run(input_file: Path, output_dir: Path):
         data["Total Filecount"] += data["Files"][ext]["File Count"]
         # Error de presición agrupado por extension de archivo
         data["Presicion Error"][ext] = calculate_presition_loss(ext)
-        
+
+    # Limpieza entre ejecuciones
+    executor.clear()
+    extractor.clear()
+    gc.collect()
 
     return data
 
@@ -193,6 +198,23 @@ def batch_run(batch_count: int = 1, batch_output_path: Path = OUTPUT_DIR):
 
     count = 0
 
+    # Warm up
+    print("Warming up")
+    for item in INPUT_DIR.iterdir():
+        if count >= 5:
+            break
+        
+        exporter.dry_run = True
+        
+        input_file = INPUT_DIR / str(item.name)
+        output_target = batch_output_path / str(item.stem)
+
+        run(input_file, output_target)
+        count += 1
+
+    count = 0
+    exporter.dry_run = False
+
     # Iteracion por archivos de entrada
     for item in INPUT_DIR.iterdir():
         if count >= batch_count:
@@ -260,24 +282,7 @@ def batch_run(batch_count: int = 1, batch_output_path: Path = OUTPUT_DIR):
 if __name__=="__main__":
     extractor.capture_layers = ["Conv2d"]
     
-    # Ejecucion: Extracción de vdb (Solo Conv2d)
-    print("========= Extracción VDB ===========")
-    exporter.formats = ["vdb"]
-    batch_run(10, OUTPUT_DIR / "batch_vdb")
-    
-    
-    # Ejecucion: Extracción de png
-    print("========= Extracción PNG ===========")
-    exporter.formats = ["png"]
-    batch_run(10, OUTPUT_DIR / "batch_png")
-
-    # Ejecucion: Extracción de jpg
-    print("========= Extracción JPG ===========")
-    exporter.formats = ["jpg"]
-    batch_run(10, OUTPUT_DIR / "batch_jpg")
-  
-    # Ejecución: Extracción de TIFF
-    print("========= Extracción TIFF ==========")
-    exporter.formats = ["tiff"]
-    batch_run(10, OUTPUT_DIR / "batch_tiff")
-    
+    # Ejecucion
+    print("========= Extracción ===========")
+    exporter.formats = [FORMAT]
+    batch_run(EXECUTION_COUNT, OUTPUT_DIR / f"batch_{FORMAT}")

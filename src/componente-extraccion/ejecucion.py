@@ -37,6 +37,7 @@ class ModelExecutor:
             input_path (Path): Ruta de archivo de entrada del modelo
         """
         self.input_path = input_path
+        print(self.device)
 
         self._load_model()
         self.configure_input_image()
@@ -90,3 +91,8 @@ class ModelExecutor:
                     torchvision.transforms.ToTensor()
                     ])
         self.input_tensor = transform(self.input_image).unsqueeze(0).to(self.device)
+
+    def clear(self):
+        self.input_image = None
+        self.output_image = None
+        self.boxes.clear()

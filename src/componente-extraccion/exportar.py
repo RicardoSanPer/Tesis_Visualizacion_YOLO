@@ -145,8 +145,8 @@ class ModelExporter:
 
             elif ext == "png":
                 # PNG no soporta mode='F'; convertimos [0.0, 1.0] -> [0, 255] uint8 sin estirar contraste
-                arr = np.clip(channel * 255.0, 0, 255).astype(np.uint8)
-                img = Image.fromarray(arr, mode="L")
+                arr = np.clip(channel * 65535.0, 0, 65535).astype(np.uint16)
+                img = Image.fromarray(arr, mode="I;16")
                 images.append(img)
 
             elif ext in ("jpg", "jpeg"):
