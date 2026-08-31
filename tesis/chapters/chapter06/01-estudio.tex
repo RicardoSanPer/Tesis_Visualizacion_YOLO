@@ -135,41 +135,71 @@ umbrales de presencia de objeto (\textit{objectness}) y probabilidad condicional
 \FloatBarrier
 
 \subsection{Caso de diagnóstico: Análisis comparativo de predicción errónea}
-Para evaluar la utilidad del sistema como herramienta de diagnóstico e interpretabilidad (XAI), 
-se analizó un caso de detección errónea (falso positivo). El objetivo de esta prueba consiste en rastrear 
+Para evaluar la utilidad del sistema como herramienta de diagnóstico e interpretabilidad (XAI), se 
+analizó un caso de detección errónea (falso positivo). El objetivo de esta prueba consiste en rastrear 
 el flujo de activaciones internas a lo largo de la arquitectura para identificar en qué etapa del 
-procesamiento se originó la confusión del modelo, contrastándolo directamente con las activaciones 
-de un caso de detección exitoso de la misma clase.
+procesamiento se originó la confusión del modelo, contrastándolo directamente con las activaciones de 
+un caso de detección exitoso de la misma clase.
 \medskip
 
-Para este estudio de caso se utilizan dos inferencias de red: un falso positivo, en el que la red
-identifica erroneamente la clase de un objeto, y un verdadero positivo en el que identifica correctamente
-la clase del objeto, siendo este la misma clase erroneamente identificada en el falso positivo.
+Para este estudio de caso se contrastan tres inferencias de la red:
+\begin{itemize}
+    \item Un \textbf{falso positivo}: un ejemplar felino clasificado erróneamente bajo la categoría \textit{perro}.
+    \item Un \textbf{verdadero positivo de la clase errónea}: una detección nominal de la clase \textit{perro}.
+    \item Un \textbf{verdadero positivo de la clase real}: una detección nominal de la clase \textit{gato}.
+\end{itemize}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.4\textwidth]{images/cases/input_3.png}
-    \includegraphics[width=0.4\textwidth]{images/cases/output_3.png}
-    \caption[Falso positivo]{Caso de falso positivo. Fuente: Elaboración propia}
-    \label{fig:false_positive}
+    \includegraphics[width=0.45\textwidth]{images/cases/comparison_case.png}
+    \caption[Casos de prueba para el diagnóstico]{Escenarios de inferencia seleccionados para el diagnóstico. 
+    Arriba: falso positivo (felino identificado como perro). Centro: verdadero positivo de la clase predicha 
+    (\textit{perro}) \parencite{wikimedia_dog_sample}. Abajo: verdadero positivo de la clase real 
+    (\textit{gato}) \parencite{wikimedia_cat_sample}.}
+    \label{fig:comparison_cases_input}
 \end{figure}
+
+Los tensores extraídos fueron importados a Blender mediante instancias del grupo de nodos
+ \textit{Volume Viewer}, lo que permitió cargar y yuxtaponer las activaciones volumétricas de las 
+ tres ejecuciones simultáneamente. Al visualizar los volúmenes en el espacio tridimensional, se aprecian 
+ con claridad las divergencias en los patrones energéticos:
+\begin{itemize}
+    \item En las capas iniciales (\texttt{conv1} a \texttt{conv3}), el falso positivo adquiere una mayor 
+    activación basal en la región correspondiente al fondo en canales específicos, en contraste con los dos 
+    casos nominales.
+    \item En particular, en el segundo canal de la primera capa convolucional (\texttt{conv1}), el falso 
+    positivo presenta una activación pronunciada sobre el área del sujeto, mientras que en los dos casos 
+    nominales la respuesta se concentra en el fondo circundante con niveles mínimos sobre los sujetos respectivos.
+\end{itemize}
 
 \begin{figure}[!htbp]
     \centering
-    \includegraphics[width=0.4\textwidth]{images/cases/input_4.png}
-    \includegraphics[width=0.4\textwidth]{images/cases/output_4.png}
-    \caption[Verdadero positivo]{Caso de verdadero positivo. Fuente: \parencite{wikimedia_dog_sample}}
-    \label{fig:true_positive}
+    \includegraphics[width=0.85\textwidth]{images/cases/comparison/conv1.png}
+    \vspace{0.2cm}
+    \includegraphics[width=0.85\textwidth]{images/cases/comparison/conv2.png}
+    \vspace{0.2cm}
+    \includegraphics[width=0.85\textwidth]{images/cases/comparison/conv3.png}
+    \caption[Activaciones en capas tempranas]{Activaciones en capas tempranas correspondientes a 
+    \texttt{conv1} (arriba), \texttt{conv2} (centro) y \texttt{conv3} (abajo). En cada bloque: superior: 
+    verdadero positivo de la clase real (\textit{gato}); intermedio: verdadero positivo de la clase 
+    predicha (\textit{perro}); inferior: falso positivo (\textit{gato}).}
+    \label{fig:comparison_early_activations}
 \end{figure}
-% Escenarios de prueba
-% 1.- Caso exitoso: Demostrar que el pipeline funciona correctamente
-% 2.- Caso complejo: Multiples detecciones
-% 3.- Caso fallido: Deteccion incorrecta. Comparar con correccion correcta del mismo objeto (incorrecto)
-%       para comparar activaciones.
 
-% Fidelidad de datos
-% 1.- Comparar tensores con openvdb (diferencia de error)
-    % Comparar con imagenes?
-% 2.- Exactitud de coordenadas
-    % Extraer en formato de imagenes y comparar correctitud de posicionamiento
-% 3.- Jerarquias: Verificar que capas evidencian progresion patrones simples -> patrones complejos
+Para un diagnóstico cuantitativo y estructural, se procedió a inspeccionar la capa de salida de la 
+red ($13 \times 13 \times 125$), la cual contiene los tensores sin filtrar previos a la decodificación 
+de las cajas delimitadoras. Esta representación permite desagregar por separado los parámetros geométricos 
+de regresión espacial frente a los canales de probabilidad condicional por categoría, aislando la respuesta 
+de la cuadrícula en las clases en disputa.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/cases/comparison/conv6.png}
+    \vspace{0.3cm}
+    \includegraphics[width=0.85\textwidth]{images/cases/comparison/output.png}
+    \caption[Activaciones en capas tardías y salida]{Inspección de capas profundas. Arriba: 
+    activación en la sexta capa convolucional (\texttt{conv6}). Abajo: tensor de predicción de la 
+    capa de salida final.}
+    \label{fig:comparison_late_activations}
+\end{figure}
+
