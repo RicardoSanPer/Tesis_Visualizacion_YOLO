@@ -4,7 +4,7 @@ import sys
 import bpy
 import time
 import argparse
-import csv
+import json
 
 import math
 from mathutils import Euler, Vector
@@ -27,49 +27,96 @@ def run(input_directory: Path):
     bpy.ops.mesh.create_yolov2_object()
     geometry_generation_runtime = time.perf_counter() - geometry_generation_start_time
 
-    # Activar visibilidad de todas las capas y actualizar propiedades
+    set_camera()
+    # Renderizado de calentamiento para evitar el tiempo de inicialización
+    warmup()  
+
+    ### Renderizado de geometría simple
+    render_runtime_simple = run_render()
+
+    # Propiedades de visualización
     scene = bpy.context.scene
     vis_props = scene.yolo_visualization_settings
 
-    # Deshabilitar visibilidad simple de capas
-    for layer in vis_props.layer_properties:
-        layer.visibility = False
-
+    # Renderizado de geometría una capa (Solo Conv2d)
+    vis_props.layer_properties.get("Conv2d").visibility = False
     vis_props.update_all(bpy.context)
 
-    set_camera()
+    render_runtime_one_layer = run_render()
 
-    # Renderizado
-    depsgraph = bpy.context.evaluated_depsgraph_get()
-    depsgraph.update()
+    ### Renderizado de geometria dos capas
+    vis_props.layer_properties.get("MaxPool2d").visibility = False
+    vis_props.layer_properties.get("MaxPoolStride1").visibility = False
+    vis_props.update_all(bpy.context)
 
-    render_start_time = time.perf_counter()
-    bpy.ops.render.render(write_still=True)
-    render_runtime = time.perf_counter() - render_start_time
+    render_runtime_two_layers = run_render()
+
+    ### Renderizado de geometria tres capas
+    vis_props.layer_properties.get("BatchNorm2d").visibility = False
+    vis_props.update_all(bpy.context)
+
+    render_runtime_three_layers = run_render()
+
+    ### Renderizado de geometria completa (cuatro capas)
+    for layer in vis_props.layer_properties:
+        layer.visibility = False
+    vis_props.update_all(bpy.context)
+
+    render_runtime_complex = run_render()
 
     if SAVE_RENDER:
-        save_render_result(input_directory)
+            save_render_result(input_directory)
 
     # Guardar resultados en el diccionario
     data = {
         "Import Runtime": import_runtime,
         "Geometry Generation Runtime": geometry_generation_runtime,
-        "Render Runtime": render_runtime,
-        "Total Runtime": import_runtime + geometry_generation_runtime + render_runtime,
+        "Simple Render Runtime": render_runtime_simple,
+        "One Layer Render Runtime": render_runtime_one_layer,
+        "Two Layers Render Runtime": render_runtime_two_layers,
+        "Three Layers Render Runtime": render_runtime_three_layers,
+        "Complex Render Runtime": render_runtime_complex,
         "Render Engine": scene.render.engine,
         "Input Directory": str(input_directory)
     }
 
-    fields = ["Import Runtime", "Geometry Generation Runtime", "Render Runtime", "Render Engine", "Total Runtime", "Input Directory"]
+    output_file = input_directory / "blender_headless_benchmark.json"
 
-    output_file = input_directory / "blender_headless_benchmark.csv"
-
-    with open(str(output_file), "w", newline="", encoding="utf-8") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fields)
-        writer.writeheader()
-        writer.writerow(data)
+    with open(str(output_file), "w", encoding="utf-8") as jsonfile:
+        json.dump(data, jsonfile, indent=4)
 
     return data
+
+def warmup():
+    """Renderizado de prueba para generar shaders y poblar el cache
+    """
+    scene = bpy.context.scene
+    vis_props = scene.yolo_visualization_settings
+
+    for layer in vis_props.layer_properties:
+        layer.visibility = False
+        vis_props.update_all(bpy.context)
+    
+    run_render()
+
+    for layer in vis_props.layer_properties:
+        layer.visibility = True
+        vis_props.update_all(bpy.context)
+
+def run_render():
+    """Ejecuta renderizado
+
+    Returns:
+        float: tiempo de renderizado en segundos
+    """
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    depsgraph.update()
+
+    render_start_time = time.perf_counter()
+    bpy.ops.render.render(write_still=False)
+    render_runtime = time.perf_counter() - render_start_time
+
+    return render_runtime
 
 def set_camera():
     """
@@ -93,7 +140,12 @@ def set_camera():
     cam.data.type = 'ORTHO'
     cam.data.ortho_scale = 42
 
-def save_render_result(output_path):
+def save_render_result(output_path: Path):
+    """Guarda los resultados del renserizado más reciente al disco
+
+    Args:
+        output_path (Path): Ruta del directorio donde guardar los resultados
+    """
     scene = bpy.context.scene
     scene.render.filepath = str(output_path / "render_output.png")
     scene.render.image_settings.file_format = 'PNG'

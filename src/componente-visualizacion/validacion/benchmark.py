@@ -24,9 +24,11 @@ if __name__ == "__main__":
     batch_data = {
         "Average Import Runtime": 0.0,
         "Average Geometry Generation Runtime": 0.0,
-        "Average Render Runtime": 0.0,
-        "Average Total Runtime": 0.0,
-        "Total Runtime": 0.0,
+        "Average Simple Render Runtime": 0.0,
+        "Average One Layer Render Runtime": 0.0,
+        "Average Two Layers Render Runtime": 0.0,
+        "Average Three Layers Render Runtime": 0.0,
+        "Average Complex Render Runtime": 0.0,
         "Total Items": total_items,
         "Runs" : {}
     }
@@ -49,24 +51,29 @@ if __name__ == "__main__":
 
         subprocess.run(cmd, check=True, capture_output=True)
 
-        with open(str(input_directory / "blender_headless_benchmark.csv"), "r", encoding="utf-8") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                batch_data["Average Import Runtime"] += float(row["Import Runtime"])
-                batch_data["Average Geometry Generation Runtime"] += float(row["Geometry Generation Runtime"])
-                batch_data["Average Render Runtime"] += float(row["Render Runtime"])
-                batch_data["Average Total Runtime"] += float(row["Total Runtime"])
-                batch_data["Total Runtime"] += float(row["Total Runtime"])      
+        with open(str(input_directory / "blender_headless_benchmark.json"), "r", encoding="utf-8") as jsonfile:
+            data = json.load(jsonfile)
+            
+            batch_data["Average Import Runtime"] += data["Import Runtime"]
+            batch_data["Average Geometry Generation Runtime"] += data["Geometry Generation Runtime"]
+            batch_data["Average Simple Render Runtime"] += data["Simple Render Runtime"]
+            batch_data["Average One Layer Render Runtime"] += data["One Layer Render Runtime"]
+            batch_data["Average Two Layers Render Runtime"] += data["Two Layers Render Runtime"]
+            batch_data["Average Three Layers Render Runtime"] += data["Three Layers Render Runtime"]
+            batch_data["Average Complex Render Runtime"] += data["Complex Render Runtime"]  
 
-            batch_data["Runs"][item.name] = next(reader, {})
+            batch_data["Runs"][item.name] = data
 
         completed_items += 1
         progress_bar(completed_items, total_items)
 
     batch_data["Average Import Runtime"] /= total_items
     batch_data["Average Geometry Generation Runtime"] /= total_items
-    batch_data["Average Render Runtime"] /= total_items
-    batch_data["Average Total Runtime"] /= total_items
+    batch_data["Average Simple Render Runtime"] /= total_items
+    batch_data["Average One Layer Render Runtime"] /= total_items
+    batch_data["Average Two Layers Render Runtime"] /= total_items
+    batch_data["Average Three Layers Render Runtime"] /= total_items
+    batch_data["Average Complex Render Runtime"] /= total_items
 
     # Guardar resultados en un archivo JSON
     output_file = INPUT_PATH / "blender_headless_benchmark_batch.json"
@@ -75,6 +82,9 @@ if __name__ == "__main__":
 
     print("\nBenchmark completado. Resultados guardados en:", output_file)
     print(f"Avg Import Runtime: {batch_data['Average Import Runtime']:0.4f}")
-    print(f"Avg Geometry Generation Runtime: {batch_data['Average Geometry Generation Runtime']:0.4f}")
-    print(f"Avg Render Runtime: {batch_data['Average Render Runtime']:0.4f}")
-    print(f"Avg Total Runtime: {batch_data['Average Total Runtime']:0.4f}")
+    print(f"Avg Geometry Generation Runtime: {batch_data['Average Geometry Generation Runtime']:.4f}")
+    print(f"Avg Simple Render Runtime: {batch_data['Average Simple Render Runtime']:.4f}")
+    print(f"Avg One Layer Render Runtime: {batch_data['Average One Layer Render Runtime']:.4f}")
+    print(f"Avg Two Layers Render Runtime: {batch_data['Average Two Layers Render Runtime']:.4f}")
+    print(f"Avg Three Layers Render Runtime: {batch_data['Average Three Layers Render Runtime']:.4f}")
+    print(f"Avg Complex Render Runtime: {batch_data['Average Complex Render Runtime']:.4f}")
