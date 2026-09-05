@@ -1,7 +1,7 @@
 from ..utils import utils
-from .generate_ui import VIEW3D_PT_GeoNodesGeneratorPanel
+from .generate_ui import VIEW3D_PT_Yolov2GeneratorPanel
 
-CLASSES = [VIEW3D_PT_GeoNodesGeneratorPanel]
+CLASSES = [VIEW3D_PT_Yolov2GeneratorPanel]
 
 def register_ui():
     utils.register_classes(CLASSES)

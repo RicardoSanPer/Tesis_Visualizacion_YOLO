@@ -7,9 +7,9 @@ from ..properties.visualization_properties import update_dimensions
 """Generación de la geometría
 """
 
-class MESH_OT_CreateGeoNodesObject(Operator):
+class MESH_OT_CreateYolov2Object(Operator):
     """Generar geometría de la red"""
-    bl_idname = "mesh.create_geonodes_object"
+    bl_idname = "mesh.create_yolov2_object"
     bl_label = "Generar visualización de red"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -248,7 +248,7 @@ class MESH_OT_CreateGeoNodesObject(Operator):
             # Dato del volumen
             if datos.get("data"):
                 nodo.slice_count = dim[1]
-                nodo.file = str(path / "openvdb" / f"{nodo.name}.vdb")
+                nodo.file = str(path / "vdb" / f"{nodo.name}.vdb")
 
     def _get_or_create_collection(self, name: str, parent: bpy.types.Collection = None):
         """

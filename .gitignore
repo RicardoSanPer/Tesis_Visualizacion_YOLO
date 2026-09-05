@@ -571,6 +571,7 @@ data/output
 src/componente-extraccion/TinyYoloV2
 src/componente-visualizacion/TinyYoloV2Viewer/assets
 blender_scenes
+video
 
 # Graficas
 *.bkp

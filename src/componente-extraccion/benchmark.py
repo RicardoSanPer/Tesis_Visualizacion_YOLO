@@ -42,7 +42,6 @@ def run(input_file: Path, output_dir: Path):
     Returns:
         dict: Métricas capturadas
     """
-    data = {}
 
     # Configurar entrada
     executor.input_path = input_file
@@ -54,25 +53,28 @@ def run(input_file: Path, output_dir: Path):
     exporter.export(output_dir)
     elapsed_time = time.perf_counter() - starting_time
 
-    # Datos
-    data["Input File"] = str(input_file)
-    data["Output Directory"] = str(output_dir)
-    data["Runtime"] = elapsed_time
-    data["Total Filesize"] = 0
-    data["Total Filecount"] = 0
+    # Datos    
+    run_params = {
+        "nms": executor.nms_threshold,
+        "confidence": executor.conf_threshold,
+        "layers": extractor.capture_layers,
+        "include": extractor.include,
+        "exclude": extractor.exclude,
+        "formats": exporter.formats
+    }
+
+    data ={
+        "Input File" : str(input_file),
+        "Output Directory" : str(output_dir),
+        "Runtime" : elapsed_time,
+        "Total Filesize" : 0,
+        "Total Filecount" : 0,
+        "Run parameters" : run_params,
+        "Presicion Error" : {},
+        "Files" : {}
+    }
 
     # Parametros de la ejecución
-    run_params = {}
-    run_params["nms"] = executor.nms_threshold
-    run_params["confidence"] = executor.conf_threshold
-    run_params["layers"] = extractor.capture_layers
-    run_params["include"] = extractor.include
-    run_params["exclude"] = extractor.exclude
-    run_params["formats"] = exporter.formats
-
-    data["Run parameters"] = run_params
-    data["Presicion Error"] = {}
-    data["Files"] = {}
 
     for ext in exporter.formats:
         path = output_dir / ext
@@ -106,9 +108,10 @@ def output_tree_info(path: Path):
     Returns:
         dict: Información ("Total Size", "File Count", datos de subarboles)
     """
-    tree = {}
-    tree["Total Size"] = 0
-    tree["File Count"] = 0
+    tree = {
+        "Total Size": 0,
+        "File Count": 0
+    }
     # Iterar
     for item in sorted(path.iterdir()):
         # Recursión de directorios
@@ -139,7 +142,6 @@ def calculate_presition_loss(ext: str):
     Returns:
         dict: diccionario con la información de perdida de presición ('Avg', 'Min', 'Max', 'Layers')
     """
-    presicion_data = {}
     layer_data = {}
 
     total = 0
@@ -165,10 +167,12 @@ def calculate_presition_loss(ext: str):
         count += 1
 
     # MAE de toda la ejecucion por extension de archivo
-    presicion_data["Avg"] = total /  count
-    presicion_data["Min"] = min_value
-    presicion_data["Max"] = max_value
-    presicion_data["Layers"] = layer_data
+    presicion_data = {
+        "Avg": total / count if count > 0 else 0,
+        "Min": min_value,
+        "Max": max_value,
+        "Layers": layer_data
+    }
     return presicion_data
 
 
@@ -184,17 +188,18 @@ def batch_run(batch_count: int = 1, batch_output_path: Path = OUTPUT_DIR):
         dict: metricas de la ejecución por lotes
     """
     # Datos de ejecucion
-    batch_data = {}
-    batch_data["Runs"] = 0
-    batch_data["Min Runtime"] = float("inf")
-    batch_data["Max Runtime"] = 0
-    batch_data["Avg Runtime"] = 0
-    batch_data["Total Runtime"] = 0
-    batch_data["Total Filesize"] = 0
-    batch_data["Total Filecount"] = 0
-    batch_data["Avg Filesize"] = 0
-    batch_data["MEA"] = {}
-    batch_data["items"] = {}
+    batch_data = {
+        "Runs": 0,
+        "Min Runtime": float("inf"),
+        "Max Runtime": 0,
+        "Avg Runtime": 0,
+        "Total Runtime": 0,
+        "Total Filesize": 0,
+        "Total Filecount": 0,
+        "Avg Filesize": 0,
+        "MEA" : {},
+        "items" : {}
+    }
 
     count = 0
 
@@ -286,3 +291,5 @@ if __name__=="__main__":
     print("========= Extracción ===========")
     exporter.formats = [FORMAT]
     batch_run(EXECUTION_COUNT, OUTPUT_DIR / f"batch_{FORMAT}")
+
+    print("Datos de salida guardados en:", OUTPUT_DIR / f"batch_{FORMAT}/batch_results.json")

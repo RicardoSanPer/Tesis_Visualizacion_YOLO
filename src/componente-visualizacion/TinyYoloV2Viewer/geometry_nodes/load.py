@@ -101,7 +101,7 @@ def update_input_image(image_path: str):
     tex_node.image = img
     mat.update_tag()
 
-    print(f"Actualizada textura de '{mat.name}' a '{img.name}'.")
+    # print(f"Actualizada textura de '{mat.name}' a '{img.name}'.")
     return img
 
 def set_node_parameters(obj: bpy.types.Object, modifier_name: str, parameters: dict):

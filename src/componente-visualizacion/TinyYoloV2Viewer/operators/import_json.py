@@ -10,11 +10,11 @@ from bpy.types import Operator
 def menu_func_import(self, context):
     """Opción en menú contextual para agregar importación del manifesto
     """
-    self.layout.operator(IMPORT_OT_LoadJSON.bl_idname, text="YOLOv2 Manifest (.json)")
+    self.layout.operator(IMPORT_OT_LoadYolov2.bl_idname, text="YOLOv2 Manifest (.json)")
 
-class IMPORT_OT_LoadJSON(Operator, ImportHelper):
+class IMPORT_OT_LoadYolov2(Operator, ImportHelper):
     """Cargar un archivo JSON con el manifesto de YOLOv2"""
-    bl_idname = "import_scene.load_yolo_json"
+    bl_idname = "import_scene.load_yolov2_json"
     bl_label = "Import YOLOv2 Manifest"
 
     filter_glob: StringProperty(

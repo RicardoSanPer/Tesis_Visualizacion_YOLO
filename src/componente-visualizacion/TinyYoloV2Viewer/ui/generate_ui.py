@@ -5,10 +5,10 @@ from bpy.types import Panel
 """
 
 
-class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
+class VIEW3D_PT_Yolov2GeneratorPanel(Panel):
     """Draws a button in the 3D Viewport N-Panel"""
     bl_label = "Geometria YOLOv2"
-    bl_idname = "OBJECT_PT_geonodes_generator"
+    bl_idname = "OBJECT_PT_yolov2_generator"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "YOLOv2"
@@ -41,5 +41,5 @@ class VIEW3D_PT_GeoNodesGeneratorPanel(Panel):
 
         col = layout.column(align=True)
         layout.separator()
-        layout.operator("mesh.create_geonodes_object", text="Generar geometría", icon='GEOMETRY_NODES')
+        layout.operator("mesh.create_yolov2_object", text="Generar geometría", icon='GEOMETRY_NODES')
 

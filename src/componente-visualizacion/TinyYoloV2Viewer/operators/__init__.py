@@ -1,10 +1,10 @@
 import bpy
-from .import_json import IMPORT_OT_LoadJSON
+from .import_json import IMPORT_OT_LoadYolov2
 from .import_json import menu_func_import
-from .generate_geometry import MESH_OT_CreateGeoNodesObject
+from .generate_geometry import MESH_OT_CreateYolov2Object
 from ..utils import utils
 
-CLASSES = [IMPORT_OT_LoadJSON, MESH_OT_CreateGeoNodesObject]
+CLASSES = [IMPORT_OT_LoadYolov2, MESH_OT_CreateYolov2Object]
 
 def register_operators():
     utils.register_classes(CLASSES)
