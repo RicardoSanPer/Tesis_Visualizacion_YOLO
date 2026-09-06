@@ -12,8 +12,9 @@ import numpy as np
 
 INPUT_DIR = Path("./data/images/VOC2007")
 OUTPUT_DIR = Path("./data/output/benchmark")
+CAPTURE_LAYERS = ["Conv2d"]
 EXECUTION_COUNT = 100
-FORMAT = "tiff"
+FORMAT = "vdb"
 
 PROGRESS_BAR_WIDTH  = 50
 
@@ -285,8 +286,8 @@ def batch_run(batch_count: int = 1, batch_output_path: Path = OUTPUT_DIR):
 
 
 if __name__=="__main__":
-    extractor.capture_layers = ["Conv2d"]
-    
+    extractor.capture_layers = CAPTURE_LAYERS
+
     # Ejecucion
     print("========= Extracción ===========")
     exporter.formats = [FORMAT]

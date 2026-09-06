@@ -4,7 +4,7 @@ import json
 
 from pathlib import Path
 
-INPUT_PATH = Path("./data/output/blender_testing")
+INPUT_PATH = Path("./data/output/blender_benchmark")
 
 PROGRESS_BAR_WIDTH = 50
 
@@ -34,6 +34,7 @@ if __name__ == "__main__":
     }
 
     for item in INPUT_PATH.iterdir():
+        progress_bar(completed_items, total_items)
         if not item.is_dir():
             continue
 

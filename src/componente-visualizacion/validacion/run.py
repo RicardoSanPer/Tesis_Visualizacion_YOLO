@@ -9,7 +9,7 @@ import json
 import math
 from mathutils import Euler, Vector
 
-SAVE_RENDER = True  # Guardar resultado del renderizado como imagen PNG
+SAVE_RENDER = False  # Guardar resultado del renderizado como imagen PNG
 
 def run(input_directory: Path):
     # Cargar archivo JSON
@@ -34,6 +34,9 @@ def run(input_directory: Path):
     ### Renderizado de geometría simple
     render_runtime_simple = run_render()
 
+    if SAVE_RENDER:
+        save_render_result(input_directory, filename="render_output_simple.png")
+
     # Propiedades de visualización
     scene = bpy.context.scene
     vis_props = scene.yolo_visualization_settings
@@ -44,6 +47,9 @@ def run(input_directory: Path):
 
     render_runtime_one_layer = run_render()
 
+    if SAVE_RENDER:
+        save_render_result(input_directory, filename="render_output_one_layer.png")
+
     ### Renderizado de geometria dos capas
     vis_props.layer_properties.get("MaxPool2d").visibility = False
     vis_props.layer_properties.get("MaxPoolStride1").visibility = False
@@ -51,11 +57,17 @@ def run(input_directory: Path):
 
     render_runtime_two_layers = run_render()
 
+    if SAVE_RENDER:
+        save_render_result(input_directory, filename="render_output_two_layers.png")
+
     ### Renderizado de geometria tres capas
     vis_props.layer_properties.get("BatchNorm2d").visibility = False
     vis_props.update_all(bpy.context)
 
     render_runtime_three_layers = run_render()
+
+    if SAVE_RENDER:
+        save_render_result(input_directory, filename="render_output_three_layers.png")
 
     ### Renderizado de geometria completa (cuatro capas)
     for layer in vis_props.layer_properties:
@@ -134,13 +146,13 @@ def set_camera():
         scene.camera = cam
 
     # Posicionar la camara en angulo (isometrico) para ver todos los objetos
-    cam.rotation_euler = Euler((math.radians(75), 0.0, 0.0), 'XYZ')
-    cam.location = Vector((0, -3, 8))
+    cam.rotation_euler = Euler((math.radians(65), 0.0, math.radians(45)), 'XYZ')
+    cam.location = Vector((18, 10, 12))
     cam.data.clip_end = 500
     cam.data.type = 'ORTHO'
-    cam.data.ortho_scale = 42
+    cam.data.ortho_scale = 46
 
-def save_render_result(output_path: Path):
+def save_render_result(output_path: Path, filename: str = "render_output.png"):
     """Guarda los resultados del renserizado más reciente al disco
 
     Args:
@@ -151,7 +163,7 @@ def save_render_result(output_path: Path):
     scene.render.image_settings.file_format = 'PNG'
     render_result = bpy.data.images.get("Render Result")
     if render_result:
-        render_result.save_render(filepath=str(output_path / "render_output.png"), scene=scene)
+        render_result.save_render(filepath=str(output_path / filename), scene=scene)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Datos de la red")
