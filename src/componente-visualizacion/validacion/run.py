@@ -9,7 +9,7 @@ import json
 import math
 from mathutils import Euler, Vector
 
-SAVE_RENDER = False  # Guardar resultado del renderizado como imagen PNG
+SAVE_RENDER = True  # Guardar resultado del renderizado como imagen PNG
 
 def run(input_directory: Path):
     # Cargar archivo JSON
