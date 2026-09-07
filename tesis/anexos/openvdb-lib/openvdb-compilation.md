@@ -1,5 +1,5 @@
 # Compilación de pyopenvdb
-El siguiente documento detalla el proceso que se siguió para la compilación de OpenVDB para Python.
+El siguiente documento detalla el proceso que se siguió para la compilación de la librería OpenVDB para Python.
 
 ## Requisitos
 - CMake
@@ -21,15 +21,13 @@ cd vcpkg
 .\bootstrap-vcpkg.bat
 ~~~
 
-EL siguiente comando utiliza `vcpkg` para instalar y compilar varias dependencias requeridas para `openvdb`. El proceso tarda 15-20 minutos.
+Utilizar `vcpkg` para instalar y compilar varias dependencias requeridas para `openvdb`. El proceso tarda 15-20 minutos.
 
 ~~~
 .\vcpkg install tbb blosc boost-iostreams boost-system boost-any boost-algorithm openexr imath zlib nanobind boost-interprocess boost-headers:x64-windows
 ~~~
 
-Tarda 10-15 minutos.
-
-El siguiente descarga el código fuente de OpenVDB en el directorio raíz y crea un directorio donde colocar los archivos a compilar.
+Descargar el código fuente de OpenVDB en el directorio raíz y crear un directorio donde colocar los archivos a compilar.
 ~~~
 cd C:\
 git clone https://github.com/AcademySoftwareFoundation/openvdb.git
@@ -38,13 +36,13 @@ mkdir build
 cd build
 ~~~
 
-El siguiente comando genera la configuración de CMake para compilar OpenVDB, ejecutandolo desde el directorio `build` creado en el paso anterior. Se debe cambiar el valor de `-DPython_EXECUTABLE` al directorio donde se encuentra el ejecutable de Python de la versión para la cual se quiere compilar, y `"Visual Studio 17 2022"` debe cambiarse por la versión correcta de Visual Studio si se utiliza una distinta.
+Generar la configuración de CMake para compilar OpenVDB, ejecutandolo desde el directorio `build` creado en el paso anterior. Se debe cambiar el valor de `-DPython_EXECUTABLE` al directorio donde se encuentra el ejecutable de Python de la versión para la cual se quiere compilar, y `"Visual Studio 17 2022"` debe cambiarse por la versión correcta de Visual Studio si se utiliza una distinta.
 
 ~~~
 cmake .. -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="C:/vcpkg/installed/x64-windows" -DOPENVDB_BUILD_CORE=ON -DOPENVDB_BUILD_PYTHON_MODULE=ON -DPython_EXECUTABLE="C:/path/a/instalacion/de/python/python.exe" -DUSE_BLOSC=ON -DUSE_TBB=ON
 ~~~
 
-Las instalaciones de Python suelen encontrarse en `C:\Users\usuario\AppData\Local\Programs\Python\Python3xx\python.exe`. Se recomienda utilizar la instalación nativa de Python en el sistema para evitar problemas de dependencias.
+Las instalaciones de Python suelen encontrarse en `C:\Users\usuario\AppData\Local\Programs\Python\Python3xx\python.exe`. Se recomienda utilizar la instalación nativa de Python en el sistema (no las instalaciones incluidas en un abmiente virtual como `venv`) para evitar problemas de dependencias.
 
 Finalmente el siguiente comando compila OpenVDB para Python:
 ~~~
@@ -53,7 +51,7 @@ cmake --build . --config Release --target openvdb_python
 
 La biblioteca se crea en `C:/openvdb/build/openvdb/openvdb/python/Release/openvdb.cp3XX-win_amd.pyd` (el nombre del archivo cambia dependiendo de la versión de Python para el que se compiló).
 
-Finalmente se copian los archivos de los siguientes directios:
+Finalmente se copian los archivos de los siguientes directorios:
 
 `C:\openvdb\build\openvdb\openvdb\python\Release`:
 - openvdb.cp3xx-wind_amd64.pyd
@@ -69,7 +67,7 @@ Finalmente se copian los archivos de los siguientes directios:
 - lz4.dll
 - openvdb.dll
 
-Al directorio `Lib/site-packages` del ambiente virtual.
+Al directorio `Lib/site-packages` del ambiente virtual `venv`.
 
 ## Verificación
 
@@ -79,3 +77,4 @@ La instalación se puede verificar ejecutando el interprete de Python e importan
 import openvdb
 ~~~
 
+Si el interprete no presenta errores, entonces la instalación fué exitosa.
