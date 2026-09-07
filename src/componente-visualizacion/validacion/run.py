@@ -12,6 +12,14 @@ from mathutils import Euler, Vector
 SAVE_RENDER = False  # Guardar resultado del renderizado como imagen PNG
 
 def run(input_directory: Path):
+    """Ejecuta una carga de trabajo, cargando los datos extraidos y renderizando incrementalmente más capas.
+
+    Args:
+        input_directory (Path): Directorio con datos de entrada
+
+    Returns:
+        dict: Métricas de la ejecución
+    """
     # Cargar archivo JSON
     import_start_time = time.perf_counter()
     bpy.ops.import_scene.load_yolov2_json(filepath=str(input_directory / "manifest.json"))

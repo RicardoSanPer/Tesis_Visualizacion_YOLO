@@ -1,0 +1,52 @@
+En el presente trabajo terminal se desarrolló e implementó un entorno integral para la extracción, reconstrucción y exploración volumétrica 
+tridimensional de activaciones internas en redes neuronales convolucionales, tomando como caso de estudio la arquitectura Tiny YOLOv2 dentro 
+de la suite de código abierto Blender.
+\medskip
+
+A partir de la metodología implementada y los resultados experimentales obtenidos, se desprenden las siguientes conclusiones:
+
+\begin{itemize}
+    \item \textbf{Viabilidad y superioridad del formato OpenVDB:} La adopción de cuadrículas volumétricas jerárquicas dispersas 
+    (\textit{OpenVDB}) resolvió de forma eficiente el cuello de botella tradicional de entrada/salida (I/O). Al consolidar las 
+    activaciones multidimensionales en un único archivo físico por capa (9 contenedores frente a 3181 imágenes rasterizadas por 
+    inferencia a través de nueve capas convolucionales), se redujo el tiempo medio de exportación en aproximadamente un $67\,\%$. 
+    Asimismo, el esquema preservó la fidelidad de punto flotante continuo ($\text{MAE} = 0.000$), superando las pérdidas sistemáticas 
+    de precisión cuantizada observadas en formatos como PNG y JPEG ($\text{MAE} = 1.442$).
+
+    \item \textbf{Capacidad diagnóstica e interpretabilidad (XAI):} La evaluación del caso de estudio demostró que la inspección tridimensional 
+    e interactiva aporta un valor analítico superior a la telemetría convencional de métricas agregadas. Mediante el aislamiento por rebanadas 
+    (\textit{slicing}) y la correspondencia visual en el espacio 3D, fue posible identificar la causa raíz de una clasificación errónea: una 
+    amplificación basal en las capas iniciales (\texttt{conv1} a \texttt{conv3}) inducida por la baja varianza espacial de fondos homogéneos y 
+    las transformaciones de \textit{Batch Normalization}, la cual propagó suficiente sesgo como para alterar los canales categóricos de salida 
+    sin deformar la coherencia geométrica de la caja delimitadora.
+    \item \textbf{Integración procedural en Blender:} El diseño de grupos de nodos modulares basados en \textit{Geometry Nodes} y sombreadores 
+    permitió transformar datos abstractos de aprendizaje profundo en objetos manipulables en tiempo real, validando a Blender no solo como una 
+    herramienta de renderizado técnico o divulgación visual, sino como una plataforma funcional para la auditoría interna de modelos opacos 
+    (\textit{black-box}).
+\end{itemize}
+
+\section{Limitaciones del sistema}
+A pesar de los resultados favorables, se identificaron limitaciones operativas inherentes a la implementación actual:
+\begin{itemize}
+    \item \textbf{Carga computacional en el \textit{viewport}:} La evaluación simultánea de múltiples capas volumétricas densas en el motor 
+    interactivo EEVEE reduce drásticamente la tasa de cuadros por segundo (\textit{framerate}), exigiendo el uso de modos simplificados 
+    (\textit{Solid View}) o el aislamiento selectivo de capas para mantener una navegación fluida.
+    \item \textbf{Acoplamiento topológico:} La reconstrucción espacial procedural fue configurada considerando la secuencia estrictamente 
+    lineal de Tiny YOLOv2, careciendo de soporte automático para grafos computacionales complejos con múltiples ramas o salidas distribuidas.
+\end{itemize}
+
+\section{Trabajo futuro}
+Con base en las restricciones observadas, se plantean las siguientes líneas de desarrollo futuro:
+\begin{itemize}
+    \item \textbf{Soporte para topologías no lineales y grafos acíclicos dirigidos (DAG):} Generalizar el generador procedural para acomodar 
+    arquitecturas modernas con conexiones residuales (\textit{ResNet}), bloques de cuello de botella densos y mecanismos de atención espacial 
+    (\textit{Vision Transformers}).
+    \item \textbf{Paginación y transmisión de memoria bajo demanda (\textit{Out-of-Core Streaming}):} Implementar un mecanismo de carga dinámica 
+    de volúmenes VDB para instanciar en memoria únicamente las capas y rebanadas activas en el campo de visión de la cámara, optimizando el 
+    consumo de VRAM en redes profundas.
+    \item \textbf{Incorporación de mapas de saliencia y atribución automática:} Integrar técnicas como Grad-CAM tridimensional para guiar 
+    proceduralmente la selección de rebanadas y acentuar de forma automática los canales con mayor peso en el gradiente de predicción.
+    \item \textbf{Optimización de la experiencia de usuario (UX):} Desarrollar herramientas de interacción avanzadas, tales como la 
+    importación concurrente de múltiples inferencias para agilizar la comparación directa de tensores, así como controles parametrizados 
+    más versátiles para la gestión, filtrado y visualización de las activaciones en la escena.
+\end{itemize}

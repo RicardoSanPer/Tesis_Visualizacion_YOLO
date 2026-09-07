@@ -160,9 +160,9 @@ Para este estudio de caso se contrastan tres inferencias de la red:
 \end{figure}
 
 Los tensores extraídos fueron importados a Blender mediante instancias del grupo de nodos
- \textit{Volume Viewer}, lo que permitió cargar y yuxtaponer las activaciones volumétricas de las 
- tres ejecuciones simultáneamente. Al visualizar los volúmenes en el espacio tridimensional, se aprecian 
- con claridad las divergencias en los patrones energéticos:
+\textit{Volume Viewer}, lo que permitió cargar y yuxtaponer las activaciones volumétricas de las 
+tres ejecuciones simultáneamente. Al visualizar los volúmenes en el espacio tridimensional, se aprecian 
+con claridad las divergencias en los patrones energéticos:
 \begin{itemize}
     \item En las capas iniciales (\texttt{conv1} a \texttt{conv3}), el falso positivo adquiere una mayor 
     activación basal en la región correspondiente al fondo en canales específicos, en contraste con los dos 
@@ -202,4 +202,7 @@ de la cuadrícula en las clases en disputa.
     capa de salida final.}
     \label{fig:comparison_late_activations}
 \end{figure}
-
+Aunque un estudio más a fondo de la causa del falso positivo queda fuera del alcance del trabajo presente, gracias a la 
+visualización interactiva se puede diagnosticar que un posible factor influyente es la presencia de un fondo homogéneo en
+la imagen de entrada, que presentando una activación abnormal en comparación a otros casos, propaga dichas activaciones a
+capas subsecuentes.
