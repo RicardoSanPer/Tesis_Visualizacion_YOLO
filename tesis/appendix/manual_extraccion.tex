@@ -1,1 +1,307 @@
-\chapter{Manual de uso del componente de extracción}
+\chapter[Uso del componente de extracción]{Manual de uso del componente de extracción}
+\label{anx:manual_extraccion}
+Este anexo presenta la guía operativa del componente de extracción diseñado para capturar y serializar de manera automatizada las 
+activaciones intermedias generadas durante la inferencia de la arquitectura Tiny YOLOv2.
+
+\section{Requisitos del sistema}
+El componente requiere un entorno de ejecución basado en Python 3.12.10 y las siguientes dependencias de software:
+
+\begin{verbatim}
+    filelock==3.32.0
+    fsspec==2026.6.0
+    Jinja2==3.1.6
+    MarkupSafe==3.0.3
+    mpmath==1.3.0
+    networkx==3.6.1
+    numpy==2.5.1
+    pillow==12.3.0
+    setuptools==83.0.0
+    sympy==1.13.1
+    torch==2.6.0+cu124
+    torchvision==0.21.0+cu124
+    typing_extensions==4.16.0
+\end{verbatim}
+Adicionalmente, se requiere el módulo de enlace para Python de la biblioteca \textit{OpenVDB} (\texttt{pyopenvdb}) 
+compilado para la versión específica del intérprete en uso. El procedimiento detallado de compilación e instalación 
+se documenta en el Anexo~\ref{anx:compilacion_openvdb}.
+\medskip
+
+Por último, el componente integra la implementación en PyTorch de Tiny YOLOv2 desarrollada por \textcite{yolov2_implementation}. 
+Los parámetros preentrenados del modelo corresponden a los pesos oficiales provistos por \textcite{yolov3} bajo la denominación 
+\textit{Tiny YOLO (weights)}, disponibles mediante el siguiente enlace de descarga directa:
+\url{https://data.pjreddie.com/files/yolov2-tiny.weights}.
+
+\section{Estructura e instalación}
+El árbol de directorios del módulo debe organizarse de la siguiente manera:
+
+\dirtree{%
+.1 componente-extraccion/.
+.2 benchmark.py.
+.2 ejecucion.py.
+.2 exportar.py.
+.2 extractor.py.
+.2 main.py.
+.2 utils.py.
+.2 TinyYoloV2/.
+.3 model.py.
+.3 utils.py.
+}
+
+Previo a la primera ejecución, es necesario configurar en el archivo \texttt{ejecucion.py} la variable \texttt{WEIGHTS\_PATH} 
+con la ruta absoluta o relativa hacia el archivo de pesos (\texttt{.weights}) descargado.
+
+\section{Uso}
+Para iniciar el flujo de extracción se ejecuta el \textit{script} \texttt{main.py} mediante el intérprete de Python, suministrando 
+los argumentos requeridos y parámetros de configuración opcionales a través de la interfaz de línea de comandos:
+
+\begin{verbatim}
+    python main.py input="ruta/a/imagen/de/entrada.png" [parámetros]
+\end{verbatim}
+
+Por ejemplo:
+\begin{verbatim}
+    python main.py input="my_image.png" output="./output"
+\end{verbatim}
+procesa la imagen \texttt{my\_image.png} ubicada en el directorio de trabajo actual y almacena las activaciones volumétricas 
+resultantes en el subdirectorio \texttt{output/}.
+
+\subsection{Parámetros de ejecución}
+Los argumentos disponibles a través de la interfaz de línea de comandos son:
+
+\begin{itemize}
+    \item \texttt{--input}: Ruta del archivo de la imagen de entrada (Obligatorio).
+    \item \texttt{--output}: Directorio de destino para los archivos generados. Si se omite, crea por defecto una carpeta denominada 
+    \texttt{output/} en el directorio de trabajo actual.
+    \item \texttt{--layers}: Lista separada por comas de los tipos de capas a extraer (e.g., \texttt{conv}, \texttt{maxpool}). 
+    Por defecto incluye las capas convolucionales (\textit{Conv2d}) y de reducción espacial (\textit{MaxPool2d}).
+    \item \texttt{--include}: Lista separada por comas de nombres de capas individuales que se incorporarán a la extracción, en adición 
+    a las especificadas mediante \texttt{--layers}.
+    \item \texttt{--exclude}: Lista separada por comas de nombres de capas individuales a excluir del proceso. Este parámetro toma 
+    precedencia sobre \texttt{--layers} y \texttt{--include}.
+    \item \texttt{--view-layers}: Bandera de depuración (\textit{flag}) que imprime en consola el resumen estructural de la red 
+    (nombres de capa y sus tipos respectivos). Omite la inferencia, captura y exportación de datos.
+    \item \texttt{--dry-run}: Bandera de depuración que ejecuta el flujo de inferencia y extracción en memoria, pero omite la 
+    escritura de archivos en disco.
+    \item \texttt{--info}: Imprime en terminal los metadatos de ejecución y las rutas absolutas de los directorios de salida configurados.
+    \item \texttt{--formats}: Lista separada por comas de los formatos de serialización deseados. Las extensiones admitidas comprenden 
+    \texttt{vdb}, \texttt{png}, \texttt{jpg}, \texttt{jpeg}, \texttt{tiff} y \texttt{tif}. Si se omite, el valor predeterminado es \texttt{vdb}.
+    \item \texttt{--conf}: Umbral de confianza (\textit{confidence threshold}) para el filtrado de detecciones en la inferencia. 
+    Valor predeterminado: \texttt{0.55}.
+    \item \texttt{--nms}: Umbral para el algoritmo de supresión de no máximos (\textit{Non-Maximum Suppression}). Valor predeterminado: \texttt{0.55}.
+\end{itemize}
+
+\section{Estructura de los datos extraídos}
+Los metadatos y la topología capturada de la red se persisten en un archivo de manifiesto en formato JSON 
+(\texttt{manifest.json}), cuya estructura raíz almacena los siguientes campos:
+
+\begin{itemize}
+    \item \texttt{confidence}: Umbral de confianza (\textit{confidence threshold}) empleado durante la inferencia.
+    \item \texttt{nms}: Umbral para el algoritmo de supresión de no máximos (\textit{Non-Maximum Suppression}).
+    \item \texttt{n\_boxes}: Número total de cajas delimitadoras generadas por la red tras el filtrado.
+    \item \texttt{classes}: Lista con las etiquetas categóricas admitidas por el modelo.
+    \item \texttt{layers\_data}: Diccionario que contiene las especificaciones estructurales y tensores capturados por cada capa.
+\end{itemize}
+
+Los elementos contenidos en \texttt{layers\_data} se indexan mediante el identificador único de cada capa. Para cada una de ellas se 
+registran los siguientes atributos:
+
+\begin{itemize}
+    \item \texttt{type}: Clase de capa u operación matemática ejecutada (e.g., \textit{Conv2d}, \textit{MaxPool2d}).
+    \item \texttt{connections}: Lista de nombres de las capas adyacentes a las que se vincula en el grafo computacional.
+    \item \texttt{data}: Valor booleano que indica si el tensor de activaciones fue extraído y serializado a disco.
+    \item \texttt{kernel\_size}: Dimensiones del núcleo convolucional de la capa.
+    \item \texttt{stride}: Paso o desplazamiento espacial (\textit{stride}) aplicado por el operador.
+    \item \texttt{padding}: Margen de relleno (\textit{padding}) añadido en las fronteras espaciales.
+    \item \texttt{dimensions}: Dimendiones espaciales del tensor.
+\end{itemize}
+Determinados atributos pueden omitirse o adoptar un esquema de datos diferente según la naturaleza y tipología específica de la capa analizada.
+\medskip
+
+A continuación se incluye una muestra del manifesto generado:
+\begin{verbatim}
+{
+  "confidence": 0.78,
+  "nms": 0.55,
+  "n_boxes": 1,
+  "classes": "aeroplane,bicycle,bird,boat,bottle,bus,car,cat,chair,
+              cow,diningtable,dog,horse,motorbike,person,pottedplant,
+              sheep,sofa,train,TVmonitor",
+  "layers_data": {
+    "input": {
+      "type": "Input",
+      "data": false,
+      "connections": [
+        "cnn.conv1"
+      ]
+    },
+    "cnn.conv1": {
+      "type": "Conv2d",
+      "connections": [
+        "cnn.bn1"
+      ],
+      "data": true,
+      "kernel_size": [
+        3,
+        3
+      ],
+      "stride": [
+        1,
+        1
+      ],
+      "padding": [
+        1,
+        1
+      ],
+      "dimensions": [
+        1,
+        16,
+        416,
+        416
+      ]
+    },
+    ...
+  }
+}
+\end{verbatim}
+
+Los tensores extraídos se almacenan en subdirectorios categorizados según el formato de exportación seleccionado. 
+Los archivos generados en formato \textit{OpenVDB} (\texttt{.vdb}) adoptan la misma denominación de la capa de origen. 
+Por su parte, las exportaciones en formatos de imagen rasterizada se agrupan en carpetas nombradas a partir de la capa respectiva, 
+donde cada archivo individual se indexa numéricamente conforme al índice de la rebanada espacial o canal del tensor al que corresponde.
+\medskip
+
+Adicionalmente, se genera un archivo \texttt{boxes.vdb} que codifica volumétricamente las cajas delimitadoras resultantes de la inferencia, 
+junto con una copia de la imagen original de entrada y una imagen de salida que exhibe las detecciones sobrepuestas.
+
+\subsection{Codificación de predicciones: \texttt{boxes.vdb}}
+La red genera como salida un vector de tuplas correspondiente a las propiedades de detección de cada caja delimitadora: 
+$(x, y, w, h, \text{conf}, \text{prob}, \text{id})$. Esta secuencia se estructura matricialmente como un arreglo bidimensional 
+y se serializa en una cuadrícula volumétrica de \textit{OpenVDB}. En dicha representación, la coordenada discreta $Y$ del volumen 
+indexa la caja detectada, mientras que el eje $Z$ mapea los atributos y coordenadas individuales asociados a dicha predicción.
+
+\subsection{Estructura de los datos de salida}
+A continuación se ilustra la jerarquía del árbol de directorios resultante tras una ejecución completa:
+
+\begin{figure}[!htbp]
+\dirtree{%
+.1 directorio\_de\_salida/.
+.2 manifest.json.
+.2 input.png.
+.2 output.png.
+.2 boxes.vdb.
+.2 png/.
+.3 cnn.conv1/.
+.4 frame\_00001.png.
+.4 frame\_00002.png.
+.4 \dots.
+.3 cnn.conv2/.
+.4 frame\_00001.png.
+.4 frame\_00002.png.
+.4 \dots.
+.3 \dots.
+.2 vdb/.
+.3 cnn.conv1.vdb.
+.3 cnn.conv2.vdb.
+.3 cnn.conv3.vdb.
+.3 \dots.
+}
+\caption{Estructura jerárquica de los archivos y directorios de salida.}
+\label{fig:arbol_salida}
+\end{figure}
+
+Es indispensable conservar intacta esta disposición jerárquica de carpetas y nombres de archivo en el directorio 
+\texttt{vdb/}, dado que el complemento de Blender depende de estas rutas relativas para llevar a cabo la reconstrucción 
+volumétrica automatizada en la escena.
+
+\section{Evaluación de rendimiento (\textit{Benchmark})}
+El \textit{script} \texttt{benchmark.py} permite ejecutar el flujo de extracción por lotes (\textit{batch processing}) para procesar 
+múltiples imágenes de manera secuencial y cuantificar el rendimiento temporal y espacial de la ejecución.
+\medskip
+
+El archivo expone los siguientes parámetros de configuración:
+\begin{itemize}
+    \item \texttt{INPUT\_DIR}: Ruta del directorio que contiene las imágenes de prueba a procesar.
+    \item \texttt{OUTPUT\_DIR}: Directorio raíz de destino para los datos extraídos. Dentro de este, los 
+    resultados se estructuran en subdirectorios nombrados conforme al identificador de la imagen de entrada correspondiente.
+    \item \texttt{CAPTURE\_LAYERS}: Lista con los tipos de capas del modelo a capturar.
+    \item \texttt{EXECUTION\_COUNT}: Número total de imágenes a procesar en la corrida de prueba.
+    \item \texttt{FORMAT}: Formato de serialización y exportación de los tensores.
+\end{itemize}
+
+En adición a las activaciones extraídas durante las inferencias, el procedimiento genera un archivo estructurado en formato 
+JSON que consolida la telemetría y métricas agregadas del procesamiento por lotes en el directorio de salida, indexados
+por el nombre del archivo de entrada correspondiente. 
+Para cada inferencia individual se registran los siguientes atributos:
+
+\begin{itemize}
+    \item \texttt{Input File}: Nombre o ruta del archivo de imagen suministrado a la red.
+    \item \texttt{Output Directory}: Directorio de destino asignado a la muestra procesada.
+    \item \texttt{Runtime}: Tiempo total de ejecución en segundos del flujo (inferencia del modelo, captura de tensores y exportación a disco).
+    \item \texttt{Total Filesize}: Tamaño acumulado de los artefactos generados (en bytes), excluyendo las cuadrículas de cajas 
+    delimitadoras y las imágenes de entrada/salida.
+    \item \texttt{Total Filecount}: Cantidad neta de archivos producidos, aplicando las mismas exclusiones de metadatos y previsualizaciones.
+    \item \texttt{Run Parameters}: Parámetros de configuración suministrados al flujo, tales como \texttt{--include}, \texttt{--exclude}, 
+    \texttt{--conf}, \texttt{--nms}, entre otros.
+    \item \texttt{Precision Error}: Pérdida de precisión numérica estimada entre los tensores residentes en memoria y los datos exportados 
+    (calculada como el error absoluto medio o MAE). Las métricas se agrupan por formato e incluyen los valores promedio, mínimo y máximo, 
+    además del error específico cuantificado por cada capa intervenida.
+    \item \texttt{Files}: Estructura jerárquica de los archivos y carpetas generados, documentando el tamaño en disco de cada elemento 
+    (en bytes) y la cantidad de archivos contenidos por directorio.
+\end{itemize}
+A continuación se incluye una muestra de las métricas obtenidas:
+\begin{verbatim}
+{
+  "Runs": 100,
+  "Min Runtime": 0.364212000000407,
+  "Max Runtime": 1.8603689999945345,
+  "Avg Runtime": 1.124063983000451,
+  "Total Runtime": 112.40639830004511,
+  "Total Filesize": 2298406180,
+  "Total Filecount": 900,
+  "Avg Filesize": 22984061.8,
+  "MEA": {
+    "vdb": 0
+  },
+  "items": {
+    "000001.jpg": {
+      "Input File": "data\\images\\VOC2007\\000001.jpg",
+      "Output Directory": "data\\output\\benchmark\\batch_vdb\\000001",
+      "Runtime": 0.4191782999987481,
+      "Total Filesize": 23101845,
+      "Total Filecount": 9,
+      "Run parameters": {
+        "nms": 0.55,
+        "confidence": 0.55,
+        "layers": [
+          "Conv2d"
+        ],
+        "include": [],
+        "exclude": [],
+        "formats": [
+          "vdb"
+        ]
+      },
+      "Presicion Error": {
+        "vdb": {
+          "Avg": 0,
+          "Min": 0,
+          "Max": 0,
+          "Layers": {
+            "cnn.conv1": 0,
+            ...
+          }
+        }
+      },
+      "Files": {
+        "vdb": {
+          "Total Size": 23101845,
+          "File Count": 9,
+          "cnn.conv1.vdb": 10778523,
+          ...
+        }
+      }
+    }
+    ...
+  }
+}
+\end{verbatim}

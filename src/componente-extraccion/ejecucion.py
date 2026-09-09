@@ -6,6 +6,8 @@ from PIL import Image
 from pathlib import Path
 from utils import file_validation
 
+WEIGHTS_PATH = Path("./data/weights/yolov2-tiny-voc.weights")
+
 """
 Clase de encapsulación para la ejecución del modelo Tiny YoloV2.
 """
@@ -21,7 +23,7 @@ class ModelExecutor:
 
     """
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    weight_path = Path.cwd() / "data" / "weights" / "yolov2-tiny-voc.weights"
+    weight_path = WEIGHTS_PATH
 
     conf_threshold = 0.55
     nms_threshold = 0.55

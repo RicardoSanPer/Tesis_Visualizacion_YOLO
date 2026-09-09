@@ -1,4 +1,5 @@
-\chapter{Instrucciones de compilación de OpenVDB para Python}
+\chapter[Compilación de OpenVDB]{Instrucciones de compilación de OpenVDB para Python}
+\label{anx:compilacion_openvdb}
 Este anexo presenta las instrucciones de compilación de la biblioteca OpenVDB para Python en 
 Windows 11.
 
@@ -69,11 +70,11 @@ de compilación (\texttt{build}):
 Configure el proyecto de compilación utilizando CMake con la siguiente instrucción (una sola linea):
 
 \begin{verbatim}
-    cmake .. -G "Visual Studio 17 2022" -A x64 
-    -DCMAKE_PREFIX_PATH="C:/vcpkg/installed/x64-windows" 
-    -DOPENVDB_BUILD_CORE=ON -DOPENVDB_BUILD_PYTHON_MODULE=ON 
-    -DPython_EXECUTABLE="C:/path/a/instalacion/de/python/python.exe" 
-    -DUSE_BLOSC=ON -DUSE_TBB=ON
+    cmake .. -G "Visual Studio 17 2022" -A x64 ^
+     -DCMAKE_PREFIX_PATH="C:/vcpkg/installed/x64-windows" ^
+     -DOPENVDB_BUILD_CORE=ON -DOPENVDB_BUILD_PYTHON_MODULE=ON ^
+     -DPython_EXECUTABLE="C:/path/a/instalacion/de/python/python.exe" ^
+     -DUSE_BLOSC=ON -DUSE_TBB=ON
 \end{verbatim}
 Reemplace el valor asignado a \texttt{-DPython\_EXECUTABLE} por la ruta absoluta al ejecutable 
 de Python (\texttt{python.exe}) correspondiente a la versión específica para la cual se 

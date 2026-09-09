@@ -1,1 +1,496 @@
-\chapter{Manual de uso de extensión de Blender}
+\chapter{Manual de uso de la extensión para Blender}
+\label{anx:manual_extension_blender}
+Este anexo presenta la guía de usuario de la extensión para Blender desarrollada para la reconstrucción y visualización interactiva de 
+las activaciones intermedias de la red Tiny YOLOv2, previamente serializadas por el componente de extracción.
+
+\section{Requisitos del sistema}
+Para la ejecución del complemento se requiere únicamente contar con Blender 5.2 LTS y disponer del paquete comprimido de la extensión 
+(\texttt{TinyYoloV2Viewer.zip}).
+
+\section{Instalación}
+Para instalar extensiones en Blender, abra el menú superior \textit{Edit} y acceda al panel de configuración seleccionando la opción 
+\textit{Preferences...}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/anexos/uso_visualizacion/instalacion_1.png}
+    \caption[Ubicación del menú de preferencias]{Ubicación del menú de preferencias en la interfaz de Blender.}
+    \label{fig:blender_prefs}
+\end{figure}
+
+En la ventana de preferencias, diríjase a la sección de gestión de complementos en la pestaña \textit{Get Extensions}. 
+En la esquina superior derecha, junto al selector de \textit{Repositories}, haga clic en el botón desplegable 
+(icono de flecha hacia abajo) y seleccione la opción \textit{Install from Disk...}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/instalacion_2.png}
+    \caption[Gestor de extensiones]{Gestor de extensiones en el panel de preferencias de Blender.}
+    \label{fig:blender_get_extensions}
+\end{figure}
+
+En el explorador de archivos emergente, navegue hasta localizar el archivo empaquetado \texttt{TinyYoloV2Viewer.zip}, 
+selecciónelo y confirme la operación pulsando el botón \textit{Install from Disk}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/instalacion_3.png}
+    \caption[Explorador de archivos]{Navegador de archivos para la selección del paquete comprimido.}
+    \label{fig:blender_extension_fileexplorer}
+\end{figure}
+
+Si el proceso concluyó satisfactoriamente, el complemento figurará registrado y habilitado en la lista de extensiones del sistema.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/instalacion_4.png}
+    \caption[Extensión instalada]{Extensión registrada y habilitada correctamente en Blender.}
+    \label{fig:blender_extension_installed}
+\end{figure}
+
+\section{Uso operativo de la extensión}
+Para importar los datos de una inferencia de forma automatizada, diríjase al menú superior \textit{File}, despliegue el submenú 
+\textit{Import} y seleccione la opción \textit{YOLOv2 Manifest (.json)}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/use_1.png}
+    \caption[Importación de manifiesto]{Acceso al operador de importación del archivo de manifiesto en Blender.}
+    \label{fig:blender_import_json}
+\end{figure}
+
+En el explorador de archivos emergente, localice el archivo \texttt{manifest.json}, selecciónelo y confirme la importación. 
+Antes de proceder, es indispensable verificar que los archivos derivados preserven la jerarquía de directorios requerida y 
+que el contenido del manifiesto generado por el componente de extracción no haya sido alterado; de lo contrario, la 
+instanciación de geometrías volumétricas puede fallar o resultar inconsistente. Para mayores detalles sobre esta organización, 
+consúltese el Anexo~\ref{anx:manual_extraccion}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/use_2.png}
+    \caption[Explorador de archivos]{Navegador de archivos para la selección del archivo de manifiesto.}
+    \label{fig:blender_fileexplorer_manifest}
+\end{figure}
+
+Una vez cargado el manifiesto, el panel de configuración de la herramienta se encontrará disponible en la barra lateral 
+de la vista 3D (\textit{3D Viewport Sidebar}, accesible mediante la tecla \texttt{N}).
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/anexos/uso_visualizacion/use_3.png}
+    \caption[Ubicación del panel de YOLOv2]{Ubicación de la pestaña de la extensión en el panel lateral de la vista 3D.}
+    \label{fig:blender_panel_sidebar}
+\end{figure}
+
+En la pestaña dedicada a la extensión es posible parametrizar aspectos globales del modelo, tales como la escala dimensional, 
+la separación longitudinal entre capas consecutivas y filtros de visibilidad por tipología de capa. El operador \textit{Generar Geometría} 
+instancia las mallas procedimentales y vincula las cuadrículas volumétricas a partir de la información leída. Tras su creación inicial, 
+no se requiere regenerar la escena al modificar parámetros de visualización interactiva; no obstante, el operador puede ejecutarse 
+nuevamente para cargar un conjunto de datos o inferencia diferente.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/anexos/uso_visualizacion/use_4.png}
+    \caption[Panel de control de YOLOv2]{Controles globales para la manipulación y despliegue de las capas.}
+    \label{fig:blender_controls_overview}
+\end{figure}
+
+Es importante destacar que las modificaciones realizadas desde este panel aplican de forma global a la totalidad de las capas, 
+sobrescribiendo cualquier ajuste paramétrico configurado previamente a nivel individual. Por tanto, se recomienda establecer 
+primero la escala y disposición general en este módulo y, posteriormente, refinar los atributos particulares de cada capa según se requiera.
+\medskip
+
+Los parámetros globales configurables son:
+\begin{itemize}
+    \item \texttt{Escala}: Factor multiplicador dimensional para la visualización. Escala los ejes $X$ e $Y$ (anchura y altura, respectivamente) del volumen 
+    en función de su resolución espacial nativa. Un valor unitario ($1.0$) mapea la resolución de vóxeles en una relación $1:1$ con las unidades métricas de Blender.
+    \item \texttt{Escala de profundidad}: Factor multiplicador aplicado exclusivamente al eje $Z$ (profundidad longitudinal) de la geometría volumétrica.
+    \item \texttt{Espaciado}: Distancia euclidiana de separación entre capas consecutivas a lo largo del eje de propagación de la red.
+    \item \texttt{Profundidad Máxima}: Cota superior o valor límite admitido para la extensión en el eje de profundidad de las capas.
+\end{itemize}
+
+Asimismo, para cada tipología de capa se exponen los siguientes controles paramétricos:
+\begin{itemize}
+    \item \texttt{Color}: Tonalidad cromática asignada a la representación volumétrica simplificada de la capa.
+    \item \texttt{Simple}: Valor booleano que determina si se renderiza una caja envolvente simplificada en lugar de la cuadrícula volumétrica detallada.
+    \item \texttt{Texto}: Casilla de selección que activa la instanciación de etiquetas tipográficas tridimensionales con el identificador y tipo de capa.
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/geometry_example.png}
+    \caption[Geometría Generada]{Ejemplo de geometría generada utilizando la visualización simplificada.}
+    \label{fig:blender_geometry_example}
+\end{figure}
+
+Adicionalmente la generación de la geometría organiza los objetos en colecciones por tipo de capa.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/anexos/uso_visualizacion/collections.png}
+    \caption[Organización por Colecciones]{Organización de la geometría en colecciones por tipo de capa.}
+    \label{fig:blender_collection}
+\end{figure}
+
+\subsection{Nodos de geometría (\textit{Geometry Nodes})}
+Fundamentalmente, la representación gráfica de las activaciones intermedias depende de árboles de nodos de geometría (\textit{Geometry Nodes}) para 
+transformar los datos volumétricos en objetos tridimensionales dentro de la escena de Blender. Con este propósito se definen cuatro grupos de nodos 
+principales encargados de dicho mapeo procedimental, los cuales exponen controles directos en el panel de modificadores para ajustar la apariencia de cada elemento de forma individual.
+
+\subsubsection{YV2 Volume Viewer}
+Constituye el grupo de nodos primario del sistema de visualización. Su objetivo consiste en reconstruir los archivos de cuadrícula \textit{OpenVDB} (\texttt{.vdb}) 
+mediante una secuencia de planos coplanares que representan las rebanadas (\textit{slices}) del volumen. El nodo expone los siguientes parámetros de configuración:
+
+\begin{itemize}
+    \item \texttt{Volume File}: Ruta absoluta o relativa del archivo volumétrico \textit{OpenVDB} a cargar.
+    \item \texttt{Type}: Cadena de texto descriptiva que indica el tipo de capa o metadatos informativos a desplegar.
+    \item \texttt{View Type}: Conmutador booleano (\textit{toggle}) para habilitar o suspender la visibilidad de la etiqueta de texto definida en \texttt{Type}.
+    \item \texttt{Simplified Volume}: Conmutador que sustituye el conjunto de planos de rebanadas por un prisma envolvente sólido. Se recomienda 
+    mantener activa esta vista simplificada en aquellas capas que no se encuentren bajo inspección activa a fin de reducir la carga de cómputo geométrico en la vista 3D.
+    \item \texttt{Color}: Valor cromático asignado a la malla simplificada de la capa.
+    \item \texttt{World Size}: Dimensiones globales del volumen en unidades métricas de Blender (\textit{Blender Units}). Es imperativo modificar 
+    la escala del volumen mediante este parámetro en lugar de recurrir a transformaciones afines de objeto (\textit{Object Transform}), preservando 
+    así la correctitud espacial de la visualización de las conexiones.
+    \item \texttt{Resolution}: Resolución bidimensional de las rebanadas ($H \times W$), asumiendo una sección transversal cuadrada.
+    \item \texttt{Slice Count}: Cantidad total de rebanadas contenidas a lo largo del eje de profundidad longitudinal ($C$).
+    \item \texttt{Slice Selection}: Índice ordinal de la rebanada que se desea aislar; atenúa u oculta la geometría de las rebanadas anteriores en la secuencia.
+    \item \texttt{Single Slice}: Conmutador que restringe la visualización exclusivamente a la rebanada indicada en \texttt{Slice Selection}, descartando la 
+    renderización de las rebanadas anteriores y posteriores para optimizar el rendimiento y permitir la inspección transversal aislada.
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/anexos/uso_visualizacion/volume_viewer.png}
+    \caption[Volume Viewer]{Visualizador de volúmenes, con los parametros expuestos en el modificador de nodos de geometría.}
+    \label{fig:blender_volume_viewer}
+\end{figure}
+
+\subsubsection{YV2 Box Viewer}
+Este grupo de nodos de geometría se utiliza para visualizar las cajas delimitadoras (\textit{bounding boxes}) generadas por la red. Su función principal 
+consiste en decodificar los atributos de detección contenidos en la cuadrícula volumétrica de \textit{OpenVDB} (\texttt{boxes.vdb}) y reconstruir proceduralmente 
+la geometría de las cajas (posiciones espaciales, dimensiones normalizadas y etiquetas de clase) proyectándolas sobre la imagen de entrada del modelo.
+\medskip
+
+El nodo expone los siguientes parámetros:
+\begin{itemize}
+    \item \texttt{Box File}: Ruta al archivo \textit{OpenVDB} (\texttt{boxes.vdb}) que contiene los datos matriciales codificados de las predicciones.
+    \item \texttt{World Size}: Dimensiones globales de la visualización en unidades métricas de Blender. Únicamente los componentes de los ejes $X$ e $Y$ 
+    (anchura y altura, respectivamente) modifican la escala proyectiva del plano de visualización.
+    \item \texttt{Class Labels}: Cadena de texto que contiene el listado de las etiquetas categóricas de la red, separadas por comas.
+    \item \texttt{Box Count}: Número total de cajas delimitadoras generadas por la red antes o después del filtrado.
+    \item \texttt{Box Selection}: Selector numérico que controla el régimen de despliegue de las predicciones:
+    \begin{itemize}
+        \item \texttt{-1}: Visualiza todas las cajas candidatas que superen los umbrales configurados en \texttt{Confidence} y \texttt{Class Probability}.
+        \item \texttt{0} a \texttt{Box Count - 1}: Aísla e ilustra una única caja de predicción conforme a su índice ordinal.
+        \item \texttt{Box Count}: Fuerza la visualización de la totalidad de las cajas generadas sin aplicar filtrado.
+    \end{itemize}
+    \item \texttt{Confidence}: Umbral de confianza de detección (\textit{objectness score}). Filtra las cajas cuya certeza calculada sea inferior a este valor.
+    \item \texttt{Class Probability}: Umbral de probabilidad condicional de clase. Descarta las predicciones cuya confianza categórica no alcance dicha magnitud.
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/anexos/uso_visualizacion/box_viewer.png}
+    \caption[Box Viewer]{Visualizador de cajas, con los parametros expuestos en el modificador de nodos de geometría.}
+    \label{fig:blender_box_viewer}
+\end{figure}
+
+\subsubsection{YV2 Input Viewer}
+Este grupo de nodos se utiliza para proyectar e inspeccionar la imagen de entrada suministrada a la red. Expone los siguientes parámetros:
+
+\begin{itemize}
+    \item \texttt{World Size}: Dimensiones espaciales del plano de visualización en unidades métricas de Blender (\textit{Blender Units}).
+    \item \texttt{Resolution}: Resolución bidimensional de la imagen de entrada ($H \times W$), asumiendo una relación de aspecto cuadrada.
+    \item \texttt{View Channels}: Conmutador booleano que determina si se descomponen y despliegan los canales individuales RGB (rojo, verde y azul) en planos separados, 
+    en adición a la composición original a color.
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/anexos/uso_visualizacion/input_viewer.png}
+    \caption[Input Viewer]{Visualizador de la entrada, con los parametros expuestos en el modificador de nodos de geometría.}
+    \label{fig:blender_input_viewer}
+\end{figure}
+
+\subsubsection{YV2 Volume Connection}
+Este grupo de nodos de geometría se encarga de representar visualmente las conexiones topológicas entre las distintas capas de la red, así como las operaciones 
+matemáticas de convolución o reducción espacial que ocurren entre ellas. El árbol de nodos consulta directamente los atributos geométricos de los objetos enlazados 
+para calcular analíticamente los puntos de anclaje de las conexiones, las dimensiones del núcleo convolucional (\textit{kernel}) y su posición espacial relativa.
+\medskip
+
+Las dependencias se proyectan como aristas alámbricas que unen los volúmenes de las capas adyacentes y, opcionalmente, ilustran la transformación computacional mediante
+una caja volumétrica de \textit{kernel} que recorre de forma sincronizada los planos de entrada y salida, evidenciando el mapeo del campo receptivo.
+\medskip
+
+El modificador expone los siguientes parámetros:
+
+\begin{itemize}
+    \item \texttt{Input Layer}: Objeto tridimensional que representa la capa previa o nodo emisor en el grafo computacional. Requiere que dicho objeto contenga una 
+    instancia activa del modificador \texttt{YV2 Volume Viewer} debidamente parametrizada.
+    \item \texttt{Output Layer}: Objeto tridimensional que representa la capa sucesora o nodo receptor de la relación. De igual forma, asume la presencia y correcta 
+    configuración del modificador \texttt{YV2 Volume Viewer}.
+    \item \texttt{View Convolution}: Conmutador booleano que habilita la renderización de la geometría correspondiente al \textit{kernel} convolucional y sus líneas de proyección.
+    \item \texttt{T}: Parámetro normalizado de interpolación temporal para la animación interactiva de la convolución ($t \in [0, 1]$). Controla el barrido secuencial del 
+    \textit{kernel} sobre el volumen de entrada y el punto resultante en el plano de salida, iniciando en la esquina superior izquierda ($0.0$) y concluyendo en la esquina inferior derecha ($1.0$).
+    \item \texttt{Stride}: Paso de desplazamiento espacial (\textit{stride}) del núcleo en los ejes de altura y anchura. Omite posiciones intermedias de la entrada 
+    según el incremento configurado. No realiza comprobaciones de consistencia dimensional entre tensores.
+    \item \texttt{Ceiling Mode}: Conmutador booleano que selecciona el criterio de redondeo al calcular las dimensiones de salida si el paso fracciona el recorrido 
+    sobre las filas y columnas. Aplica la función suelo (\textit{floor}) cuando está inactivo y la función techo (\textit{ceiling}) cuando está habilitado 
+    (análogo al parámetro homónimo en operaciones como \textit{MaxPool2d}).
+    \item \texttt{Operation Mode}: Selector categórico del régimen de mapeo de canales entre volúmenes:
+    \begin{itemize}
+        \item \textit{One to One} (canal a canal): Procesa cada canal de entrada de forma independiente sobre su canal análogo de salida (e.g., submuestreo por \textit{MaxPool2d}).
+        \item \textit{Many to One} (volumen a plano/canal): Modela la agregación de todos los canales de entrada para proyectar una única rebanada o 
+        mapa de activación resultante (convolución estándar).
+        \item \textit{Many to Many}: Representación generalizada del flujo volumétrico completo entre el bloque entrante y saliente.
+    \end{itemize}
+\end{itemize}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/anexos/uso_visualizacion/connection_viewer.png}
+    \caption[Volume Connection Viewer]{Visualizador de la conexión entre dos capas, con los parametros expuestos en el modificador de nodos de geometría.}
+    \label{fig:blender_connection_viewer}
+\end{figure}
+
+\section{Importación manual de recursos}
+Como parte de la extensión se distribuye el archivo \texttt{library.blend} dentro del directorio \texttt{assets/}, el cual almacena los árboles de nodos 
+de geometría y los materiales utilizados por el sistema. No obstante, estos activos pueden importarse de forma modular e independiente a 
+cualquier proyecto de Blender sin necesidad de instalar la extensión completa, facilitando la inspección focalizada de activaciones 
+intermedias o la comparativa de datos entre distintas inferencias.
+\medskip
+
+Para importar dichos recursos a un nuevo proyecto, despliegue el menú superior \textit{File} y seleccione la opción \textit{Link...} o \textit{Append...}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/anexos/uso_visualizacion/import_1.png}
+    \caption[Importación de recursos]{Menú principal para la vinculación e importación de recursos desde archivos \texttt{.blend}.}
+    \label{fig:blender_import_asset}
+\end{figure}
+
+En el explorador de archivos integrado, navegue hasta localizar el archivo \texttt{library.blend}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/import_2.png}
+    \caption[Ubicación de library.blend]{Localización del archivo \texttt{library.blend} en el explorador interno.}
+    \label{fig:blender_library}
+\end{figure}
+
+Al hacer doble clic sobre el archivo o seleccionarlo y pulsar el botón \textit{Append}, Blender examinará la estructura interna 
+del contenedor tratándolo como un sistema jerárquico de carpetas. Dentro de este, acceda a las secciones \texttt{Material} o 
+\texttt{NodeTree}, donde se agrupan los materiales y los grupos de nodos de geometría, respectivamente.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/import_3.png}
+    \caption[Estructura interna de library.blend]{Bloques de datos internos accesibles en el archivo \texttt{library.blend}.}
+    \label{fig:blender_library_content}
+\end{figure}
+
+En estas carpetas, seleccione los bloques de datos requeridos y confirme la operación pulsando el botón \textit{Append}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/import_4.png}
+    \caption[Selección de grupos de nodos]{Selección de árboles de nodos de geometría dentro de \texttt{library.blend}.}
+    \label{fig:blender_library_geonodes}
+\end{figure}
+
+Completada la transferencia, los elementos seleccionados quedarán instanciados y disponibles en el entorno de trabajo actual.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.55\textwidth]{images/anexos/uso_visualizacion/import_5.png}
+    \caption[Recursos importados en la escena]{Nodos de geometría procedentes de \texttt{library.blend} integrados y disponibles en el proyecto.}
+    \label{fig:blender_imported_geonodes_success}
+\end{figure}
+
+\subsection{Criterios de integración: \textit{Link} frente a \textit{Append}}
+Ambos mecanismos permiten incorporar bloques de datos externos procedentes de archivos \texttt{.blend} a la escena de trabajo; no obstante, 
+difieren de manera fundamental en la gestión de sus dependencias:
+
+\begin{itemize}
+    \item \textbf{\textit{Link}} (Vinculación dinámica): Establece una referencia externa al bloque de datos original. Cualquier cambio efectuado 
+    sobre el archivo fuente se propaga automáticamente a los proyectos que lo enlazan. Como restricción, los datos vinculados permanecen en modo 
+    de solo lectura, impidiendo su edición directa en el archivo receptor salvo que se generen modificaciones locales controladas (\textit{library overrides}).
+    \item \textbf{\textit{Append}} (Copia estática): Genera un duplicado independiente y aislado del bloque de datos en el archivo actual. Al desvincularse 
+    por completo del archivo de origen, el recurso puede editarse, transformarse o eliminarse localmente sin repercutir sobre la biblioteca maestra ni 
+    reflejar revisiones futuras de esta.
+\end{itemize}
+
+\section{Evaluación de rendimiento (\textit{Benchmark})}
+Adicionalmente, se incluyen \textit{scripts} de evaluación de rendimiento para cuantificar los tiempos de ejecución y carga del componente de visualización. 
+Estas rutinas ejecutan Blender en modo desatendido (\textit{headless}), por lo que no demandan requisitos adicionales más allá del registro del binario ejecutable 
+de Blender en las variables de entorno del sistema operativo.
+
+\subsection{Registro de Blender en las variables de entorno del sistema}
+En el menú Inicio de Windows, busque \textit{«Editar las variables de entorno del sistema»} y abra la utilidad del panel de 
+control. En el cuadro de diálogo emergente, diríjase a la pestaña \textit{Opciones avanzadas} y haga clic en el botón 
+\textit{Variables de entorno...}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.48\textwidth]{images/anexos/uso_visualizacion/variable_1.png}\hfill
+    \includegraphics[width=0.48\textwidth]{images/anexos/uso_visualizacion/variable_2.png}
+    \caption[Propiedades del sistema]{Búsqueda y apertura del editor de variables de entorno del sistema en Windows 11.}
+    \label{fig:blender_env_vars}
+\end{figure}
+
+En la nueva ventana, localice la variable \texttt{Path} en el apartado de variables de usuario o en el de variables del sistema, 
+selecciónela y haga clic en el botón \textit{Editar...} correspondiente.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/anexos/uso_visualizacion/variable_3.png}
+    \caption[Lista de variables de entorno]{Panel de configuración de variables de usuario y de sistema.}
+    \label{fig:blender_env_list}
+\end{figure}
+
+En el editor de la lista, pulse el botón \textit{Nuevo} e introduzca la ruta absoluta del directorio de instalación de Blender 
+(la carpeta contenedora del binario \texttt{blender.exe}). Para una instalación estándar de Blender 5.2 LTS, esta ruta corresponde habitualmente a:
+\begin{center}
+\path{C:\Program Files\Blender Foundation\Blender 5.2}
+\end{center}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/anexos/uso_visualizacion/variable_4.png}
+    \caption[Editor de la variable Path]{Adición del directorio de instalación en el editor de la variable \texttt{Path}.}
+    \label{fig:blender_env_edit}
+\end{figure}
+
+Finalmente, haga clic en \textit{Aceptar} en todas las ventanas abiertas para persistir los cambios aplicados en el registro del sistema.
+
+\subsection{Uso}
+La evaluación de rendimiento se realiza mediante dos \textit{scripts} de Python. El primero, \texttt{run.py}, 
+ejecuta una instancia de Blender en modo desatendido (\textit{headless}). Esta rutina cuantifica de forma aislada 
+los tiempos de ejecución correspondientes a la importación del manifiesto, la instanciación procedimental de la 
+geometría y el renderizado de un fotograma de la escena. Este último proceso se evalúa inicialmente empleando la representación 
+volumétrica simplificada y, de manera incremental, activando la visualización detallada por tipo de capa hasta concluir 
+con el renderizado completo de todos los volúmenes activos en la red.
+\medskip
+
+El procedimiento se ejecuta a través de la terminal mediante la siguiente instrucción:
+\begin{verbatim}
+blender --background --python run.py -- --input manifest.json
+\end{verbatim}
+donde se deben sustituir los argumentos por las rutas absolutas o relativas correspondientes a \texttt{run.py} y 
+al archivo \texttt{manifest.json} objeto de prueba.
+\medskip
+
+Las métricas obtenidas se persisten en un archivo estructurado JSON dentro del directorio raíz de los datos de entrada, 
+bajo el nombre:
+\begin{verbatim}
+blender_headless_benchmark
+\end{verbatim}
+
+Opcionalmente, es posible almacenar la imagen generada en 
+cada pasada de renderizado modificando el valor de la variable de configuración \texttt{SAVE\_RENDER}.
+\medskip
+
+Las claves registradas en el archivo de telemetría son:
+\begin{itemize}
+    \item \texttt{Import Runtime}: Tiempo transcurrido durante la carga y decodificación del archivo 
+    de manifiesto (en segundos).
+    \item \texttt{Geometry Generation Runtime}: Tiempo requerido para la instanciación de mallas 
+    procedimentales y vinculación de cuadrículas volumétricas (en segundos).
+    \item \texttt{Simple Render Runtime}: Tiempo de cómputo para el renderizado del fotograma 
+    configurado en modo de prismas envolventes simplificados (en segundos).
+    \item \texttt{One Layer Render Runtime}: Tiempo de renderizado habilitando la visualización
+    detallada de las capas convolucionales (\textit{Conv2d}).
+    \item \texttt{Two Layer Render Runtime}: Tiempo de renderizado habilitando la visualización 
+    detallada adicional de las capas de reducción espacial (\textit{MaxPool2d}).
+    \item \texttt{Three Layer Render Runtime}: Tiempo de renderizado habilitando la visualización 
+    detallada adicional de las capas de normalización por lotes (\textit{BatchNorm2d}).
+    \item \texttt{Complex Render Runtime}: Tiempo de renderizado de la red entera con la visualización
+    detallada de todas las capas.
+    \item \texttt{Render Engine}: Identificador del motor de renderizado empleado durante la prueba 
+    (e.g., \textit{Eevee} o \textit{Cycles}).
+    \item \texttt{Input Directory}: Ruta del directorio de origen de los datos evaluados.
+\end{itemize}
+
+Se incluye a continuación una muestra de las métricas de evaluación obtenidas de un ejemplo:
+\begin{verbatim}
+{
+  "Import Runtime": 0.008005999999994629,
+  "Geometry Generation Runtime": 1.0007236000000006,
+  "Simple Render Runtime": 1.1826745000000187,
+  "One Layer Render Runtime": 2.577571000000006,
+  "Two Layers Render Runtime": 2.6404170000000136,
+  "Three Layers Render Runtime": 12.821499799999998,
+  "Complex Render Runtime": 24.0028389,
+  "Render Engine": "BLENDER_EEVEE",
+  "Input Directory": "data\\output\\blender_benchmark\\000002"
+}
+\end{verbatim}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/uso_visualizacion/benchmark.png}
+    \caption[Renderizado de Benchmark]{Ejemplo de la imagen renderizada por el benchmark.}
+    \label{fig:blender_benchmark_render}
+\end{figure}
+
+Por otro lado, el \textit{script} \texttt{benchmark.py} se encarga de orquestar la ejecución por lotes de las pruebas de 
+rendimiento y consolidar las métricas resultantes en un único archivo. Esta rutina invoca recursivamente a 
+\texttt{run.py} sobre cada uno de los subdirectorios de datos extraídos localizados en la ruta especificada por la 
+constante \texttt{INPUT\_PATH}. Tras finalizar las iteraciones, calcula agregaciones estadísticas (como tiempos promedio) y
+almacena los resultados consolidados directamente en el directorio apuntado por dicha variable.
+\medskip
+
+El reporte agregado se genera en la raíz de \texttt{INPUT\_PATH} con el siguiente nombre de archivo:
+\begin{verbatim}
+blender_headless_benchmark_batch.json
+\end{verbatim}
+
+La ejecución por lotes se inicia desde la terminal mediante:
+\begin{verbatim}
+python benchmark.py
+\end{verbatim}
+
+La estructura del archivo consolidado registra los siguientes campos globales:
+\begin{itemize}
+    \item \texttt{Average Import Runtime}: Media aritmética del tiempo de carga y decodificación del manifiesto (en segundos).
+    \item \texttt{Average Geometry Generation Runtime}: Media aritmética del tiempo empleado en instanciar la geometría 
+    procedimental.
+    \item \texttt{Average Simple Render Runtime}: Tiempo promedio de renderizado empleando la representación volumétrica simplificada (en segundos).
+    \item \texttt{Average One Layer Render Runtime}: Tiempo promedio de renderizado habilitando la 
+    inspección detallada de un único tipo de capa (\textit{Conv2d}).
+    \item \texttt{Average Two Layer Render Runtime}: Tiempo promedio de renderizado habilitando la inspección 
+    detallada de dos tipos de capa (\textit{Conv2d} y \textit{MaxPool2d}).
+    \item \texttt{Average Three Layer Render Runtime}: Tiempo promedio de renderizado habilitando la inspección detallada 
+    de tres tipos de capa (\textit{Conv2d}, \textit{MaxPool2d} y \textit{BatchNorm2d}).
+    \item \texttt{Average Complex Render Runtime}: Tiempo promedio de renderizado completo con todas las capas y rebanadas volumétricas activas.
+    \item \texttt{Total Items}: Cantidad total de inferencias individuales procesadas en la corrida por lotes.
+    \item \texttt{Runs}: Diccionario con la telemetría detallada de cada corrida individual, indexado por la ruta del directorio de entrada correspondiente.
+\end{itemize}
+
+A continuación, se presenta un fragmento representativo del archivo JSON generado tras la ejecución del procesamiento por lotes:
+\begin{verbatim}
+{
+  "Average Import Runtime": 0.008921029999997075,
+  "Average Geometry Generation Runtime": 0.5769823799999865,
+  "Average Simple Render Runtime": 0.7148078589999924,
+  "Average One Layer Render Runtime": 1.911119840000028,
+  "Average Two Layers Render Runtime": 2.0927358469999935,
+  "Average Three Layers Render Runtime": 7.905473746000044,
+  "Average Complex Render Runtime": 20.779706116999986,
+  "Total Items": 100,
+  "Runs": {
+    "000001": {
+      "Import Runtime": 0.01564989999999966,
+      "Geometry Generation Runtime": 0.7377384000000049,
+      "Simple Render Runtime": 0.7767770999999897,
+      "One Layer Render Runtime": 1.7438802999999865,
+      "Two Layers Render Runtime": 1.9176590000000004,
+      "Three Layers Render Runtime": 7.931757400000009,
+      "Complex Render Runtime": 21.1033221,
+      "Render Engine": "BLENDER_EEVEE",
+      "Input Directory": "data\\output\\blender_benchmark\\000001"
+    },
+    ...
+  }
+}
+\end{verbatim}
