@@ -30,6 +30,13 @@ class ModelExecutor:
                'dog', 'horse', 'motorbike', 'person', 'pottedplant',
                'sheep', 'sofa', 'train', 'TVmonitor']
 
+    input_path = None
+    input_image = None
+    input_tensor = None
+
+    boxes = None
+    output_image = None
+
     def __init__(self, input_path: Path = None):
         """Constructor de la clase de ejecución.
 
@@ -47,20 +54,6 @@ class ModelExecutor:
         self._load_image()
         self._load_input_tensor()
 
-    def execute(self):
-        """Ejecuta el modelo.
-        """
-        self.model.eval()
-        with torch.no_grad():
-            self.output = self.model(self.input_tensor)
-
-        self.boxes = utils.find_all_boxes(self.output, self.conf_threshold, self.model.num_classes,
-                                          self.model.anchors, self.model.num_anchors)[0]
-        self.boxes = utils.nms(self.boxes, self.nms_threshold)
-        #output_file = self.input_path.parent / "output.jpg"
-        self.output_image = utils.plot_boxes(self.input_image.copy(), self.boxes, savename=None, class_names=self.class_names)
-
-
     def _load_image(self):
         """Carga una imagen dada la ruta de entrada.
         """
@@ -70,13 +63,6 @@ class ModelExecutor:
         
         if file_validation(self.input_path):
             self.input_image = Image.open(self.input_path)
-
-    def _load_model(self):
-        """Carga el modelo y los pesos
-        """
-        self.model = TinyYoloV2()
-        self.model.load_weights(self.weight_path)
-        self.model = self.model.to(self.device)
 
     def _load_input_tensor(self):
         """Transforma la imagen de entrada al formato y dimensiones requeridas de la red
@@ -92,7 +78,29 @@ class ModelExecutor:
                     ])
         self.input_tensor = transform(self.input_image).unsqueeze(0).to(self.device)
 
+    def _load_model(self):
+        """Carga el modelo y los pesos
+        """
+        self.model = TinyYoloV2()
+        self.model.load_weights(self.weight_path)
+        self.model = self.model.to(self.device)
+
+    def execute(self):
+        """Ejecuta el modelo.
+        """
+        self.model.eval()
+        with torch.no_grad():
+            self.output = self.model(self.input_tensor)
+
+        self.boxes = utils.find_all_boxes(self.output, self.conf_threshold, self.model.num_classes,
+                                          self.model.anchors, self.model.num_anchors)[0]
+        self.boxes = utils.nms(self.boxes, self.nms_threshold)
+        #output_file = self.input_path.parent / "output.jpg"
+        self.output_image = utils.plot_boxes(self.input_image.copy(), self.boxes, savename=None, class_names=self.class_names)
+
     def clear(self):
+        """Limpiar imagen de entrada, salida y cajas.
+        """
         self.input_image = None
         self.output_image = None
         self.boxes.clear()

@@ -15,6 +15,11 @@ class ModelExtractor:
     layers = {}
     layers_data = {}
 
+    # Modelo
+    modelexe = None
+    model = None
+    classes = []
+
     # Includes y exlcudes
     capture_layers = []
     include = []
@@ -177,6 +182,8 @@ class ModelExtractor:
         }
 
     def clear(self):
+        """Vacía los datos extraidos
+        """
         self.layers.clear()
         self.layers_data.clear()
         self.boxes.clear()

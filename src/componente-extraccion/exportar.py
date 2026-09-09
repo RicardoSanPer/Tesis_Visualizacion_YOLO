@@ -19,6 +19,8 @@ class ModelExporter:
     dry_run = False
     formats = []
     info = False
+
+    model_extractor = None
     
     def __init__(self, extractor: ModelExtractor):
         self.model_extractor = extractor
