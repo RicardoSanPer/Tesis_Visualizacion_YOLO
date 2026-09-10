@@ -35,7 +35,7 @@ class ModelExporter:
 
         manifest_file = str(output_path / f"manifest.json")
         if self.info: 
-            print(f"Ejecutando red con entrada: {self.model_extractor.modelexe.input_path}")
+            print(f"Ejecutando red con entrada: {self.model_extractor.model_exe.input_path}")
             print(f"Guardando datos en: {output_path}\n")
             print(f"Manifesto: {manifest_file}\n")
             for ext in self.formats:
@@ -104,7 +104,7 @@ class ModelExporter:
         
         openvdb.write(file_path, grid)
 
-    def _convert_tensor(self, layer:str):
+    def _convert_tensor(self, layer_name:str):
         """Convierte un tensor a cuadrícula OpenVDB
 
         Args:
@@ -115,7 +115,7 @@ class ModelExporter:
         """
 
         # Convertir tensores a arreglo de numpy
-        data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
+        data = self.model_extractor.layers[layer_name].numpy().astype("float32").squeeze()
 
         # Convertir a OpenVDB
         grid = openvdb.FloatGrid()
@@ -125,7 +125,7 @@ class ModelExporter:
 
         return grid
 
-    def _tensor_to_images(self, layer:str, ext: str):
+    def _tensor_to_images(self, layer_name:str, ext: str):
         """Convierte el tensor a una secuencia de imagenes en el formato especificado
         (jpg, jpeg, png, tiff, tif)
 
@@ -136,7 +136,7 @@ class ModelExporter:
         Returns:
             list: Arreglo de imagenes
         """
-        data = self.model_extractor.layers[layer].numpy().astype("float32").squeeze()
+        data = self.model_extractor.layers[layer_name].numpy().astype("float32").squeeze()
         images = []
         
         for channel in data:
@@ -158,7 +158,7 @@ class ModelExporter:
                 images.append(img)
         return images
 
-    def _save_tensor_as_grid(self, layer:str, output_path: Path):
+    def _save_tensor_as_grid(self, layer_name:str, output_path: Path):
         """Convierte el tensor a volumen OpenVDB y exporta a un archivo.
 
         Args:
@@ -167,17 +167,17 @@ class ModelExporter:
         """
         if 'vdb' not in self.formats: return
 
-        file_path = output_path / "vdb" / f"{layer}.vdb"
+        file_path = output_path / "vdb" / f"{layer_name}.vdb"
         file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        grid = self._convert_tensor(layer)
+        grid = self._convert_tensor(layer_name)
 
-        if self.info: print(f"{layer}: {file_path}")
+        if self.info: print(f"{layer_name}: {file_path}")
         if self.dry_run: return
 
         openvdb.write(str(file_path), grid)
 
-    def _save_tensor_as_image_seq(self, layer: str, output_path: Path, ext: str):
+    def _save_tensor_as_image_seq(self, layer_name: str, output_path: Path, ext: str):
         """Convierte el tensor a secuencias de imagenes en el formato especificado y las 
         guarda. Formatos: jpeg, jpg, png, tiff, tif
 
@@ -187,12 +187,12 @@ class ModelExporter:
             ext (str): Extension
         """
         if ext == 'vdb' or ext not in self.supported_formats: return
-        if self.info: print(f"{layer}: {output_path}\\{ext}\\{layer}")
+        if self.info: print(f"{layer_name}: {output_path}\\{ext}\\{layer_name}")
 
-        images = self._tensor_to_images(layer, ext)
+        images = self._tensor_to_images(layer_name, ext)
         # Guardar cada imagen individual
         for idx, img in enumerate(images):
-            out_file = output_path / ext / layer / f"frame_{idx:04d}.{ext}"
+            out_file = output_path / ext / layer_name / f"frame_{idx:04d}.{ext}"
             if not self.dry_run: 
                 out_file.parent.mkdir(parents=True, exist_ok=True)
                 if ext in ("jpg", "jpeg"):
@@ -202,7 +202,7 @@ class ModelExporter:
                 elif ext in ("tiff", "tif"):
                     img.save(out_file)
 
-    def get_exported_volume_as_numpy32(self, layer:str, ext:str):
+    def get_exported_volume_as_numpy32(self, layer_name:str, ext:str):
         """Reconstruye los datos del volumen exportado a partir del arreglo numpy32
         utilizado para escribir los datos
         Args:
@@ -213,10 +213,10 @@ class ModelExporter:
             numpy32: Arreglo numpy float32
         """
         if ext == "vdb":
-            grid = self._convert_tensor(layer)
+            grid = self._convert_tensor(layer_name)
             return self._get_vdb_grid_as_numpy32(grid)
         elif ext in self.supported_formats:
-            images = self._tensor_to_images(layer, ext)
+            images = self._tensor_to_images(layer_name, ext)
             return self._get_images_as_numpy32(images)
 
     def _get_vdb_grid_as_numpy32(self, grid):

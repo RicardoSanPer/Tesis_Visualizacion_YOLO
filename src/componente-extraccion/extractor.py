@@ -16,7 +16,7 @@ class ModelExtractor:
     layers_data = {}
 
     # Modelo
-    modelexe = None
+    model_exe = None
     model = None
     classes = []
 
@@ -25,7 +25,7 @@ class ModelExtractor:
     include = []
     exclude = []
     
-    def __init__(self, model):
+    def __init__(self, model_exe):
         """Constructor
 
         Args:
@@ -34,9 +34,9 @@ class ModelExtractor:
             includes (list): Lista de capas (por nombre) a incluir en la extracción
             excludes (list): Lista de capas (por nombre) a excluir en la extracción
         """
-        self.modelexe = model
-        self.model = model.model
-        self.classes = model.class_names
+        self.model_exe = model_exe
+        self.model = model_exe.model
+        self.classes = model_exe.class_names
         
 
     def _hook(self, name):
@@ -162,10 +162,10 @@ class ModelExtractor:
         self._get_layer_data()
         self._get_layer_connections()
 
-        self.modelexe.execute()
-        self.input_image = self.modelexe.input_image
-        self.output_image = self.modelexe.output_image
-        self.boxes = self.modelexe.boxes
+        self.model_exe.execute()
+        self.input_image = self.model_exe.input_image
+        self.output_image = self.model_exe.output_image
+        self.boxes = self.model_exe.boxes
 
     def get_data(self):
         """Obtener los datos de la red en un formato estructurado.
@@ -174,8 +174,8 @@ class ModelExtractor:
             dict: datos de la red
         """
         return {
-            "confidence"    : self.modelexe.conf_threshold,
-            "nms"           : self.modelexe.nms_threshold,
+            "confidence"    : self.model_exe.conf_threshold,
+            "nms"           : self.model_exe.nms_threshold,
             "n_boxes"       : len(self.boxes),
             "classes"       : ",".join(self.classes),
             "layers_data"   : self.layers_data

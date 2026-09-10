@@ -1,1 +1,253 @@
 \chapter{Documentación de Extracción}
+Este anexo presenta una descripción general de los \textit{scripts} que conforman el componente de extracción. 
+Las instrucciones de uso correspondientes, así como los detalles específicos del formato y la estructura de los 
+archivos generados durante la ejecución, se detallan en el Anexo~\ref{anx:manual_extraccion}.
+
+\section{Requisitos}
+El componente requiere un entorno de ejecución basado en Python 3.12.10 y las siguientes dependencias de software:
+
+\begin{verbatim}
+    filelock==3.32.0
+    fsspec==2026.6.0
+    Jinja2==3.1.6
+    MarkupSafe==3.0.3
+    mpmath==1.3.0
+    networkx==3.6.1
+    numpy==2.5.1
+    pillow==12.3.0
+    setuptools==83.0.0
+    sympy==1.13.1
+    torch==2.6.0+cu124
+    torchvision==0.21.0+cu124
+    typing_extensions==4.16.0
+\end{verbatim}
+Adicionalmente, se requiere el módulo de enlace para Python de la biblioteca \textit{OpenVDB} (\texttt{pyopenvdb}) 
+compilado para la versión específica del intérprete en uso. El procedimiento detallado de compilación e instalación 
+se documenta en el Anexo~\ref{anx:compilacion_openvdb}.
+\medskip
+
+Por último, el componente integra la implementación en PyTorch de Tiny YOLOv2 desarrollada por \textcite{yolov2_implementation}.
+
+\section{Organización del contenido}
+El componente de extracción se compone de cuatro \textit{scripts} principales de Python:
+\begin{itemize}
+    \item \texttt{ejecucion.py}: Módulo encargado de instanciar la arquitectura Tiny YOLOv2, transferir los pesos preentrenados, acondicionar el tensor de entrada y 
+    gestionar la inferencia del modelo.
+    \item \texttt{extractor.py}: Administra la suscripción de funciones de intercepción (\textit{forward hooks}) para capturar las activaciones intermedias durante 
+    la propagación hacia adelante, recopilando además la información topológica y metadatos de las capas.
+    \item \texttt{exportar.py}: Recupera los tensores residentes en memoria y metadatos y gestiona su persistencia y serialización en los formatos estructurados (\textit{OpenVDB} 
+    y secuencias de imágenes).
+    \item \texttt{main.py}: Actúa como punto de entrada y orquestador central del flujo de trabajo (\textit{pipeline}), exponiendo la interfaz de línea de comandos.
+\end{itemize}
+
+Asimismo, el módulo se apoya en los siguientes componentes auxiliares:
+\begin{itemize}
+    \item \texttt{TinyYoloV2/}: Directorio que contiene la implementación en PyTorch de la arquitectura Tiny YOLOv2 basada en \parencite{yolov2_implementation}.
+    \item \texttt{utils.py}: Provee funciones de soporte para la verificación, saneamiento y creación recursiva de rutas y directorios en el sistema de archivos.
+    \item \texttt{benchmark.py}: Módulo complementario encargado de coordinar la ejecución por lotes y recopilar métricas comparativas de rendimiento temporal 
+    y precisión.
+\end{itemize}
+
+La disposición jerárquica del paquete se estructura de la siguiente manera:
+\begin{figure}[!htbp]
+\centering
+\dirtree{%
+.1 componente-extraccion/.
+.2 benchmark.py.
+.2 ejecucion.py.
+.2 exportar.py.
+.2 extractor.py.
+.2 main.py.
+.2 utils.py.
+.2 TinyYoloV2/.
+.3 model.py.
+.3 utils.py.
+}
+\caption{Estructura del directorio del componente de extracción.}
+\label{fig:arbol_componente_extraccion}
+\end{figure}
+
+\section{Scripts}
+
+\subsection{\texttt{ejecucion.py}}
+El \textit{script} \texttt{ejecucion.py} administra la inicialización, parametrización y ejecución de la inferencia sobre la arquitectura neuronal a 
+partir de una imagen de entrada. Toda la lógica operativa se encapsula en la clase \texttt{ModelExecutor} para garantizar modularidad e independencia funcional.
+\medskip
+
+Esta clase preprocesa la imagen de entrada convirtiéndola en un tensor normalizado con las dimensiones esperadas por la red ($1 \times 3 \times 416 \times 416$). 
+Posteriormente, instancia la arquitectura Tiny YOLOv2, transfiere los pesos preentrenados a la memoria y ubica el modelo en el dispositivo de cómputo seleccionado 
+por PyTorch. Al completar la inferencia, produce una lista con los vectores de las cajas delimitadoras resultantes 
+(filtradas mediante umbrales de confianza y supresión de no máximos, NMS) junto con una previsualización gráfica que sobrepone las detecciones a la imagen original.
+
+\subsubsection*{Atributos de \texttt{ModelExecutor}}
+\begin{itemize}
+    \item \texttt{device}: Dispositivo asignado para la ejecución en PyTorch (\texttt{torch.device}). Selecciona de forma prioritaria un acelerador 
+    compatible con CUDA o conmuta a CPU en caso de no disponer de uno.
+    \item \texttt{weight\_path}: Ruta del archivo binario con los pesos preentrenados del modelo (formato \texttt{.weights}).
+    \item \texttt{conf\_threshold}: Umbral de confianza (\textit{objectness threshold}) empleado para discriminar predicciones candidatas.
+    \item \texttt{nms\_threshold}: Umbral de intersección sobre unión (IoU) utilizado por el algoritmo de supresión de no máximos.
+    \item \texttt{input\_path}: Ruta del archivo de la imagen suministrada como entrada.
+    \item \texttt{input\_image}: Imagen de entrada cargada en memoria (matriz RGB / objeto de imagen).
+    \item \texttt{input\_tensor}: Tensor de entrada preprocesado y transferido al dispositivo de cómputo.
+    \item \texttt{boxes}: Colección de predicciones y cajas delimitadoras calculadas por el modelo.
+\end{itemize}
+
+\subsubsection*{Métodos de \texttt{ModelExecutor}}
+\begin{itemize}
+    \item \texttt{\_\_init\_\_(input\_path)}: Constructor de la clase; inicializa los parámetros de inferencia y asigna la ruta de la imagen a procesar.
+    \item \texttt{configure\_input\_image()}: Ejecuta la secuencia de acondicionamiento de entrada invocando la lectura de la imagen y la construcción del tensor de activación inicial.
+    \item \texttt{\_load\_image()}: Lee la imagen desde el sistema de archivos a partir de \texttt{input\_path}.
+    \item \texttt{\_load\_input\_tensor()}: Convierte y normaliza la imagen leída en un tensor compatible con el grafo de ejecución.
+    \item \texttt{\_load\_model()}: Instancia el modelo Tiny YOLOv2, transfiere los coeficientes de los pesos y ubica los tensores en el dispositivo configurado.
+    \item \texttt{execute()}: Ejecuta la inferencia del modelo y aplica la decodificación vectorial junto con el filtrado por NMS.
+    \item \texttt{clear()}: Libera los recursos de memoria asignados a las imágenes de entrada/salida y a las estructuras de cajas generadas.
+    \item \texttt{get\_boxes()}: Método de acceso (\textit{getter}) que retorna la lista estructurada de cajas delimitadoras calculadas.
+\end{itemize}
+
+\subsection{\texttt{extractor.py}}
+Este módulo implementa los mecanismos de introspección para capturar las activaciones intermedias y la topología de la red Tiny YOLOv2. 
+Dicha funcionalidad se implementa en la clase \texttt{ModelExtractor}.
+\medskip
+
+Tomando como dependencia una instancia de \texttt{ModelExecutor}, la clase registra funciones de intercepción (\textit{forward hooks}) 
+en las capas seleccionadas para capturar los tensores residentes en memoria durante el paso hacia adelante, además de recopilar metadatos 
+analíticos de la arquitectura. Adicionalmente, implementa directivas de filtrado para delimitar la extracción mediante listas de inclusión y 
+exclusión explícitas. Los datos extraídos se consolidan en una estructura jerárquica indexada por capa.
+
+\subsubsection*{Atributos de \texttt{ModelExtractor}}
+\begin{itemize}
+    \item \texttt{input\_image}: Referencia a la imagen de entrada leída por el ejecutor.
+    \item \texttt{output\_image}: Imagen de salida con las anotaciones de las cajas superpuestas.
+    \item \texttt{boxes}: Lista de vectores numéricos correspondientes a las predicciones filtradas.
+    \item \texttt{layers}: Diccionario con los tensores de activación extraídos, indexados por el identificador único de cada capa.
+    \item \texttt{layers\_data}: Diccionario de metadatos estructurales (tipo de capa, dimensión del núcleo convolucional, paso o \textit{stride}, 
+    relleno o \textit{padding}, etc.), indexado por el nombre de la capa.
+    \item \texttt{model\_exe}: Instancia referenciada de la clase \texttt{ModelExecutor}.
+    \item \texttt{model}: Referencia al módulo de red neuronal instanciado en el ejecutor.
+    \item \texttt{classes}: Lista con las etiquetas categóricas del conjunto de datos.
+    \item \texttt{capture\_layers}: Lista de clases u operadores (e.g., \textit{Conv2d}) cuyos tensores deben ser interceptados sistemáticamente.
+    \item \texttt{include}: Lista de nombres canónicos de capas específicas a incluir de forma forzada, con precedencia sobre \texttt{capture\_layers}.
+    \item \texttt{exclude}: Lista de nombres canónicos de capas a omitir durante la extracción, con precedencia sobre \texttt{capture\_layers} e \texttt{include}.
+\end{itemize}
+
+\subsubsection*{Métodos de \texttt{ModelExtractor}}
+\begin{itemize}
+    \item \texttt{\_\_init\_\_(model\_exe, \dots)}: Constructor de la clase; recibe la instancia de \texttt{ModelExecutor} e inicializa los registros de captura.
+    \item \texttt{hook\_fn(module, input, output)}: Función de intercepción ejecutada durante el paso hacia adelante (\textit{forward step}) para registrar y duplicar los tensores de activación.
+    \item \texttt{\_get\_layer\_data()}: Inspecciona las propiedades constructivas de los módulos y suscribe formalmente los \textit{forward hooks}.
+    \item \texttt{\_get\_layer\_connections()}: Reconstruye el grafo computacional para derivar las dependencias emisor-receptor (padre-hijo) entre capas consecutivas.
+    \item \texttt{\_node\_name(node)}: Función auxiliar de \texttt{\_get\_layer\_connections()} encargada de normalizar la denominación de los nodos dentro del grafo.
+    \item \texttt{print\_info()}: Despliega en consola el esquema topológico de la red, listando el identificador de cada módulo y su tipo de operación asociada.
+    \item \texttt{extract()}: Dispara la inferencia en el ejecutor y orquesta la recolección de tensores y metadatos derivados.
+    \item \texttt{clear()}: Vacía las colecciones y diccionarios de tensores intermedios liberando la memoria asignada.
+\end{itemize}
+
+\subsection{\texttt{exportar.py}}
+Este módulo gestiona la persistencia de las activaciones y metadatos capturados en el sistema de almacenamiento. Soporta la 
+serialización a cuadrículas volumétricas dispersas en formato \textit{OpenVDB} (\texttt{.vdb}), así como la descomposición 
+en imágenes bidimensionales rasterizadas (\texttt{.jpg}, \texttt{.png} y \texttt{.tiff}) para análisis comparativo y depuración. 
+Dicho comportamiento se abstrae en la clase \texttt{ModelExporter}.
+\medskip
+
+Durante el proceso, el módulo genera un directorio de destino donde preserva copias de las imágenes de entrada y salida, 
+serializa la estructura \texttt{layers\_data} en el archivo \texttt{manifest.json} y exporta las predicciones a la cuadrícula 
+volumétrica \texttt{boxes.vdb}. En este último archivo, cada predicción es mapeada como un vector discreto a lo largo de los 
+ejes espaciales, consolidando todas las detecciones en una única estructura que posteriormente es reconstruida por las herramientas de visualización.
+
+\subsubsection*{Atributos de \texttt{ModelExporter}}
+\begin{itemize}
+    \item \texttt{supported\_formats}: Tupla o conjunto que define las extensiones y formatos de persistencia admitidos por el exportador.
+    \item \texttt{dry\_run}: Indicador booleano de depuración; ejecuta la totalidad del flujo computacional y de conversión omitiendo la escritura física en disco.
+    \item \texttt{formats}: Lista de formatos de exportación seleccionados para la corrida en curso.
+    \item \texttt{info}: Indicador booleano para habilitar la salida detallada (\textit{verbose}) de telemetría durante la serialización.
+    \item \texttt{model\_extractor}: Instancia referenciada de la clase \texttt{ModelExtractor}.
+\end{itemize}
+
+\subsubsection*{Métodos de \texttt{ModelExporter}}
+\begin{itemize}
+    \item \texttt{\_\_init\_\_(model\_extractor)}: Constructor; vincula la fuente de tensores y metadatos 
+    a partir de una instancia de \texttt{ModelExtractor}.
+    \item \texttt{export(output\_path)}: Método principal de exportación de los datos, guardando los 
+    archivos resultantes en \texttt{output\_path}.
+    \item \texttt{\_save\_io\_images(output\_dir)}: Escribe en el directorio de destino los archivos 
+    gráficos de entrada y salida anotada.
+    \item \texttt{\_convert\_boxes(output\_dir)}: Codifica matricialmente las cajas delimitadoras resultantes 
+    y las serializa en el archivo \texttt{boxes.vdb}.
+    \item \texttt{\_convert\_tensor(layer\_name)}: Transforma el tensor en memoria de la capa especificada en 
+    una cuadrícula volumétrica de \textit{OpenVDB}.
+    \item \texttt{\_tensor\_to\_images(layer\_name, ext)}: Procesa el tensor de activación descomponiéndolo a 
+    lo largo de sus canales en una secuencia de matrices bidimensionales.
+    \item \texttt{\_save\_tensor\_as\_grid(layer\_name, output\_dir)}: Serializa la cuadrícula \textit{OpenVDB} 
+    de una capa determinada escribiendo el archivo \texttt{.vdb} en el almacenamiento secundario.
+    \item \texttt{\_save\_tensor\_as\_image\_seq(layer\_name, output\_dir, ext)}: Exporta los canales del tensor 
+    omo una secuencia indexada de imágenes rasterizadas en la ruta indicada.
+    \item \texttt{\_get\_exported\_volume\_as\_numpy32(layer\_name, ext)}: Lee un volumen previamente serializado 
+    y lo reconstruye en un arreglo \textit{NumPy} de precisión simple (\texttt{float32}) para validación de error.
+    \item \texttt{\_get\_vdb\_grid\_as\_numpy32(grid)}: Convierte los vóxeles de una cuadrícula de \textit{OpenVDB} 
+    en un arreglo matricial de tipo \texttt{float32}.
+    \item \texttt{\_get\_images\_as\_numpy32(images)}: Reconstruye una secuencia de imágenes leídas de disco en una 
+    estructura tensorial equivalente de \textit{NumPy} en precisión simple (\texttt{float32}).
+\end{itemize}
+
+\subsection{\texttt{main.py}}
+El \textit{script} \texttt{main.py} actúa como orquestador y punto de entrada central del flujo de trabajo 
+(\textit{pipeline}). Integra y coordina el ciclo de vida de las clases \texttt{ModelExecutor}, \texttt{ModelExtractor} y 
+\texttt{ModelExporter}. Asimismo, define y analiza los argumentos de la interfaz de línea de comandos (CLI), permitiendo 
+parametrizar dinámicamente las rutas de entrada/salida, los formatos de destino, los umbrales de detección y los filtros 
+de capas a procesar.
+
+\subsection{\texttt{utils.py}}
+El módulo \texttt{utils.py} agrupa funciones auxiliares para la verificación y saneamiento de rutas en el sistema de archivos:
+\begin{itemize}
+    \item \texttt{directory\_validation(path)}: Comprueba la validez de una ruta de directorio y asegura su existencia en disco creándola 
+    de forma recursiva si no se encuentra presente.
+    \item \texttt{file\_validation(path)}: Valida formalmente la existencia física y la integridad de acceso del archivo especificado.
+\end{itemize}
+
+\subsection{Subdirectorio \texttt{TinyYoloV2/}}
+Este directorio contiene la adaptación en PyTorch de la arquitectura Tiny YOLOv2 basada en la implementación de \parencite{yolov2_implementation}. 
+Los dos componentes primarios de este paquete son:
+\begin{itemize}
+    \item \texttt{model.py}: Define la clase del modelo neuronal, su topología convolucional y el método de propagación hacia adelante (\textit{forward pass}).
+    \item \texttt{utils.py}: Provee rutinas complementarias para la decodificación matricial de las predicciones, el filtrado mediante supresión 
+    de no máximos (NMS) y el renderizado gráfico de las cajas delimitadoras sobre la imagen de salida.
+\end{itemize}
+
+\subsection{\texttt{benchmark.py}}
+Este módulo orquesta la evaluación de rendimiento computacional ejecutando el flujo de trabajo por lotes (\textit{batch processing}) 
+sobre un conjunto de imágenes. Expone las siguientes variables globales de configuración:
+
+\begin{itemize}
+    \item \texttt{INPUT\_DIR}: Ruta del directorio que contiene el conjunto de imágenes de prueba a procesar.
+    \item \texttt{OUTPUT\_DIR}: Directorio raíz de destino para los artefactos extraídos. En su interior, los resultados se 
+    estructuran en subdirectorios nombrados según el identificador de la imagen de entrada correspondiente.
+    \item \texttt{CAPTURE\_LAYERS}: Lista con los tipos de capas u operadores del modelo a interceptar.
+    \item \texttt{EXECUTION\_COUNT}: Cantidad total de imágenes a procesar en la corrida de prueba.
+    \item \texttt{FORMAT}: Formato de serialización y exportación de las cuadrículas tensoriales.
+\end{itemize}
+
+Asimismo, inicializa a nivel global las instancias de los componentes del flujo:
+\begin{itemize}
+    \item \texttt{executor}: Instancia de \texttt{ModelExecutor} encargada de la inferencia del modelo.
+    \item \texttt{extractor}: Instancia de \texttt{ModelExtractor} configurada para la captura de tensores intermedios.
+    \item \texttt{exporter}: Instancia de \texttt{ModelExporter} responsable de la persistencia de los datos.
+\end{itemize}
+El script utiliza una sola instancia del ejecutor del modelo, compartida por todas las ejecuciones, con el propósito de agilizar las
+operaciones al evitar volver a cargar los pesos y parámetros de la red entre estas.
+\medskip
+
+El módulo implementa las siguientes funciones de soporte y control:
+\begin{itemize}
+    \item \texttt{progress\_bar(count, total)}: Rutina auxiliar que despliega una barra de progreso interactiva en la terminal para monitorizar el 
+    avance del procesamiento por lotes.
+    \item \texttt{run(input\_file, output\_path)}: Ejecuta el ciclo integral de inferencia, extracción y serialización para una muestra individual. 
+    Registra la telemetría temporal de la ejecución y los metadatos de los archivos generados.
+    \item \texttt{output\_tree\_info(path)}: Analiza de forma recursiva la jerarquía del directorio generado, calculando el tamaño en disco (en bytes) 
+    y la cantidad de archivos contenidos en cada subcarpeta.
+    \item \texttt{calculate\_precision\_loss(ext)}: Cuantifica la pérdida de precisión numérica generada por el proceso de exportación para una extensión dada. 
+    La discrepancia se evalúa contrastando directamente el tensor original en memoria contra la estructura intermedia procesada por el exportador antes de su 
+    escritura física, evitando sobrecostos por operaciones de lectura en disco.
+    \item \texttt{batch\_run(batch\_count, batch\_output\_path)}: Orquesta la ejecución secuencial del procesamiento por lotes sobre las imágenes del 
+    directorio de entrada. Consolida los artefactos y el reporte agregado de telemetría bajo un directorio único de salida y despliega en consola las métricas 
+    estadísticas promedio.
+\end{itemize}

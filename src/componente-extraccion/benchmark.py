@@ -19,7 +19,7 @@ FORMAT = "vdb"
 PROGRESS_BAR_WIDTH  = 50
 
 executor = ModelExecutor()
-extractor = ModelExtractor(model=executor)
+extractor = ModelExtractor(model_exe=executor)
 exporter = ModelExporter(extractor=extractor)
 
 def progress_bar(count, total):
