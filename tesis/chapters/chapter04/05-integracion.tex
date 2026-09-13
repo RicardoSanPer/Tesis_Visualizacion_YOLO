@@ -1,37 +1,9 @@
 \subsection{Integración y ejecución del componente}
 La integración de los módulos se centraliza en el script ejecutable \textit{main.py}. Al invocarse 
-mediante la interfaz de línea de comandos (CLI), el script expone y procesa los siguientes argumentos 
-de configuración:
+mediante la interfaz de línea de comandos (CLI), el script expone y procesa argumentos 
+de configuración, con el propósito de facilitar la ejecución y configuración del programa sin necesidad
+de modificar el código fuente.
+\medskip
 
-\begin{itemize}
-    \item \texttt{--input}: especifica la ruta de archivo de la imagen de entrada para alimentar la red 
-    durante la inferencia. Este parámetro es obligatorio.
-    \item \texttt{--output}: define la ruta del directorio destino donde se exportarán los archivos y 
-    volúmenes generados. Es un argumento opcional; en caso de omitirse, se crea automáticamente un 
-    directorio denominado \textit{output} en la ruta de trabajo actual.
-    \item \texttt{--view-layers}: indicador booleano (\textit{flag}) que instruye al programa a listar 
-    en consola las capas de la arquitectura junto con sus tipos de operación asociados. Esta opción es 
-    de carácter informativo y detiene el flujo antes de generar archivos en disco.
-    \item \texttt{--layers}: lista delimitada por comas con las categorías de capas u operaciones de 
-    las cuales se extraerán los tensores intermedios. Es opcional; por defecto, el sistema captura 
-    los tensores de las capas convolucionales y de agrupamiento (\textit{pooling}).
-    \item \texttt{--include}: lista delimitada por comas con identificadores de capas específicas a 
-    incorporar forzosamente en el proceso de extracción, independientemente del filtro general 
-    asignado en \texttt{--layers}.
-    \item \texttt{--exclude}: lista delimitada por comas con nombres de capas específicas a descartar 
-    de la extracción, teniendo la máxima precedencia sobre los filtros \texttt{--layers} y 
-    \texttt{--include}.
-    \item \texttt{--dry-run}: bandera de simulación que ejecuta el pipeline de inferencia y extracción 
-    omitiendo la escritura física de datos en el disco. Su propósito es verificar la consistencia de 
-    los tensores, previsualizar el registro de archivos resultantes y auditar la ejecución ante posibles 
-    fallos de configuración.
-    \item \texttt{--conf}: umbral de confianza para la detección. Es de caracter opcional, con valor por
-    defecto de $0.55$.
-    \item \texttt{--nms}: umbral para la supresión del no-máximo. Es opcional con valor por defecto
-    de $0.55$.
-    \item \texttt{--formats}: argumento que recibe una lista delimitada de formatos destino para la exportación
-    de datos, incluyendo \textit{vdb}, \textit{png}, \textit{jpg}, \textit{jpeg}, \textit{tiff} y
-    \textit{tif}. Los archivos resultantes se estructuran jerárquicamente en directorios organizados por 
-    formato y por capa. Por defecto el programa utiliza \textit{vdb}.
-    \item \texttt{--info}: bandera de depuración. Indica al script si imprimir información de los archivos generados.
-\end{itemize}
+El uso del componente integrado se detalla en el Anexo~\ref{anx:manual_extraccion}, mientras que la documentación
+del componente se detalla en el Anexo~\ref{anx:doc_extraccion}.

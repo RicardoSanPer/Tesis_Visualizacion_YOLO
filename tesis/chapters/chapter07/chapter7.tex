@@ -19,6 +19,7 @@ A partir de la metodología implementada y los resultados experimentales obtenid
     amplificación basal en las capas iniciales (\texttt{conv1} a \texttt{conv3}) inducida por la baja varianza espacial de fondos homogéneos y 
     las transformaciones de \textit{Batch Normalization}, la cual propagó suficiente sesgo como para alterar los canales categóricos de salida 
     sin deformar la coherencia geométrica de la caja delimitadora.
+    
     \item \textbf{Integración procedural en Blender:} El diseño de grupos de nodos modulares basados en \textit{Geometry Nodes} y sombreadores 
     permitió transformar datos abstractos de aprendizaje profundo en objetos manipulables en tiempo real, validando a Blender no solo como una 
     herramienta de renderizado técnico o divulgación visual, sino como una plataforma funcional para la auditoría interna de modelos opacos 
@@ -33,6 +34,8 @@ A pesar de los resultados favorables, se identificaron limitaciones operativas i
     (\textit{Solid View}) o el aislamiento selectivo de capas para mantener una navegación fluida.
     \item \textbf{Acoplamiento topológico:} La reconstrucción espacial procedural fue configurada considerando la secuencia estrictamente 
     lineal de Tiny YOLOv2, careciendo de soporte automático para grafos computacionales complejos con múltiples ramas o salidas distribuidas.
+    \item \textbf{Selección de datos:} La extracción de datos está limitada a los mapas de activación de una única inferencia, lo cual 
+    restringe su alcance como herramienta de diagnóstico a análisis individuales muestra por muestra.
 \end{itemize}
 
 \section{Trabajo futuro}
