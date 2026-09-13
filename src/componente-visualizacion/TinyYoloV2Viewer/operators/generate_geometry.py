@@ -114,27 +114,27 @@ class MESH_OT_CreateYolov2Object(Operator):
         self.report({'INFO'}, "Creada red")
         return {'FINISHED'}
 
-    def _instance_nodes(self, group_name: str, name: str, context):
+    def _instance_nodes(self, node_group_name: str, object_name: str, context):
         """Genera un objeto y asigna un grupo de nodos de geometría
 
         Args:
-            group_name (str): Nombre del grupo de nodos
-            name (str): Nombre del objeto
+            node_group_name (str): Nombre del grupo de nodos
+            object_name (str): Nombre del objeto
             context (_type_): Contexto
 
         Returns:
-            _type_: Objeto con nodos
+            bpy.data.objects: Objeto con nodos
         """
         try:
             # 1. Cargar grupo de nodos
-            node_group = load.load_geonode_group(group_name)
+            node_group = load.load_geonode_group(node_group_name)
             if not node_group:
-                self.report({'ERROR'}, f"No se pudo cargar el grupo '{group_name}'")
+                self.report({'ERROR'}, f"No se pudo cargar el grupo '{node_group_name}'")
                 return None
 
             # 2. Crear objeto y asignar ubicación
-            mesh_data = bpy.data.meshes.new(name=f"{name}_Mesh")
-            obj = bpy.data.objects.new(name=name, object_data=mesh_data)
+            mesh_data = bpy.data.meshes.new(name=f"{object_name}_Mesh")
+            obj = bpy.data.objects.new(name=object_name, object_data=mesh_data)
 
             # 3. Vincular a la colección
             context.collection.objects.link(obj)
@@ -149,24 +149,24 @@ class MESH_OT_CreateYolov2Object(Operator):
             self.report({'ERROR'}, f"Failed to instantiate: {e}")
             return None
 
-    def _configure_volume_viewer_objects(self, node: LayerItem):
+    def _configure_volume_viewer_objects(self, layer_item: LayerItem):
         """Configura los parametros del grupo de nodos de visualización de volúmenes
         para visualizar una capa de la red
 
         Args:
-            node (LayerItem): LayerItem con los datos de la capa/volymen
+            layer_item (LayerItem): LayerItem con los datos de la capa/volymen
         """
         params = {
-            "World Size": node.dimensions,
-            "Type": node.type,
-            "Resolution": node.resolution,
-            "Slice Count": node.slice_count,
-            "Volume File": node.file,
+            "World Size": layer_item.dimensions,
+            "Type": layer_item.type,
+            "Resolution": layer_item.resolution,
+            "Slice Count": layer_item.slice_count,
+            "Volume File": layer_item.file,
             "Simplified Volume": True
         }
-        load.set_node_parameters(node.object, "Geometry Nodes", params)
+        load.set_node_parameters(layer_item.object, "Geometry Nodes", params)
 
-    def _configure_box_viewer(self, obj: bpy.types.Object, directory: Path, config: dict):
+    def _configure_box_viewer(self, target_object: bpy.types.Object, boxes_path: Path, parameters: dict):
         """Configura los parametros del grupo de nodos para la visualizacipn de las cajas
 
         Args:
@@ -174,83 +174,87 @@ class MESH_OT_CreateYolov2Object(Operator):
             directory (Path): Ruta de directorio del manifesto
             config (dict): Datos
         """
-        file = directory / "boxes.vdb"
+        file = boxes_path / "boxes.vdb"
         params = {
                 "Box File" : str(file),
-                "Box Count" : config["n_boxes"],
-                "Class Labels" : config["classes"],
-                "Confidence" : config["confidence"],
+                "Box Count" : parameters["n_boxes"],
+                "Class Labels" : parameters["classes"],
+                "Confidence" : parameters["confidence"],
                 "World Size" : (416, 416, 0)
             }
-        load.set_node_parameters(obj, "Geometry Nodes", params)
+        load.set_node_parameters(target_object, "Geometry Nodes", params)
 
-    def _configure_input_viewer(Self, obj: bpy.types.Object):
-        """Configura los parametros de la visualización de entrada"""
+    def _configure_input_viewer(Self, target_object: bpy.types.Object):
+        """Configura los parametros de la visualización de entrada
+
+        Args:
+            target_object (bpy.types.Object): Objeto con el visalizador de entrada asignado.
+        """
         params = {
             "World Size" : (416, 416, 3),
             "Resolution" : 416,
             "View Channels" : True
         }
-        load.set_node_parameters(obj, "Geometry Nodes", params)
+        load.set_node_parameters(target_object, "Geometry Nodes", params)
 
-    def _configure_connections(self, connection:bpy.types.Object, parent: LayerItem, child: LayerItem):
+    def _configure_connections(self, connection_object:bpy.types.Object, parent_layer: LayerItem, child_layer: LayerItem):
         """Configura los parametros del grupo de nodos para la visualización de una conexión entre
         dos capas
 
         Args:
-            connection (bpy.types.Object): Objeto con el grupo de nodos de visualización de conexión
-            parent (LayerItem): LayerItem con el padre
-            child (LayerItem): LayerItem con el hijo
+            connection_object (bpy.types.Object): Objeto con el grupo de nodos de visualización de conexión
+            parent_layer (LayerItem): LayerItem con el padre
+            child_layer (LayerItem): LayerItem con el hijo
         """
         params = {
-            "Input Layer": parent.object,
-            "Output Layer": child.object,
-            "Kernel Size": child.kernel_size,
-            "Stride": child.stride,
-            "Ceiling Mode": child.ceiling
+            "Input Layer": parent_layer.object,
+            "Output Layer": child_layer.object,
+            "Kernel Size": child_layer.kernel_size,
+            "Stride": child_layer.stride,
+            "Ceiling Mode": child_layer.ceiling
         }
-        load.set_node_parameters(connection, "Geometry Nodes", params)
+        load.set_node_parameters(connection_object, "Geometry Nodes", params)
 
-    def _layer_parameters(self, nodo: LayerItem, path: Path, datos: dict):
+    def _layer_parameters(self, layer_item: LayerItem, manifest_dir: Path, layer_data: dict):
         """Configura LayerItem con los datos de la capa correspondiente
 
         Args:
-            nodo (LayerItem): LayerItem
-            path (Path): Ruta de directorio del manifesto
-            datos (dict): Datos de la capa
+            layer_item (LayerItem): LayerItem
+            manifest_dir (Path): Ruta de directorio del manifesto
+            layer_data (dict): Datos de la capa
         """
         #Kernel
-        if datos.get("kernel_size"):
-            kernel_size = datos["kernel_size"]
+        if layer_data.get("kernel_size"):
+            kernel_size = layer_data["kernel_size"]
             if isinstance(kernel_size, list):
                 kernel_size = kernel_size[0]
             elif isinstance(kernel_size, int):
                 kernel_size = kernel_size
-            nodo.kernel_size = kernel_size
+            layer_item.kernel_size = kernel_size
         # Stride
-        if datos.get("stride"):
-            stride = datos["stride"]
+        if layer_data.get("stride"):
+            stride = layer_data["stride"]
             if isinstance(stride, list):
                 stride = stride[0]
             elif isinstance(stride, int):
                 stride = stride
-            nodo.stride = stride
+            layer_item.stride = stride
         # Ceiling
-        if datos.get("ceiling"):
-            nodo.ceiling = datos["ceiling"]
+        if layer_data.get("ceiling"):
+            layer_item.ceiling = layer_data["ceiling"]
         #Dimensiones
-        if datos.get("dimensions"):
-            dim = datos["dimensions"]
+        if layer_data.get("dimensions"):
+            dim = layer_data["dimensions"]
 
-            nodo.dimensions = (dim[2], dim[3], dim[1])
-            nodo.resolution = dim[2]
+            layer_item.dimensions = (dim[2], dim[3], dim[1])
+            layer_item.resolution = dim[2]
             
             # Dato del volumen
-            if datos.get("data"):
-                nodo.slice_count = dim[1]
-                nodo.file = str(path / "vdb" / f"{nodo.name}.vdb")
+            if layer_data.get("data"):
+                layer_item.slice_count = dim[1]
+                layer_item.file = str(manifest_dir / "vdb" / f"{layer_item.name}.vdb")
 
-    def _get_or_create_collection(self, name: str, parent: bpy.types.Collection = None):
+    def _get_or_create_collection(self, name: str, parent_collection: bpy.types.Collection = None):
         """
         Obtiene o crea una colección
         """
@@ -260,7 +264,7 @@ class MESH_OT_CreateYolov2Object(Operator):
             col = bpy.data.collections.new(name)
 
         # Determinar coleccion padre
-        parent_col = parent if parent is not None else bpy.context.scene.collection
+        parent_col = parent_collection if parent_collection is not None else bpy.context.scene.collection
 
         # Vincular a la jerarquia
         if col.name not in parent_col.children:
@@ -268,18 +272,21 @@ class MESH_OT_CreateYolov2Object(Operator):
 
         return col
 
-    def _assign_object_to_collection(self, obj: bpy.types.Object, target_col: bpy.types.Collection):
+    def _assign_object_to_collection(self, object: bpy.types.Object, target_collection: bpy.types.Collection):
+        """Asigna un objeto a una coleccion
+
+        Args:
+            object (bpy.types.Object): Objeto a asignar a la coleccion
+            target_collection (bpy.types.Collection): Coleccion de destino
         """
-        Asigna un objeto a una coleccion
-        """
-        if not obj or not target_col:
+        if not object or not target_collection:
             return
 
         # Vincular a coleccion
-        if obj.name not in target_col.objects:
-            target_col.objects.link(obj)
+        if object.name not in target_collection.objects:
+            target_collection.objects.link(object)
 
         # Quitar de otras colecciones como default
-        for col in list(obj.users_collection):
-            if col != target_col:
-                col.objects.unlink(obj)
+        for col in list(object.users_collection):
+            if col != target_collection:
+                col.objects.unlink(object)

@@ -1,1 +1,582 @@
 \chapter{Documentación de Visualización}
+Este anexo presenta una descripción general de los \textit{scripts} que conforman el componente de visualización (la extensión de Blender). 
+Las instrucciones de uso correspondientes se detallan en el Anexo~\ref{anx:manual_extraccion}.
+
+\section{Requisitos}
+Se requiere únicamente de Blender 5.2 LTS. Sin embargo, para modificar los scripts en editores
+externos se puede utilizar un ambiente virtual con Python 3.13 con los siguientes
+requisitos:
+
+\begin{verbatim}
+attrs==26.1.0
+cattrs==26.1.0
+certifi==2026.7.22
+charset-normalizer==3.4.9
+Cython==3.2.9
+fake-bpy-module-5.2==20260730
+idna==3.18
+numpy==2.5.1
+requests==2.34.2
+typing_extensions==4.16.0
+urllib3==2.7.0
+zstandard==0.25.0
+\end{verbatim}
+
+Adicionalmente, se requiere el módulo de enlace para Python 3.13 de la biblioteca \textit{OpenVDB} (\texttt{pyopenvdb}). 
+El procedimiento detallado de compilación e instalación se documenta en el Anexo~\ref{anx:compilacion_openvdb}.
+
+\section{Organización del contenido}
+El contenido del componente sigue una organización convencional para extensiones de Blender con la siguiente estructura
+de directorio:
+\begin{figure}[!htbp]
+\dirtree{%
+.1 TinyYoloV2Viewer/.
+.2 assets/.
+.3 library.blend.
+.3 library.cats.txt.
+.2 geometry\_nodes/.
+.3 load.py.
+.2 operators/.
+.3 \_\_init\_\_.py.
+.3 generate\_geometry.py.
+.3 import\_json.py.
+.2 properties/.
+.3 \_\_init\_\_.py.
+.3 graph\_properties.py.
+.3 manifest\_properties.py.
+.3 visualization\_properties.py.
+.2 ui/.
+.3 \_\_init\_\_.py.
+.3 generate\_ui.py.
+.2 utils/.
+.3 utils.py.
+.2 \_\_init\_\_.py.
+.2 blender\_manifest.toml.
+}
+\caption{Estructura de archivos y directorios del paquete de la extensión \texttt{TinyYoloV2Viewer}.}
+\label{fig:arbol_extension_blender}
+\end{figure}
+
+\section{Scripts}
+La herramienta se distribuye como una extensión para Blender integrada por \textit{scripts} modulares en Python que exponen funcionalidad 
+nativa en el editor, complementada por una biblioteca de recursos que contiene los elementos preconfigurados del sistema.
+
+La estructura interna del paquete se organiza en los siguientes directorios:
+\begin{itemize}
+    \item \texttt{assets/}: Aloja el archivo contenedor \texttt{library.blend}, dentro del cual se definen los árboles de nodos de geometría 
+    (\textit{Geometry Nodes}) y los materiales de sombreado requeridos por el complemento.
+    \item \texttt{geometry\_nodes/}: Agrupa módulos auxiliares especializados en la vinculación, carga e instanciación procedimental de los 
+    grupos de nodos contenidos en la biblioteca.
+    \item \texttt{operators/}: Contiene los operadores de Blender (\texttt{bpy.types.Operator}) que ejecutan acciones sobre la escena, tales 
+    como la lectura del manifiesto y la generación de geometrías volumétricas.
+    \item \texttt{properties/}: Define las estructuras de datos (\texttt{bpy.types.PropertyGroup}) y propiedades personalizadas encargadas 
+    de persistir el estado de la visualización y los metadatos de las capas importadas.
+    \item \texttt{ui/}: Implementa los paneles gráficos (\texttt{bpy.types.Panel}) y menús desplegables integrados en la barra lateral de 
+    la vista 3D.
+    \item \texttt{utils/}: Provee funciones auxiliares para el registro de clases.
+\end{itemize}
+
+\subsection{Directorio \texttt{geometry\_nodes/}}
+Este directorio contiene el módulo \texttt{load.py}, cuya finalidad consiste en gestionar la vinculación programática de los árboles de 
+nodos de geometría procedentes de la biblioteca de recursos y parametrizar sus valores en tiempo de ejecución.
+
+\subsubsection{\texttt{load.py}}
+El módulo expone las siguientes funciones:
+
+\begin{itemize}
+    \item \texttt{load\_geonode\_group(group\_name)}: Importa un bloque de datos de tipo árbol de nodos (\texttt{NodeTree}) desde el archivo 
+    \texttt{library.blend} a la escena activa. Recibe como argumento el identificador del grupo de nodos requerido.
+    \item \texttt{deduplicate\_nodes()}: Identifica los bloques de nodos de geometría duplicados generados tras procesos de importación o 
+    enlace redundantes (aquellos con sufijos automáticos del tipo \texttt{.001}, \texttt{.002}, etc.). Reasigna todas las referencias de 
+    los modificadores al bloque de datos primario y purga las copias redundantes de la memoria.
+    \item \texttt{deduplicate\_materials()}: Realiza una consolidación análoga a la deduplicación de nodos, purgando instancias redundantes 
+    de materiales de sombreado y reasociando los enlaces al material original.
+    \item \texttt{update\_input\_image(image\_path)}: Actualiza la textura de entrada asignada al material \texttt{YV2 Input Image}, vinculando 
+    la imagen original procesada especificada en el archivo \texttt{manifest.json}. Recibe como parámetro la ruta absoluta o relativa de la imagen.
+    \item \texttt{set\_node\_parameters(object, modifier\_name, parameters)}: Asigna valores a los campos de entrada de un modificador de nodos 
+    de geometría (\textit{Geometry Nodes}) asociado a un objeto de la escena. Recibe como argumentos el objeto destino (\texttt{bpy.types.Object}), 
+    el identificador del modificador (por defecto \texttt{"Geometry Nodes"}) y un diccionario de Python con las parejas clave-valor correspondientes 
+    (\texttt{\{"Parámetro": valor\}}).
+\end{itemize}
+
+\subsection{Directorio \texttt{operators/}}
+Este directorio agrupa los módulos encargados de registrar y ejecutar operadores nativos de Blender (\texttt{bpy.types.Operator}). Sus dos 
+funcionalidades primarias consisten en la importación analítica del archivo \texttt{manifest.json} y la instanciación procedimental de las mallas 
+tridimensionales y árboles de nodos a partir de dicha información.
+
+\subsubsection{\texttt{import\_json.py}}
+Este módulo implementa el operador \texttt{IMPORT\_OT\_load\_yolov2\_json}, responsable de la lectura y decodificación del archivo de manifiesto. 
+Expone los siguientes métodos clave:
+
+\begin{itemize}
+    \item \texttt{execute(context)}: Lee el archivo \texttt{manifest.json} desde la ruta seleccionada en el explorador de archivos y persiste su 
+    estructura estructurada en las propiedades personalizadas de la escena activa.
+    \item \texttt{\_load\_properties()}: Parsea el contenido del manifiesto e inicializa las colecciones de propiedades de visualización asociadas 
+    a cada tipología de capa.
+    \item \texttt{menu\_func\_import(self, context)}: Función de integración que suscribe el operador al menú contextual global de importación de 
+    Blender (\textit{File $\rightarrow$ Import $\rightarrow$ YOLOv2 Manifest (.json)}).
+\end{itemize}
+
+\subsubsection{\texttt{generate\_geometry.py}}
+Este módulo implementa el operador \texttt{MESH\_OT\_create\_yolov2\_object}, encargado de construir la representación volumétrica y topológica 
+de la red en la vista 3D. Define las siguientes rutinas de generación y configuración:
+
+\begin{itemize}
+    \item \texttt{execute(context)}: Orquesta la secuencia de construcción geométrica: crea los planos de visualización de entrada y salida, 
+    reconstruye las capas intermedias, genera las aristas de conexión topológica y estructura los objetos resultantes en colecciones jerárquicas 
+    dentro del \textit{Outliner}.
+    \item \texttt{\_instance\_nodes(node\_group\_name, object\_name, context)}: Instancia una nueva entidad geométrica en la escena, le asigna un 
+    modificador de nodos de geometría (\textit{Geometry Nodes}) y vincula el árbol de nodos especificado.
+    \item \texttt{\_configure\_volume\_viewer(layer\_item)}: Parametriza el modificador \texttt{YV2 Volume Viewer} asociado al objeto de una capa 
+    para vincular el archivo volumétrico \textit{OpenVDB} correspondiente y definir sus dimensiones nativas. Recibe como argumento una instancia 
+    de \texttt{LayerItem}.
+    \item \texttt{\_configure\_box\_viewer(target\_object, boxes\_path, parameters)}: Configura el modificador \texttt{YV2 Box Viewer} asignado 
+    a la capa de salida para proyectar las cajas delimitadoras. Recibe como argumentos el objeto destino, la ruta de la cuadrícula \texttt{boxes.vdb} 
+    y un diccionario con los umbrales de detección y filtrado.
+    \item \texttt{\_configure\_input\_viewer(target\_object)}: Establece las dimensiones y texturas del modificador \texttt{YV2 Input Viewer} 
+    sobre el objeto representativo de la imagen suministrada al modelo.
+    \item \texttt{\_configure\_connections(connection\_object, parent\_layer, child\_layer)}: Parametriza el modificador \texttt{YV2 Volume Connection} 
+    para calcular analíticamente las aristas de unión y el recorrido del \textit{kernel} convolucional entre dos instancias consecutivas de \texttt{LayerItem}.
+    \item \texttt{\_layer\_parameters(layer\_item, manifest\_dir, layer\_data)}: Rellena las propiedades del contenedor \texttt{LayerItem} con los metadatos 
+    estructurales procedentes del diccionario del manifiesto (resolución espacial, canal, paso de desplazamiento y rutas absolutas a los volúmenes).
+    \item \texttt{\_get\_or\_create\_collection(name, parent\_collection)}: Evalúa la existencia de una colección en la escena y la instancia recursivamente 
+    bajo la colección padre especificada si aún no ha sido registrada.
+    \item \texttt{\_assign\_object\_to\_collection(object, target\_collection)}: Vincula la entidad geométrica a la colección destino y remueve sus referencias 
+    de la colección raíz por defecto.
+\end{itemize}
+
+\subsection{Directorio \texttt{properties/}}
+Este directorio contiene los módulos encargados de definir grupos de propiedades personalizadas (\texttt{bpy.types.PropertyGroup}) para garantizar la persistencia 
+de los datos del modelo y la configuración de la vista dentro del archivo \texttt{.blend} entre distintas sesiones de trabajo. Las estructuras se dividen 
+fundamentalmente en la persistencia del manifiesto deserializado y el control paramétrico de la visualización geométrica.
+
+\subsubsection{\texttt{manifest\_properties.py}}
+Define el contenedor de datos para almacenar el archivo de manifiesto a nivel de escena. Implementa la clase \texttt{ManifestDataSettings}, 
+la cual expone dos propiedades de almacenamiento primarias:
+
+\begin{itemize}
+    \item \texttt{filepath}: Cadena de texto que registra la ruta del archivo \texttt{manifest.json} cargado.
+    \item \texttt{raw\_data}: Cadena de texto que almacena la carga útil completa del JSON original en formato serializado, 
+    solventando las restricciones de la API de Blender sobre tipos de datos anidados en las propiedades de escena.
+\end{itemize}
+
+Asimismo, la clase define los siguientes métodos de manipulación:
+\begin{itemize}
+    \item \texttt{get\_parsed\_json()}: Deserializa la cadena almacenada en \texttt{raw\_data} y retorna una estructura nativa de 
+    diccionario en Python para su consumo por otros módulos.
+    \item \texttt{set\_json(data\_string)}: Asigna y persiste el contenido crudo del manifiesto en las propiedades de la escena.
+    \item \texttt{get\_manifest\_location()}: Retorna la ruta canónica del directorio contenedor del archivo de manifiesto para 
+    resolver rutas relativas hacia las cuadrículas \textit{OpenVDB}.
+\end{itemize}
+
+\subsubsection{\texttt{visualization\_properties.py}}
+Este módulo implementa las estructuras y rutinas de sincronización encargadas de controlar la apariencia visual de los volúmenes y 
+la disposición espacial de la geometría.
+
+En primer término, define la clase \texttt{LayerTypeProperty} (\texttt{PropertyGroup}) para agrupar los ajustes de renderizado 
+aplicables a nivel de tipología de capa (e.g., \textit{Conv2d}, \textit{MaxPool2d}):
+\begin{itemize}
+    \item \texttt{name}: Cadena identificadora del tipo de capa.
+    \item \texttt{color}: Vector de color RGBA asignado a la representación simplificada de la capa.
+    \item \texttt{visibility}: Indicador booleano que determina si se fuerza la representación simplificados.
+    \item \texttt{type\_visibility}: Indicador booleano que conmuta la visibilidad de la etiqueta tipográfica 
+    que identifica la capa en la vista 3D.
+\end{itemize}
+
+Posteriormente, la clase \texttt{VisualizationDataProperties} centraliza los parámetros globales de disposición geométrica de la red:
+\begin{itemize}
+    \item \texttt{size\_scale}: Factor de escala aplicado a las dimensiones de altura y anchura (ejes $X$ e $Y$) en función de su resolución nativa.
+    \item \texttt{layer\_depth}: Factor de escala longitudinal aplicado a la profundidad (eje $Z$).
+    \item \texttt{layer\_gap}: Distancia de separación entre capas consecutivas.
+    \item \texttt{layer\_max\_depth}: Valor máximo para la dimensión en el eje $Z$ de los volúmenes.
+    \item \texttt{layer\_properties}: Colección de elementos de tipo \texttt{LayerTypeProperty} (\texttt{CollectionProperty}) 
+    con las configuraciones particulares indexadas por tipo de capa.
+\end{itemize}
+
+Esta clase incorpora los siguientes métodos:
+\begin{itemize}
+    \item \texttt{create\_layer\_properties()}: Instancia e inicializa los registros de tipo \texttt{LayerTypeProperty} dentro 
+    de la colección \texttt{layer\_properties}.
+    \item \texttt{update\_all()}: Propaga los cambios de las propiedades globales a todos los objetos activos en la escena.
+\end{itemize}
+
+De forma complementaria, el módulo implementa funciones independientes de actualización reactiva (\textit{update callbacks}) que 
+transfieren los valores modificados desde la interfaz hacia los nodos de geometría correspondientes:
+\begin{itemize}
+    \item \texttt{update\_colors(context)}: Propaga las modificaciones de color a los materiales de las cajas simplificadas.
+    \item \texttt{update\_visibility(context)}: Actualiza el parámetro de visualización simplificada en los modificadores.
+    \item \texttt{update\_dimensions(context)}: Recalcula y asigna los factores de escala espacial a los árboles de nodos de cada volumen.
+    \item \texttt{update\_positions(context)}: Recalcula las coordenadas axiales y el desplazamiento longitudinal de las capas y conexiones 
+    topológicas a lo largo del eje de propagación.
+\end{itemize}
+
+\subsubsection{\texttt{graph\_properties.py}}
+Este módulo modela la estructura topológica y las propiedades geométricas de la red dentro del ecosistema de Blender. 
+Implementa clases derivadas de \texttt{bpy.types.PropertyGroup} para representar nodos, conexiones y dependencias jerárquicas en 
+forma de grafo acíclico dirigido (DAG), vinculando los metadatos de las capas con los objetos tridimensionales instanciados en la escena.
+
+\paragraph{Clases auxiliares de colección}
+Primero define clases auxiliares para el uso de colecciones de datos:
+\begin{itemize}
+    \item \texttt{StringItem}: Contenedor elemental que encapsula una cadena de texto en la propiedad 
+    \texttt{value} (\texttt{StringProperty}), solventando la restricción de Blender que impide almacenar 
+    listas nativas de cadenas dentro de una \texttt{CollectionProperty}. Se utiliza para listar identificadores de nodos padre e hijo.
+    \item \texttt{ConnectionItem}: Contenedor para referencias a objetos de conexión. Expone la propiedad 
+    de puntero \texttt{object} (\texttt{PointerProperty} de tipo \texttt{bpy.types.Object}), la cual almacena 
+    la entidad de malla que contiene el modificador \texttt{YV2 Volume Connection}.
+\end{itemize}
+
+\paragraph{Clase \texttt{LayerItem}}
+Representa individualmente una capa o nodo computacional de la red neuronal. Encapsula tanto los hiperparámetros 
+operacionales del tensor como los enlaces a los datos volumétricos y a la entidad geométrica en la escena:
+\begin{itemize}
+    \item \texttt{name}: Identificador canónico y único de la capa dentro del grafo.
+    \item \texttt{type}: Tipología de la operación computacional asociada (e.g., \textit{Conv2d}, \textit{MaxPool2d}, \textit{BatchNorm2d}).
+    \item \texttt{dimensions}: Vector tridimensional (\texttt{FloatVectorProperty} de tamaño 3) que define las dimensiones métricas base ($X, Y, Z$) del prisma o volumen en la escena.
+    \item \texttt{kernel\_size}: Tamaño espacial del núcleo de convolución o ventana de reducción ($K$).
+    \item \texttt{stride}: Magnitud del paso de desplazamiento espacial aplicado por la operación.
+    \item \texttt{ceiling}: Conmutador booleano que indica si se emplea la función techo (\textit{ceiling mode}) para el cálculo dimensional del tensor de salida.
+    \item \texttt{resolution}: Resolución espacial bidimensional transversal de la capa ($H = W$).
+    \item \texttt{slice\_count}: Cantidad total de planos longitudinales o canales ($C$) que componen el volumen.
+    \item \texttt{file}: Ruta al archivo volumétrico \textit{OpenVDB} (\texttt{.vdb}) asociado a las activaciones de la capa.
+    \item \texttt{object}: Puntero (\texttt{PointerProperty}) al objeto tridimensional de Blender (\texttt{bpy.types.Object}) asignado a la capa.
+    \item \texttt{parents}: Colección (\texttt{CollectionProperty} de tipo \texttt{StringItem}) que lista los nombres de las capas emisoras o predecesoras directas.
+    \item \texttt{children}: Colección (\texttt{CollectionProperty} de tipo \texttt{StringItem}) con los identificadores de las capas sucesoras o receptoras.
+\end{itemize}
+
+\paragraph{Clase \texttt{GraphProperty}}
+Estructura central de la escena encargada de persistir el grafo computacional completo, sincronizar las dependencias 
+jerárquicas y gestionar el ciclo de vida de los objetos tridimensionales generados.
+\medskip
+
+Expone las siguientes propiedades:
+\begin{itemize}
+    \item \texttt{layers}: Colección (\texttt{CollectionProperty} de tipo \texttt{LayerItem}) que contiene todos los nodos de la red indexados por nombre.
+    \item \texttt{connections}: Colección (\texttt{CollectionProperty} de tipo \texttt{ConnectionItem}) que almacena los objetos de enlace e interpolación de 
+    \textit{kernel} entre capas.
+\end{itemize}
+
+Asimismo, implementa los siguientes métodos de gestión y depuración:
+\begin{itemize}
+    \item \texttt{add\_connection(name, obj)}: Registra una nueva conexión topológica o actualiza una existente identificada por \texttt{name}, vinculando 
+    el objeto de enlace \texttt{obj} (\texttt{bpy.types.Object}) y retornando el elemento instanciado.
+    \item \texttt{add\_layer(name, type, obj)}: Da de alta un nuevo nodo en la colección \texttt{layers} especificando su nombre, tipo de módulo y puntero 
+    al objeto en escena.
+    \item \texttt{add\_node\_parent(parent, child)}: Establece una relación de precedencia dirigida insertando el identificador \texttt{parent} en la 
+    colección \texttt{parents} del nodo \texttt{child}; si el nodo destino aún no existe en el registro, lo instancia dinámicamente.
+    \item \texttt{set\_children\_nodes(graph\_node, children\_name)}: Actualiza de manera atómica las dependencias descendientes de una capa; vacía la 
+    colección \texttt{children} del nodo \texttt{graph\_node}, registra bidireccionalmente cada elemento de la lista \texttt{children\_name} e invoca 
+    internamente \texttt{add\_node\_parent}.
+    \item \texttt{empty()}: Rutina de saneamiento que elimina la geometría generada en la escena para permitir su reconstrucción. Desvincula y destruye 
+    los objetos de capas y conexiones de la base de datos (\texttt{bpy.data.objects}), purga los bloques de malla (\texttt{bpy.data.meshes}) que queden 
+    sin usuarios huérfanos (\texttt{users == 0}) y vacía la colección \texttt{layers}.
+\end{itemize}
+
+\subsection{Directorio \texttt{ui/}}
+Este directorio contiene el módulo \texttt{generate\_ui.py}, en el cual se define la clase de interfaz gráfica \texttt{VIEW3D\_PT\_Yolov2GeneratorPanel} 
+(\texttt{bpy.types.Panel}). Su objetivo fundamental consiste en registrar e instanciar el panel de control interactivo dentro de la barra lateral 
+(\textit{Sidebar} / región \textit{UI}) de la vista 3D (\textit{3D Viewport}), desplegando los controles para parametrizar las opciones de visualización, 
+ajustar las dimensiones del grafo y accionar el botón de ejecución del operador de generación geométrica (\texttt{MESH\_OT\_create\_yolov2\_object}).
+
+\section{Recursos}
+El archivo \texttt{library.blend} contiene una librería de recursos compuesto principalmente por los grupos de nodos de geometría y materiales utilizados
+por la extensión. A continuación se describen estos.
+
+\subsection{Nodos de Geometría}
+Los grupos de nodos principales utilizados para la visualización son \texttt{YV2 Volume Viewer}, \texttt{YV2 Box Viewer}, \texttt{YV2 Input Viewer}
+y \texttt{YV2 Volume Connection}, los cuales pueden ser instanciados como modificadores de geometría. Otros grupos de nodos son incluidos, aunque
+su uso es meramente auxiliar.
+
+\subsubsection{YV2 Volume Viewer}
+Constituye el grupo de nodos primario del sistema de visualización. Su objetivo consiste en reconstruir los archivos de cuadrícula \textit{OpenVDB} (\texttt{.vdb}) 
+mediante una secuencia de planos coplanares que representan las rebanadas (\textit{slices}) del volumen. El nodo expone los siguientes parámetros de configuración:
+
+\begin{itemize}
+    \item \texttt{Volume File}: Ruta absoluta o relativa del archivo volumétrico \textit{OpenVDB} a cargar.
+    \item \texttt{Type}: Cadena de texto descriptiva que indica el tipo de capa o metadatos informativos a desplegar.
+    \item \texttt{View Type}: Conmutador booleano (\textit{toggle}) para habilitar o suspender la visibilidad de la etiqueta de texto definida en \texttt{Type}.
+    \item \texttt{Simplified Volume}: Conmutador que sustituye el conjunto de planos de rebanadas por un prisma envolvente sólido. Se recomienda 
+    mantener activa esta vista simplificada en aquellas capas que no se encuentren bajo inspección activa a fin de reducir la carga de cómputo geométrico en la vista 3D.
+    \item \texttt{Color}: Valor cromático asignado a la malla simplificada de la capa.
+    \item \texttt{World Size}: Dimensiones globales del volumen en unidades métricas de Blender (\textit{Blender Units}). Es imperativo modificar 
+    la escala del volumen mediante este parámetro en lugar de recurrir a transformaciones afines de objeto (\textit{Object Transform}), preservando 
+    así la correctitud espacial de la visualización de las conexiones.
+    \item \texttt{Resolution}: Resolución bidimensional de las rebanadas ($H \times W$), asumiendo una sección transversal cuadrada.
+    \item \texttt{Slice Count}: Cantidad total de rebanadas contenidas a lo largo del eje de profundidad longitudinal ($C$).
+    \item \texttt{Slice Selection}: Índice ordinal de la rebanada que se desea aislar; atenúa u oculta la geometría de las rebanadas anteriores en la secuencia.
+    \item \texttt{Single Slice}: Conmutador que restringe la visualización exclusivamente a la rebanada indicada en \texttt{Slice Selection}, descartando la 
+    renderización de las rebanadas anteriores y posteriores para optimizar el rendimiento y permitir la inspección transversal aislada.
+\end{itemize}
+
+Este grupo de nodos instancia una cuadrícula de polígonos (planos bidimensionales subdivididos) por cada canal del tensor volumétrico,
+operando cada uno como una rebanada transversal del mismo. Cada cuadrícula se genera con una densidad de subdivisiones equivalente a la 
+resolución nativa del volumen a representar, de modo que cada cara poligonal corresponde biunívocamente con un vóxel en la cuadrícula de datos discretos.
+A partir de las coordenadas del centroide de cada cara, se muestrea el campo volumétrico continuo del archivo \textit{OpenVDB} subyacente y se almacena 
+la intensidad resultante como un atributo de dominio de cara (\textit{face domain attribute}), permitiendo que el shader mapee dicho escalar a una rampa 
+cromática. De forma complementaria, el árbol de nodos evalúa la visibilidad condicional de las cuadrículas para conmutar o descartar rebanadas en función 
+de los parámetros de configuración activos.
+\medskip
+
+Asimismo, este grupo de nodos escribe atributos geométricos persistentes en la malla para facilitar el intercambio analítico de datos y la 
+sincronización con otros grupos de nodos (como \texttt{YV2 Volume Connection}):
+
+\begin{itemize}
+    \item \texttt{grid\_color}: Atributo escalar asignado por cara en cada rebanada. Almacena el valor muestreado del volumen en la 
+    coordenada discreta asociada, consumido directamente por el material de sombreado.
+    \item \texttt{tensor\_size}: Vector tridimensional con las dimensiones métricas globales del volumen en la escena 
+    (equivalente al parámetro de entrada \texttt{World Size}).
+    \item \texttt{tensor\_resolution}: Resolución espacial bidimensional transversal ($H = W$) del tensor (equivalente a \texttt{Resolution}).
+    \item \texttt{tensor\_layer\_count}: Cantidad total de planos longitudinales o canales ($C$) que componen el volumen (equivalente a \texttt{Slice Count}).
+    \item \texttt{tensor\_layer\_selection}: Índice entero del canal o rebanada activa seleccionada para inspección individual (equivalente a \texttt{Slice Selection}).
+\end{itemize}
+
+\subsubsection{YV2 Box Viewer}
+Este grupo de nodos de geometría se utiliza para visualizar las cajas delimitadoras (\textit{bounding boxes}) generadas por la red. Su función principal 
+consiste en decodificar los atributos de detección contenidos en la cuadrícula volumétrica de \textit{OpenVDB} (\texttt{boxes.vdb}) y reconstruir proceduralmente 
+la geometría de las cajas (posiciones espaciales, dimensiones normalizadas y etiquetas de clase) proyectándolas sobre la imagen de entrada del modelo.
+\medskip
+
+El nodo expone los siguientes parámetros:
+\begin{itemize}
+    \item \texttt{Box File}: Ruta al archivo \textit{OpenVDB} (\texttt{boxes.vdb}) que contiene los datos matriciales codificados de las predicciones.
+    \item \texttt{World Size}: Dimensiones globales de la visualización en unidades métricas de Blender. Únicamente los componentes de los ejes $X$ e $Y$ 
+    (anchura y altura, respectivamente) modifican la escala proyectiva del plano de visualización.
+    \item \texttt{Class Labels}: Cadena de texto que contiene el listado de las etiquetas categóricas de la red, separadas por comas.
+    \item \texttt{Box Count}: Número total de cajas delimitadoras generadas por la red antes o después del filtrado.
+    \item \texttt{Box Selection}: Selector numérico que controla el régimen de despliegue de las predicciones:
+    \begin{itemize}
+        \item \texttt{-1}: Visualiza todas las cajas candidatas que superen los umbrales configurados en \texttt{Confidence} y \texttt{Class Probability}.
+        \item \texttt{0} a \texttt{Box Count - 1}: Aísla e ilustra una única caja de predicción conforme a su índice ordinal.
+        \item \texttt{Box Count}: Fuerza la visualización de la totalidad de las cajas generadas sin aplicar filtrado.
+    \end{itemize}
+    \item \texttt{Confidence}: Umbral de confianza de detección (\textit{objectness score}). Filtra las cajas cuya certeza calculada sea inferior a este valor.
+    \item \texttt{Class Probability}: Umbral de probabilidad condicional de clase. Descarta las predicciones cuya confianza categórica no alcance dicha magnitud.
+\end{itemize}
+El grupo de nodos instancia un plano que proyecta la imagen de entrada junto con una malla alámbrica cuadrangular por cada caja delimitadora candidata. 
+A partir del índice de cada instancia y del esquema de direccionamiento discreto codificado previamente en la cuadrícula volumétrica de 
+\textit{OpenVDB} (\texttt{boxes.vdb}), el árbol recupera el vector de características de cada predicción.
+
+Los índices correspondientes a este vector estructurado son:
+\begin{itemize}
+    \item $0$: Coordenada central horizontal ($x$).
+    \item $1$: Coordenada central vertical ($y$).
+    \item $2$: Anchura de la caja delimitadora ($w$).
+    \item $3$: Altura de la caja delimitadora ($h$).
+    \item $4$: Puntuación de objetualidad (\textit{objectness score}).
+    \item $5$: Probabilidad condicional de la clase predicha ($P(\text{clase})$).
+    \item $6$: Identificador categórico de la clase (\textit{class ID}).
+\end{itemize}
+A partir de estas componentes métricas normalizadas, se calculan la translación espacial y la escala local del plano alámbrico de forma relativa al 
+plano de referencia de la imagen. Adicionalmente, el árbol genera geometrías de texto tridimensional a partir de las cadenas suministradas en 
+el parámetro \texttt{Class Labels} e instancia la etiqueta textual sobre el borde superior de cada caja en función de su identificador de clase.
+\medskip 
+
+Asimismo, el identificador entero de clase se normaliza al intervalo continuo $[0, 1]$ respecto al total de categorías disponibles en el conjunto 
+de datos; este valor escalar se transfiere como atributo al shader de la malla para modular una rampa de color que diferencia visualmente cada categoría 
+inferida. Lógica booleana complementaria evalúa los umbrales de confianza y filtros de visibilidad para descartar o mostrar las cajas en tiempo real.
+\medskip
+
+Este grupo de nodos escribe los siguientes atributos geométricos en la malla para su consumo por el material y la comunicación con otros modificadores:
+\begin{itemize}
+    \item \texttt{class}: Identificador de clase normalizado en el intervalo $[0, 1]$, consumido por el material para asignar una 
+    signatura cromática unívoca a la caja y a su etiqueta textual.
+    \item \texttt{tensor\_size}: Vector tridimensional con las dimensiones métricas globales del plano de visualización en el espacio de Blender 
+    (equivalente al parámetro de entrada \texttt{World Size}).
+\end{itemize}
+
+\subsubsection{YV2 Input Viewer}
+Este grupo de nodos se utiliza para proyectar e inspeccionar la imagen de entrada suministrada a la red. Expone los siguientes parámetros:
+
+\begin{itemize}
+    \item \texttt{World Size}: Dimensiones espaciales del plano de visualización en unidades métricas de Blender (\textit{Blender Units}).
+    \item \texttt{Resolution}: Resolución bidimensional de la imagen de entrada ($H \times W$), asumiendo una relación de aspecto cuadrada.
+    \item \texttt{View Channels}: Conmutador booleano que determina si se descomponen y despliegan los canales individuales RGB 
+    (rojo, verde y azul) en planos separados, en adición a la composición original a color.
+\end{itemize}
+Este grupo de nodos instancia cuatro planos bidimensionales que proyectan la imagen de entrada, donde cada plano aplica un factor cromático 
+multiplicativo en el sombreador (\textit{shader}) para descomponer e ilustrar sus canales correspondientes.
+\medskip
+
+Asimismo, este grupo de nodos escribe atributos geométricos en la malla para facilitar la transferencia de datos e interoperabilidad con 
+otros árboles de nodos de la escena:
+
+\begin{itemize}
+    \item \texttt{tensor\_size}: Vector tridimensional con las dimensiones métricas del plano en el espacio de trabajo 
+    (equivalente al parámetro de entrada \texttt{World Size}).
+    \item \texttt{tensor\_resolution}: Resolución espacial bidimensional transversal ($H = W$) asignada a la imagen 
+    (equivalente a \texttt{Resolution}).
+    \item \texttt{tensor\_layer\_count}: Cantidad total de planos o canales longitudinales instanciados; se fija con 
+    un valor constante de $4$.
+    \item \texttt{tensor\_layer\_selection}: Índice de la rebanada o canal seleccionado para visualización activa; se 
+    inicializa con un valor de $0$.
+\end{itemize}
+
+\subsubsection{YV2 Volume Connection}
+Este grupo de nodos de geometría se encarga de representar visualmente las conexiones topológicas entre las distintas capas de la red, así como las operaciones 
+matemáticas de convolución o reducción espacial que ocurren entre ellas. 
+\medskip
+
+El modificador expone los siguientes parámetros:
+\begin{itemize}
+    \item \texttt{Input Layer}: Objeto tridimensional que representa la capa previa o nodo emisor en el grafo computacional. Requiere que dicho objeto contenga una 
+    instancia activa del modificador \texttt{YV2 Volume Viewer} debidamente parametrizada.
+    \item \texttt{Output Layer}: Objeto tridimensional que representa la capa sucesora o nodo receptor de la relación. De igual forma, asume la presencia y correcta 
+    configuración del modificador \texttt{YV2 Volume Viewer}.
+    \item \texttt{View Convolution}: Conmutador booleano que habilita la renderización de la geometría correspondiente al \textit{kernel} convolucional y sus líneas de proyección.
+    \item \texttt{T}: Parámetro normalizado de interpolación temporal para la animación interactiva de la convolución ($t \in [0, 1]$). Controla el barrido secuencial del 
+    \textit{kernel} sobre el volumen de entrada y el punto resultante en el plano de salida, iniciando en la esquina superior izquierda ($0.0$) y concluyendo en la esquina inferior derecha ($1.0$).
+    \item \texttt{Stride}: Paso de desplazamiento espacial (\textit{stride}) del núcleo en los ejes de altura y anchura. Omite posiciones intermedias de la entrada 
+    según el incremento configurado. No realiza comprobaciones de consistencia dimensional entre tensores.
+    \item \texttt{Ceiling Mode}: Conmutador booleano que selecciona el criterio de redondeo al calcular las dimensiones de salida si el paso fracciona el recorrido 
+    sobre las filas y columnas. Aplica la función suelo (\textit{floor}) cuando está inactivo y la función techo (\textit{ceiling}) cuando está habilitado 
+    (análogo al parámetro homónimo en operaciones como \textit{MaxPool2d}).
+    \item \texttt{Operation Mode}: Selector categórico del régimen de mapeo de canales entre volúmenes:
+    \begin{itemize}
+        \item \textit{One to One} (canal a canal): Procesa cada canal de entrada de forma independiente sobre su canal análogo de salida (e.g., submuestreo por \textit{MaxPool2d}).
+        \item \textit{Many to One} (volumen a plano/canal): Modela la agregación de todos los canales de entrada para proyectar una única rebanada o 
+        mapa de activación resultante (convolución estándar).
+        \item \textit{Many to Many}: Representación generalizada del flujo volumétrico completo entre el bloque entrante y saliente.
+    \end{itemize}
+\end{itemize}
+A partir de la resolución (\texttt{tensor\_resolution}) y las dimensiones espaciales (\texttt{tensor\_size}) de los volúmenes enlazados, junto con los parámetros 
+\texttt{Stride} y \texttt{Ceiling Mode}, este grupo de nodos calcula analíticamente las coordenadas tridimensionales de cada vóxel en las representaciones 
+volumétricas conectadas. La trayectoria espacial toma como origen el vóxel superior izquierdo de la rebanada seleccionada y como destino final el vóxel inferior 
+derecho. Mediante el parámetro de interpolación normalizado \texttt{T}, se interpola linealmente a lo largo de este barrido matricial, recorriendo las celdas 
+de izquierda a derecha y de arriba hacia abajo. Apoyándose en los atributos \texttt{tensor\_layer\_count} y \texttt{tensor\_layer\_selection}, determina 
+adicionalmente la cota longitudinal (profundidad en el eje $Z$) del canal bajo inspección activa. Cabe destacar que el modificador asume la correspondencia 
+dimensional entre tensores y no realiza validaciones internas para verificar que las dimensiones de entrada y salida concuerden con los hiperparámetros de la capa conectada.
+\medskip
+
+Con base en la posición discreta del vóxel evaluado, el árbol genera dos prismas alámbricos que delimitan espacialmente el núcleo convolucional 
+(\textit{kernel}) y su vecindad receptiva, dimensionándolos y orientándolos de acuerdo con el modo de convolución configurado en \texttt{Operation Mode}. 
+De forma complementaria, proyecta una réplica del contorno del núcleo directamente sobre las rebanadas actualmente seleccionadas para delimitar visualmente 
+los valores tensoriales sometidos a la operación en ese instante.
+\medskip
+
+Asimismo, el grupo de nodos genera aristas de interconexión que unen las caras perimetrales homólogas de ambos volúmenes.
+
+\subsubsection{Nodos auxiliares}
+A continuación, se describen los grupos de nodos auxiliares. Estos bloques no están diseñados para instanciarse directamente como modificadores independientes, 
+sino que actúan como subrutinas modulares compartidas por los grupos principales de \textit{Geometry Nodes}, facilitando la reutilización de lógica matemática 
+y la encapsulación funcional:
+
+\begin{itemize}
+    \item \texttt{YV2 Ceiling Mode}: A partir de un conmutador booleano y un escalar continuo, aplica una función de redondeo hacia abajo 
+    (\textit{floor}, si es \texttt{False}) o hacia arriba (\textit{ceil}, si es \texttt{True}).
+    \item \texttt{YV2 Class Name Mesh}: Genera mallas poligonales de texto tridimensional para cada categoría a partir de la lista de 
+    etiquetas de clase, indexándolas conforme a sus respectivos identificadores de clase.
+    \item \texttt{YV2 Convolution Depth}: Determina la profundidad (eje $Z$) correspondiente a una rebanada inspeccionada, en función 
+    del modo de conexión seleccionado, la capa activa y el canal asignado.
+    \item \texttt{YV2 Create Line}: Genera una primitiva geométrica lineal entre dos posiciones.
+    \item \texttt{YV2 Even Kernel Correction}: Ajusta el centroide y desfase espacial de la vecindad del núcleo convolucional cuando la 
+    dimensión del \textit{kernel} corresponde a un valor par.
+    \item \texttt{YV2 Get Box Info}: Decodifica matricialmente el vector de características de una predicción a partir de la cuadrícula 
+    discreta almacenada en el archivo \texttt{boxes.vdb}.
+    \item \texttt{YV2 Get Layer Info}: Extrae los atributos geométricos persistentes de un objeto (\texttt{tensor\_size}, 
+    \texttt{tensor\_resolution}, \texttt{tensor\_layer\_count} y \texttt{tensor\_layer\_selection}), 
+    así como su matriz de transformación espacial.
+    \item \texttt{YV2 Get Volume Corner}: Calcula los vértices extremos de la caja envolvente de un volumen a partir de sus dimensiones 
+    nativas y su matriz de transformación. Dispone de conmutadores booleanos para seleccionar vértices específicos, retornando por defecto 
+    la esquina frontal superior izquierda.
+    \item \texttt{YV2 Iterate 2D Grid}: Computa las coordenadas espaciales requeridas para recorrer discretamente la retícula de una rebanada, 
+    calculando la posición euclidiana de una celda en función del parámetro normalizado \texttt{T}, la resolución, las dimensiones métricas, 
+    el valor de \textit{stride} y el modo de redondeo.
+    \item \texttt{YV2 Kernel}: Construye la representación alámbrica del núcleo volumétrico y de su proyección sobre la rebanada activa evaluada.
+    \item \texttt{YV2 Layer Box Connection}: Genera las aristas y polígonos de conexión entre las caras opuestas de dos volúmenes adyacentes.
+    \item \texttt{YV2 Volume Corner Offset}: Determina el vector de desplazamiento hacia el centroide de la celda de origen 
+    (esquina superior izquierda) en la rebanada de un volumen.
+    \item \texttt{YV2 Wireframe Cube}: Genera una estructura alámbrica rectangular parametrizable para delimitar prismas cúbicos 
+    o cuadriláteros bidimensionales.
+\end{itemize}
+
+\subsection{Materiales de sombreado}
+A continuación, se describen los árboles de materiales (\textit{shaders}) empleados por la extensión para la renderización 
+volumétrica y geométrica de la red en la escena. Todos los materiales implementan un modelo de sombreado predominantemente emisivo 
+(\textit{Emission}) para asegurar una lectura homogénea y nítida de los datos independientes de fuentes de iluminación externa:
+
+\begin{itemize}
+    \item \texttt{YV2 Volume Slice}: Asignado a los planos bidimensionales que componen las rebanadas del tensor. Muestrea el atributo de cara 
+    \texttt{grid\_color} proveniente de la cuadrícula de \textit{OpenVDB} y lo proyecta sobre una rampa cromática para generar una 
+    representación en mapa de calor de las activaciones.
+    \item \texttt{YV2 Simplified Volume}: Utilizado en los prismas poligonales durante el modo de visualización simplificado. Lee el vector 
+    de color \texttt{volume\_color} asignado por tipo de capa e interpola sus coordenadas UV locales para proyectar un gradiente suave en las caras de la envolvente.
+    \item \texttt{YV2 Input Image}: Asignado a los planos de la imagen de entrada suministrada a la red. Lee el atributo escalar o vectorial 
+    \texttt{channel\_color} para aislar y modular el matiz cromático de los canales individuales proyectados.
+    \item \texttt{YV2 Box Class}: Empleado para la diferenciación cromática de las cajas delimitadoras y sus etiquetas de texto 
+    correspondientes. Muestrea el atributo normalizado \texttt{class} (comprendido en el intervalo $[0, 1]$) y modula directamente 
+    el canal de matiz (\textit{hue}) en el espacio HSV, asignando una signatura cromática discreta y determinista a cada categoría del modelo.
+    \item \texttt{YV2 Volume BB}: Material emisivo acromático (blanco puro) utilizado de forma transversal para representar las aristas 
+    de conexión topológica, los prismas alámbricos de las cajas envolventes y las mallas tipográficas que identifican a cada capa.
+\end{itemize}
+
+\section{Pruebas de rendimiento}
+En adición a la extensión se proveen scripts para la evaluación del rendimiento del mismo. Este esta compuesto de dos scripts de Python:
+\texttt{run.py} y \texttt{benchmark.py}.
+
+\subsection{\texttt{run.py}}
+Ejecuta una instancia de Blender en modo desatendido (\textit{headless}). Esta rutina cuantifica de forma aislada 
+los tiempos de ejecución correspondientes a la importación del manifiesto, la instanciación procedimental de la 
+geometría y el renderizado de un fotograma de la escena.
+\medskip
+
+Este script contiene las siguientes funciones:
+\begin{itemize}
+    \item \texttt{run(input\_directory)}: Ejecuta el flujo integral de importación de datos, generación procedimental de geometría y 
+    renderizado secuencial a partir de los datos contenidos en el directorio especificado.
+    \item \texttt{warmup()}: Realiza una pasada preliminar de renderizado (\textit{warm-up}) para compilar los sombreadores en la GPU 
+    y precargar las estructuras de datos y cuadrículas volumétricas en memoria caché.
+    \item \texttt{run\_render()}: Ejecuta el renderizado del fotograma actual en la escena activa.
+    \item \texttt{set\_camera()}: Ajusta la posición, orientación y encuadre del objeto de cámara activa para abarcar la totalidad de 
+    la geometría del grafo generado dentro del campo visual (\textit{frustum}).
+    \item \texttt{save\_render\_result(output\_path, filename)}: Guarda la imagen resultante del búfer de renderizado en la ruta de 
+    destino y con el nombre de archivo indicados.
+\end{itemize}
+
+Adicionalmente, se expone la variable global \texttt{SAVE\_RENDER} para determinar si el proceso debe persistir las imágenes generadas 
+en disco. Al concluir, el \textit{script} genera en el directorio de entrada un archivo JSON denominado 
+\texttt{blender\_headless\_benchmark.json} con la telemetría individual de la ejecución, registrando las siguientes métricas:
+
+\begin{itemize}
+    \item \texttt{Import Runtime}: Tiempo transcurrido durante la carga y decodificación del archivo de manifiesto (en segundos).
+    \item \texttt{Geometry Generation Runtime}: Tiempo requerido para la instanciación de mallas procedimentales y 
+    la vinculación de cuadrículas volumétricas (en segundos).
+    \item \texttt{Simple Render Runtime}: Tiempo de cómputo para el renderizado del fotograma configurado en modo de 
+    prismas envolventes simplificados (en segundos).
+    \item \texttt{One Layer Render Runtime}: Tiempo de renderizado habilitando la visualización detallada de las capas 
+    convolucionales (\textit{Conv2d}, en segundos).
+    \item \texttt{Two Layer Render Runtime}: Tiempo de renderizado habilitando la visualización detallada adicional de 
+    las capas de reducción espacial (\textit{MaxPool2d}, en segundos).
+    \item \texttt{Three Layer Render Runtime}: Tiempo de renderizado habilitando la visualización detallada adicional 
+    de las capas de normalización por lotes (\textit{BatchNorm2d}, en segundos).
+    \item \texttt{Complex Render Runtime}: Tiempo de renderizado de la red completa con la visualización volumétrica 
+    detallada de todas las capas activas (en segundos).
+    \item \texttt{Render Engine}: Identificador del motor de renderizado empleado durante la prueba (e.g., \textit{Eevee} o \textit{Cycles}).
+    \item \texttt{Input Directory}: Ruta del directorio de origen de los datos evaluados.
+\end{itemize}
+
+\subsection{\texttt{benchmark.py}}
+Este módulo se encarga de orquestar la ejecución por lotes (\textit{batch processing}) de las pruebas de rendimiento y estabilidad en Blender, consolidando las métricas de telemetría resultantes en un único archivo de balance. 
+\medskip
+
+La rutina invoca iterativamente al \textit{script} de automatización sin interfaz gráfica (\textit{headless}) \texttt{run.py} sobre cada uno de los subdirectorios de datos extraídos ubicados en la ruta definida por la constante global \texttt{INPUT\_PATH}. Posteriormente, recopila los registros generados por cada ejecución individual y los agrega en un archivo estructurado dentro del directorio especificado, calculando métricas estadísticas globales para el lote procesado:
+
+\begin{itemize}
+    \item \texttt{Average Import Runtime}: Media aritmética del tiempo de lectura, carga y decodificación del 
+    archivo \texttt{manifest.json} (en segundos).
+    \item \texttt{Average Geometry Generation Runtime}: Media aritmética del tiempo empleado por el operador en 
+    instanciar la geometría procedimental y vincular los árboles de nodos (en segundos).
+    \item \texttt{Average Simple Render Runtime}: Tiempo promedio de renderizado por cuadro empleando la representación 
+    volumétrica simplificada mediante prismas envolventes (en segundos).
+    \item \texttt{Average One Layer Render Runtime}: Tiempo promedio de renderizado habilitando la inspección 
+    detallada de un único tipo de capa convolucional (\textit{Conv2d}, en segundos).
+    \item \texttt{Average Two Layer Render Runtime}: Tiempo promedio de renderizado habilitando la inspección 
+    volumétrica detallada de dos tipos de capa (\textit{Conv2d} y \textit{MaxPool2d}, en segundos).
+    \item \texttt{Average Three Layer Render Runtime}: Tiempo promedio de renderizado habilitando la inspección 
+    detallada de tres tipos de capa (\textit{Conv2d}, \textit{MaxPool2d} y \textit{BatchNorm2d}, en segundos).
+    \item \texttt{Average Complex Render Runtime}: Tiempo promedio de renderizado en modo de visualización completa, 
+    con la totalidad de capas intermedias y rebanadas volumétricas activas (en segundos).
+    \item \texttt{Total Items}: Cantidad neta de muestras o ejecuciones individuales procesadas a lo largo de la corrida.
+    \item \texttt{Runs}: Estructura jerárquica (diccionario) que almacena la telemetría detallada de cada corrida 
+    individual, indexada por el identificador o ruta del subdirectorio de datos correspondiente.
+\end{itemize}
+ %% AGREGAR BENCHMARK

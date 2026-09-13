@@ -4,13 +4,12 @@ from bpy.props import StringProperty, IntProperty, PointerProperty, FloatVectorP
 
 """Propiedades de la red por capa y de la geometría
 """
-
-
 class StringItem(PropertyGroup):
     """Clase para almacenar un string en una colección de propiedades."""
     value: StringProperty(name="String Value")
 
 class ConnectionItem(PropertyGroup):
+    """Clase para almacenar objetos de conexiones en una coleccion"""
     object: PointerProperty(
         name="Conexion",
         type=bpy.types.Object
@@ -47,7 +46,15 @@ class GraphProperty(PropertyGroup):
     )
 
     def add_connection(self, name:str, obj: bpy.types.Object):
-        """Agrega una conexion"""
+        """Agrega una conexion
+
+        Args:
+            name (str): Nombre del objeto/identificador
+            obj (bpy.types.Object): Objeto
+
+        Returns:
+            bpy.types.Object: Objeto asignado
+        """
         item = self.connections.get(name)
         if not item:
             item = self.connections.add()
@@ -58,7 +65,16 @@ class GraphProperty(PropertyGroup):
         return item
 
     def add_layer(self, name:str, type:str, obj:bpy.types.Object):
-        """Agrega un nuevo nodo al grafo."""
+        """Agrega un nuevo nodo al grafo
+
+        Args:
+            name (str): Nombre del objeto/capa
+            type (str): Tipo de capa
+            obj (bpy.types.Object): Objeto de la capa
+
+        Returns:
+            bpy.types.Object: Objeto agregado
+        """
         item = self.layers.get(name)
         if not item:
             item = self.layers.add()
@@ -70,7 +86,12 @@ class GraphProperty(PropertyGroup):
         return item
 
     def add_node_parent(self, parent: str, child: str):
-        """Agrega una relación de padre-hijo entre dos nodos en el grafo."""
+        """Agrega una relación de padre-hijo entre dos nodos en el grafo.
+
+        Args:
+            parent (str): Nombre del padre
+            child (str): Nombre del hijo
+        """
         child_node = self.layers.get(child)
         if not child_node:
             child_node = self.layers.add()
@@ -79,7 +100,12 @@ class GraphProperty(PropertyGroup):
         child_node.parents.add().value = parent
 
     def set_children_nodes(self, graph_node: LayerItem, children_name:list):
-        """Establece los hijos de un nodo en el grafo."""
+        """Establece los hijos de un nodo en el grafo.
+
+        Args:
+            graph_node (LayerItem): Objeto padre
+            children_name (list): Lista de hijos
+        """
         graph_node.children.clear()
         for child in children_name:
             self.add_node_parent(graph_node.name, child)

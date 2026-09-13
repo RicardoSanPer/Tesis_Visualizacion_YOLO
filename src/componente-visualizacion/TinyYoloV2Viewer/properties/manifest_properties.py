@@ -28,9 +28,13 @@ class ManifestDataSettings(PropertyGroup):
         except json.JSONDecodeError:
             return {}
 
-    def set_json(self, data_dict):
-        """Función para cargar JSON a los datos"""
-        self.raw_data = json.dumps(data_dict)
+    def set_json(self, data_string: str):
+        """Función para cargar JSON a los datos
+
+        Args:
+            data_string (str): Manifesto en string
+        """
+        self.raw_data = json.dumps(data_string)
 
     def get_manifest_location(self):
         """Obtiene la ruta de directorio del manifesto"""

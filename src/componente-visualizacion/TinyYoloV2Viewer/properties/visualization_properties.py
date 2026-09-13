@@ -135,7 +135,16 @@ class VisualizationDataProperties(PropertyGroup):
         )
 
     def create_layer_properties(self, name:str, rgba: tuple = (0.5, 0.5, 0.5, 1.0), visibility: bool = True):
-        """Crea las propiedades iniciales de un tipo de capa"""
+        """Crea las propiedades iniciales de un tipo de capa
+
+        Args:
+            name (str): Nombre del tipo de capa
+            rgba (tuple, optional): Color para el tipo de capa. Defaults to (0.5, 0.5, 0.5, 1.0).
+            visibility (bool, optional): Visibilidad simplificada. Defaults to True.
+
+        Returns:
+            _type_: _description_
+        """
         item = self.layer_properties.get(name)
         if not item:
             item = self.layer_properties.add()
@@ -145,6 +154,11 @@ class VisualizationDataProperties(PropertyGroup):
         return item
 
     def update_all(self, context):
+        """Actualiza la visibilidad de los tipos de capa.
+
+        Args:
+            context: contexto de la escena
+        """
         for layer in self.layer_properties:
             update_colors(layer, context)
             update_visibility(layer, context)

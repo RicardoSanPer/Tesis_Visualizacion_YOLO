@@ -5,7 +5,18 @@ import bpy
 """
 
 def load_geonode_group(group_name: str):
-    """Carga un grupo de nodos de la librería evitando la duplicación de subgrupos."""
+    """Carga un grupo de nodos de la librería evitando la duplicación de subgrupos.
+
+    Args:
+        group_name (str): Nombre del grupo de nodos
+
+    Raises:
+        FileNotFoundError: Si no se encuentra el archivo library.blend
+        KeyError: Si no se encuentra el grupo de nodos especificado
+
+    Returns:
+        grupo de nodos
+    """
     blend_path = (Path(__file__).parent.parent / "assets" / "library.blend").resolve()
 
     # 1. Retornar si el grupo principal ya está en memoria
@@ -68,8 +79,13 @@ def deduplicate_materials():
                 bpy.data.materials.remove(mat)
 
 def update_input_image(image_path: str):
-    """
-    Asigna una imagen al material de entrada como textura
+    """Asigna una imagen al material de entrada como textura
+
+    Args:
+        image_path (str): ruta de archivo de la imagen
+
+    Returns:
+        Image: Imagen cargada
     """
     # Obtener material
     material_name = "YV2 Input Image"
@@ -104,15 +120,21 @@ def update_input_image(image_path: str):
     # print(f"Actualizada textura de '{mat.name}' a '{img.name}'.")
     return img
 
-def set_node_parameters(obj: bpy.types.Object, modifier_name: str, parameters: dict):
-    """Aplica los parametros al grupo de nodos"""
-    if not obj or not parameters:
+def set_node_parameters(object: bpy.types.Object, modifier_name: str, parameters: dict):
+    """Aplica los parametros al grupo de nodos
+
+    Args:
+        object (bpy.types.Object): Objeto con el grupo de nodos asignado
+        modifier_name (str): Nombre del modificador
+        parameters (dict): Parametros para el grupo de nodos
+    """
+    if not object or not parameters:
         return
 
     # Obtener modificador
-    modifier = obj.modifiers.get(modifier_name)
+    modifier = object.modifiers.get(modifier_name)
     if not modifier or modifier.type != 'NODES' or not modifier.node_group:
-        print(f"Modificador '{modifier_name}' no encontrado en {obj.name}")
+        print(f"Modificador '{modifier_name}' no encontrado en {object.name}")
         return
 
     node_group = modifier.node_group
@@ -137,4 +159,4 @@ def set_node_parameters(obj: bpy.types.Object, modifier_name: str, parameters: d
         except Exception as e:
             print(f"Falló asignar '{param_name}' ({socket_id}) = {param_value}: {e}")
 
-    obj.update_tag()
+    object.update_tag()

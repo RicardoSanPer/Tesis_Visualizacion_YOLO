@@ -50,7 +50,6 @@ Asimismo, el módulo se apoya en los siguientes componentes auxiliares:
 
 La disposición jerárquica del paquete se estructura de la siguiente manera:
 \begin{figure}[!htbp]
-\centering
 \dirtree{%
 .1 componente-extraccion/.
 .2 benchmark.py.
@@ -232,22 +231,59 @@ Asimismo, inicializa a nivel global las instancias de los componentes del flujo:
     \item \texttt{extractor}: Instancia de \texttt{ModelExtractor} configurada para la captura de tensores intermedios.
     \item \texttt{exporter}: Instancia de \texttt{ModelExporter} responsable de la persistencia de los datos.
 \end{itemize}
-El script utiliza una sola instancia del ejecutor del modelo, compartida por todas las ejecuciones, con el propósito de agilizar las
-operaciones al evitar volver a cargar los pesos y parámetros de la red entre estas.
+El \textit{script} mantiene una única instancia activa del ejecutor del modelo compartida a lo largo de toda la secuencia, optimizando el tiempo 
+global de procesamiento al evitar la recarga redundante de los pesos preentrenados y la reinicialización de grafos en memoria entre iteraciones consecutivas.
 \medskip
 
 El módulo implementa las siguientes funciones de soporte y control:
 \begin{itemize}
-    \item \texttt{progress\_bar(count, total)}: Rutina auxiliar que despliega una barra de progreso interactiva en la terminal para monitorizar el 
-    avance del procesamiento por lotes.
+    \item \texttt{progress\_bar(count, total)}: Rutina auxiliar que despliega una barra de progreso interactiva en la terminal para monitorizar 
+    el avance del procesamiento por lotes.
     \item \texttt{run(input\_file, output\_path)}: Ejecuta el ciclo integral de inferencia, extracción y serialización para una muestra individual. 
     Registra la telemetría temporal de la ejecución y los metadatos de los archivos generados.
-    \item \texttt{output\_tree\_info(path)}: Analiza de forma recursiva la jerarquía del directorio generado, calculando el tamaño en disco (en bytes) 
-    y la cantidad de archivos contenidos en cada subcarpeta.
-    \item \texttt{calculate\_precision\_loss(ext)}: Cuantifica la pérdida de precisión numérica generada por el proceso de exportación para una extensión dada. 
-    La discrepancia se evalúa contrastando directamente el tensor original en memoria contra la estructura intermedia procesada por el exportador antes de su 
-    escritura física, evitando sobrecostos por operaciones de lectura en disco.
-    \item \texttt{batch\_run(batch\_count, batch\_output\_path)}: Orquesta la ejecución secuencial del procesamiento por lotes sobre las imágenes del 
-    directorio de entrada. Consolida los artefactos y el reporte agregado de telemetría bajo un directorio único de salida y despliega en consola las métricas 
-    estadísticas promedio.
+    \item \texttt{output\_tree\_info(path)}: Analiza de forma recursiva la jerarquía del directorio generado, calculando el tamaño en disco 
+    (en bytes) y la cantidad de archivos contenidos en cada subcarpeta.
+    \item \texttt{calculate\_precision\_loss(ext)}: Cuantifica la pérdida de precisión numérica generada por el proceso de exportación para 
+    una extensión dada. La discrepancia se evalúa contrastando directamente el tensor original en memoria contra la estructura intermedia 
+    procesada por el exportador antes de su escritura física, evitando sobrecostos por operaciones de lectura en disco.
+    \item \texttt{batch\_run(batch\_count, batch\_output\_path)}: Orquesta la ejecución secuencial del procesamiento por lotes sobre las 
+    imágenes del directorio de entrada. Consolida los artefactos y el reporte agregado de telemetría bajo un directorio único de salida y 
+    despliega en consola las métricas estadísticas promedio.
+\end{itemize}
+
+Además de los artefactos de extracción correspondientes a cada muestra, el módulo genera un archivo de balance \texttt{manifest.json} en 
+la raíz del directorio de salida con la telemetría individual y las métricas agregadas del lote, indexadas por el nombre del archivo 
+de entrada correspondiente.
+
+Las métricas registradas de forma individual por cada ejecución son:
+\begin{itemize}
+    \item \texttt{Input File}: Nombre o ruta del archivo de imagen suministrado a la red.
+    \item \texttt{Output Directory}: Directorio de destino asignado a la muestra procesada.
+    \item \texttt{Runtime}: Tiempo total de ejecución del flujo individual (en segundos), abarcando la inferencia del modelo, 
+    la captura de tensores y la exportación a disco.
+    \item \texttt{Total Filesize}: Tamaño acumulado de los artefactos generados (en bytes), excluyendo las cuadrículas de cajas 
+    delimitadoras y las imágenes de entrada y salida.
+    \item \texttt{Total Filecount}: Cantidad neta de archivos producidos, aplicando los mismos criterios de exclusión de metadatos 
+    y previsualizaciones.
+    \item \texttt{Run Parameters}: Parámetros de configuración suministrados al flujo, tales como \texttt{--include}, 
+    \texttt{--exclude}, \texttt{--conf} y \texttt{--nms}, entre otros.
+    \item \texttt{Precision Error}: Pérdida de precisión numérica estimada entre los tensores residentes en memoria y los 
+    datos exportados (calculada mediante el error absoluto medio o MAE). Las métricas se agrupan por formato e incluyen 
+    los valores promedio, mínimo y máximo, además del error específico cuantificado por cada capa intervenida.
+    \item \texttt{Files}: Estructura jerárquica de los archivos y carpetas generados, documentando el tamaño en disco de 
+    cada elemento (en bytes) y la cantidad de archivos contenidos por subdirectorio.
+\end{itemize}
+
+Por su parte, las métricas globales agregadas para el lote completo comprenden:
+\begin{itemize}
+    \item \texttt{Runs}: Cantidad total de ejecuciones individuales procesadas.
+    \item \texttt{Min Runtime}: Mínimo tiempo de ejecución individual registrado en el lote (en segundos).
+    \item \texttt{Max Runtime}: Máximo tiempo de ejecución individual registrado en el lote (en segundos).
+    \item \texttt{Avg Runtime}: Media aritmética del tiempo de ejecución por muestra (en segundos).
+    \item \texttt{Total Runtime}: Tiempo acumulado de procesamiento (en segundos), computando exclusivamente las 
+    fases de inferencia, captura de tensores y exportación en disco.
+    \item \texttt{Total Filesize}: Espacio total ocupado en disco por los artefactos generados (en bytes).
+    \item \texttt{Total Filecount}: Cantidad total de archivos generados a lo largo del lote.
+    \item \texttt{MAE}: Pérdida de precisión numérica media estimada por tipo de formato o extensión 
+    (calculada mediante el error absoluto medio).
 \end{itemize}

@@ -231,8 +231,9 @@ El archivo expone los siguientes parámetros de configuración:
 En adición a las activaciones extraídas durante las inferencias, el procedimiento genera un archivo estructurado en formato 
 JSON que consolida la telemetría y métricas agregadas del procesamiento por lotes en el directorio de salida, indexados
 por el nombre del archivo de entrada correspondiente. 
-Para cada inferencia individual se registran los siguientes atributos:
+\medskip
 
+Para cada inferencia individual se registran los siguientes atributos:
 \begin{itemize}
     \item \texttt{Input File}: Nombre o ruta del archivo de imagen suministrado a la red.
     \item \texttt{Output Directory}: Directorio de destino asignado a la muestra procesada.
@@ -248,6 +249,19 @@ Para cada inferencia individual se registran los siguientes atributos:
     \item \texttt{Files}: Estructura jerárquica de los archivos y carpetas generados, documentando el tamaño en disco de cada elemento 
     (en bytes) y la cantidad de archivos contenidos por directorio.
 \end{itemize}
+Adicionalmente se incluyen métricas promedio de la ejecución por lotes:
+\begin{itemize}
+  \item \texttt{Runs}: Total de ejecuciones individuales.
+  \item \texttt{Min Runtime}: Menor tiempo de ejecución registrado para todas las ejecuciones.
+  \item \texttt{Max Runtime}: Mayor tiempo de ejecución registrado para todas las ejecuciones.
+  \item \texttt{Avg Runtime}: Tiempo promedio de ejecución individual.
+  \item \texttt{Total Runtime}: Tiempo total de las ejecuciones, contando solo el tiempo de ejecución de
+  la inferencia, extracción y exportación.
+  \item \texttt{Total Filesize}: Tamaño en disco total generado.
+  \item \texttt{Total Filecount}: Total de archivos generados.
+  \item \texttt{MEA}: Pérdida de precisión numérica estimada por tipo de extensión.
+\end{itemize}
+
 A continuación se incluye una muestra de las métricas obtenidas:
 \begin{verbatim}
 {
