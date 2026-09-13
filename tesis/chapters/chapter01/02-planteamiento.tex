@@ -1,40 +1,35 @@
 \section{Planteamiento del problema}
-Los modelos de inteligencia artificial modernos son estructuras matemáticas altamente complejas. Al constar de un gran 
-número de capas, cada una con cientos o miles de neuronas que a su vez se interconectan entre sí, conforman un entramado 
-matemático difícil de visualizar y comprender. Esto provoca que a menudo la inteligencia artificial sea interpretada como 
-una «caja negra»: se reconoce que el sistema produce una salida específica a partir de una entrada determinada, pero los 
-mecanismos del procesamiento interno se ignoran por conveniencia o simplicidad metodológica. 
+Los modelos modernos de aprendizaje profundo constituyen estructuras matemáticas de elevada complejidad dimensional. 
+Al componerse de múltiples capas intermedias con miles de unidades interconectadas, su dinámica interna resulta difícil 
+de estructurar e inspeccionar de forma intuitiva, lo que frecuentemente relega el análisis de las representaciones 
+intermedias en favor de un enfoque centrado exclusivamente en la correspondencia directa entre entradas y salidas.
 \medskip
 
-Este problema se agrava significativamente en las redes neuronales convolucionales (CNN), las cuales generan un gran volumen 
-de datos intermedios estructurados en tensores tridimensionales, lo que por sí solo ya representa un desafío crítico para su 
-visualización. Las herramientas de diagnóstico visual contemporáneas se ven obligadas a simplificar estos datos tridimensionales 
-al aplanarlos a dos dimensiones (usualmente en forma de imágenes planas) para obtener una única representación promediada. 
-Por el contrario, si se desea preservar la integridad de los datos numéricos individuales, dichas herramientas deben generar 
-cientos de imágenes bidimensionales independientes. En ambos escenarios se rompe irreversiblemente la continuidad espacial y 
-la topología geométrica original de los datos.
+Esta limitación es particularmente notoria en las redes neuronales convolucionales (CNN), las cuales operan sobre 
+volúmenes masivos de datos organizados en tensores tridimensionales de activación. Los métodos y herramientas 
+tradicionales de representación visual suelen verse restringidos por las interfaces gráficas convencionales, 
+recurriendo a proyecciones bidimensionales (como imágenes en escala de grises o cuadrículas planas promediadas). 
+Si se requiere preservar cada canal de manera individual, es necesario exportar cientos de archivos de imagen aislados. 
+En ambos casos, se fractura la continuidad espacial tridimensional intrínseca del tensor, imposibilitando el análisis de 
+las relaciones geométricas locales y volumétricas que la red construye entre capas adyacentes.
 \medskip
 
-El empleo de estas representaciones bidimensionales alternativas suele derivar en una pérdida drástica de precisión debido a las 
-limitaciones técnicas de los formatos de archivo convencionales, así como en un desperdicio severo de recursos de almacenamiento.
-El formato PNG, por ejemplo, utiliza típicamente una profundidad de 8 bits por canal para registrar la información de color, 
-lo cual trunca y limita severamente la precisión de punto flotante nativa de los tensores científicos. Asimismo, este enfoque 
-incurre en redundancia de datos al replicar el mismo valor escalar en los tres canales cromáticos (RGB) cuando la imagen solo 
-almacena la información de una única rebanada o filtro del tensor. Adicionalmente, gestionar la inmensa cantidad de archivos de 
-imagen requeridos para cubrir las capas intermedias da como resultado un uso ineficiente de los recursos de cómputo y memoria 
-del sistema.
+Asimismo, el uso de estos formatos de imagen bidimensionales convencionales introduce deficiencias técnicas en la fidelidad 
+y gestión de los datos. Formatos gráficos de uso común, como PNG, operan típicamente con una profundidad de $8$ bits por 
+canal, truncando drásticamente los valores continuos en punto flotante de $32$ bits propios de las bibliotecas de aprendizaje 
+automático (e.g., PyTorch). A esto se añade una redundancia estructural significativa al duplicar valores escalares en canales 
+de color independientes (RGB) para representar un único mapa de características, multiplicando el consumo de almacenamiento 
+en disco y la sobrecarga en las operaciones de entrada/salida (I/O) al manipular colecciones atomizadas de miles de archivos independientes por inferencia.
 \medskip
 
-Consecuentemente, en el estado del arte actual no existe un flujo de trabajo estandarizado para la representación volumétrica 
-tridimensional directa de los datos tensoriales. Los entornos de desarrollo y entrenamiento de IA se encuentran completamente 
-desacoplados de los ecosistemas de computación gráfica y renderizado, lo que dificulta la exploración interactiva, procedural 
-y tridimensional de los datos internos del modelo.
+Actualmente se manifiesta una brecha técnica entre las plataformas de entrenamiento de modelos y los ecosistemas de 
+gráficos por computadora: no existe una infraestructura estandarizada que permita serializar y renderizar las estructuras 
+tensoriales volumétricas de forma procedural, directa e interactiva dentro de motores gráficos tridimensionales dedicados.
 \medskip
 
-Por consiguiente, el problema fundamental que aborda esta investigación radica en la pérdida de información geométrica y 
-continuidad espacial al inspeccionar los tensores intermedios de las redes convolucionales mediante herramientas de 
-visualización bidimensionales convencionales. A esto se suma la ineficiencia computacional implícita en el manejo de mapas de 
-activación dispersos y la falta de un flujo de trabajo integrado que conecte los entornos de aprendizaje profundo con los 
-motores de gráficos tridimensionales. Debido a esta brecha, los desarrolladores carecen de metodologías interactivas y 
-volumétricas eficaces para auditar la estructura interna de modelos como YOLOv2, lo que perpetúa la opacidad de los sistemas de 
-visión artificial y limita el alcance práctico de la Inteligencia Artificial Explicable.
+Por consiguiente, el problema que aborda este trabajo radica en la degradación de la topología geométrica y la pérdida de 
+precisión numérica al visualizar y manipular tensores de activación mediante formatos e interfaces bidimensionales. A esto se 
+suma el elevado coste de almacenamiento e I/O que impone la fragmentación en imágenes rasterizadas y la ausencia de un conducto 
+(\textit{pipeline}) integrado que conecte los entornos de inferencia con herramientas de computación gráfica. Como consecuencia, el 
+desarrollo, análisis estructural y generación de material de comunicación técnica para modelos de visión computacional como 
+Tiny YOLOv2 carecen de metodologías volumétricas capaces de representar con fidelidad y eficiencia sus representaciones latentes tridimensionales.

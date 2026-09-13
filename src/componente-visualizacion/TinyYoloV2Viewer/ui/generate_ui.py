@@ -1,0 +1,45 @@
+import bpy
+from bpy.types import Panel
+
+"""Panel en la UI para controles de visualización de la red.
+"""
+
+
+class VIEW3D_PT_Yolov2GeneratorPanel(Panel):
+    """Draws a button in the 3D Viewport N-Panel"""
+    bl_label = "Geometria YOLOv2"
+    bl_idname = "OBJECT_PT_yolov2_generator"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "YOLOv2"
+
+    def draw(self, context):
+        layout = self.layout
+        scene = context.scene
+
+        vis_props = scene.yolo_visualization_settings
+
+        ## Tamaños
+        box = layout.box()
+        box.label(text="Dimensiones", icon="FIXED_SIZE")
+        col = box.column(align=True)
+        col.prop(vis_props, "size_scale")
+        col.prop(vis_props, "layer_depth")
+        col.prop(vis_props, "layer_gap")
+        col.prop(vis_props, "layer_max_depth")
+
+        # Visibilidad
+        box = layout.box()
+        box.label(text="Visibilidad", icon="HIDE_OFF")
+        col = box.column(align=True)
+
+        for item in vis_props.layer_properties:
+            row = col.row()
+            row.prop(item, "color", text=item.name)
+            row.prop(item, "visibility", text="Simple")
+            row.prop(item, "type_visibility", text="Texto")
+
+        col = layout.column(align=True)
+        layout.separator()
+        layout.operator("mesh.create_yolov2_object", text="Generar geometría", icon='GEOMETRY_NODES')
+

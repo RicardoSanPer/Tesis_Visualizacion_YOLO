@@ -2,9 +2,14 @@
 
 \usepackage{fontspec}
 \usepackage{amsmath}
+\usepackage{dirtree}
+\usepackage{tabularx}
+\usepackage{xltabular}
+\usepackage{booktabs}
 
 % Imagenes
 \usepackage{graphicx}
+\usepackage{rotating}
 \graphicspath{ {images/} }
 
 % Lenguaje
@@ -24,6 +29,7 @@
 
 % Bookmarks (tabla de navegacion)
 \usepackage{bookmark}
+\usepackage{placeins}
 
 
 \title{
@@ -55,7 +61,19 @@ aplicado a Modelo YOLOv8
 \input{chapters/chapter03/chapter3.tex}
 
 \chapter{Modelo de Detección y Extracción}
-\input{chapters/chapter04/capter4.tex}
+\input{chapters/chapter04/chapter4.tex}
+
+\chapter{Visualización Tridimensional}
+\input{chapters/chapter05/chapter5.tex}
+
+\chapter{Resultados y Validación Técnica}
+\input{chapters/chapter06/chapter6.tex}
+
+\chapter{Conclusiones}
+\input{chapters/chapter07/chapter7.tex}
+
+\appendix
+\input{appendix/appendix.tex}
 
 \printbibliography[title={Referencias}, notkeyword={extra}]
 

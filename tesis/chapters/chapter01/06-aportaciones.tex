@@ -1,25 +1,30 @@
-\section{Aportaciones esperadas}
+\section{Justificación}
+La presente investigación se fundamenta en la necesidad de superar las limitaciones de representación y gestión de datos 
+que presentan los métodos tradicionales de inspección de redes neuronales convolucionales, abordando el problema mediante 
+la convergencia entre la ingeniería de datos en aprendizaje profundo y la computación gráfica tridimensional. 
+La relevancia de este trabajo se sustenta en tres dimensiones principales:
 
-Del presente trabajo de investigación se proyecta aportar al campo de la Inteligencia Artificial Explicable 
-una metodología y una herramienta técnica capaz de cerrar la brecha existente entre los entornos de 
-desarrollo de aprendizaje profundo y los ecosistemas gráficos interactivos. Mediante el aprovechamiento de 
-las capacidades de Blender y Python, se espera consolidar un flujo de trabajo que no solo facilite la 
-visualización e interpretación de datos tensoriales complejos, sino que también optimice su uso en la c
-reación de material didáctico e ilustrativo de alta fidelidad espacial.
-
-De manera específica, se contemplan las siguientes aportaciones clave al concluir esta investigación:
 \begin{itemize}
-    \item \textbf{Un pipeline de automatización e integración:} El código fuente y los scripts de Python 
-    necesarios para interceptar y extraer matrices densas de capas convolucionales de producción y 
-    traducirlas limpiamente a formatos tridimensionales unificados.
-    \item \textbf{Un entorno interactivo de diagnóstico visual (Artifact):} Un sistema procedural desarrollado 
-    dentro del editor de nodos de geometría de Blender, diseñado específicamente para realizar operaciones de 
-    rebanado vertical, mapas de opacidad y análisis topológico interactivo sobre volúmenes de datos científicos.
-    \item \textbf{Impacto en la ingeniería y la investigación:} Una alternativa metodológica viable frente a 
-    las herramientas bidimensionales tradicionales que sufren de fragmentación de archivos planos, 
-    proveyendo a los desarrolladores de IA de un entorno tridimensional inmersivo para el diagnóstico de 
-    filtros y mapas de activación.
-    \item \textbf{Recurso para la divulgación científica:} Un marco visual de representación geométrica que
-     humanice y desmitifique la naturaleza abstracta del procesamiento interno de la IA, convirtiendo 
-     tensores invisibles en material educativo inteligible para un público no especializado.
+    \item \textbf{Dimensión pedagógica y de comunicación técnica:} La creciente complejidad estructural de los modelos de 
+    visión artificial demanda recursos didácticos avanzados que permitan conceptualizar su funcionamiento interno de manera 
+    intuitiva y rigurosa. Al trasladar la arquitectura interna del modelo a representaciones espaciales explícitas, esta 
+    investigación aporta un marco metodológico para que estudiantes, docentes y desarrolladores puedan analizar la propagación 
+    de activaciones, comprender la interacción geométrica entre capas y contrastar conceptos abstractos, tales como el campo 
+    receptivo o la descomposición tensorial, en un entorno visual estructurado.
+    
+    \item \textbf{Dimensión técnica y computacional:} Las aproximaciones convencionales para registrar las activaciones 
+    intermedias suelen recurrir a la fragmentación en imágenes rasterizadas bidimensionales. Este esquema obliga a generar, 
+    indexar y manipular colecciones de cientos de archivos independientes (e.g., imágenes PNG individuales por canal), lo que 
+    satura las operaciones de entrada/salida (I/O) y degrada la precisión numérica al limitar los valores flotantes a profundidades 
+    de color estándar. Este trabajo resuelve dicha ineficiencia al proponer un conducto (\textit{pipeline}) integrado que encapsula 
+    las activaciones tensoriales en cuadrículas volumétricas jerárquicas mediante el formato \textit{OpenVDB}. Esta estrategia optimiza 
+    el almacenamiento, preserva la fidelidad numérica y restituye la continuidad topológica nativa de los tensores tridimensionales, 
+    eliminando los cuellos de botella asociados a la gestión masiva de archivos gráficos planos.
+    
+    \item \textbf{Dimensión metodológica y de integración de sistemas:} En el ámbito de la ingeniería de software, esta tesis 
+    articula dos ecosistemas computacionales tradicionalmente desacoplados: los entornos de ejecución e inferencia en aprendizaje 
+    profundo basados en Python (PyTorch) y las plataformas de renderizado y geometría procedimental en Blender (\textit{Geometry Nodes}).
+    La integración de este flujo de trabajo dota a la disciplina de una metodología reproducible para transformar herramientas estándar de 
+    computación gráfica en plataformas funcionales de exploración espacial, generación de material didáctico y representación interactiva 
+    de datos tensoriales complejos.
 \end{itemize}

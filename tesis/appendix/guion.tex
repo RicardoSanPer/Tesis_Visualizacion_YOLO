@@ -1,0 +1,140 @@
+\chapter{Guion de animación}
+\label{anx:guion_anim}
+Este anexo presenta un guion técnico y su respectivo guion gráfico (\textit{storyboard}), 
+los cuales sirven de base para la producción de una pieza audiovisual de carácter didáctico 
+generada a partir de las herramientas de extracción y visualización tridimensional de datos intermedios de Tiny YOLOv2.
+\medskip
+
+El material está dirigido a estudiantes de programas académicos afines a las ciencias de la 
+computación que cuenten con conocimientos fundamentales sobre aprendizaje automático y 
+redes neuronales densas. Su objetivo principal consiste en ilustrar los conceptos nucleares 
+de las redes neuronales convolucionales, tales como:
+\begin{itemize}
+    \item La operación formal de convolución bidimensional.
+    \item La arquitectura jerárquica de la red (capas convolucionales y de reducción espacial o \textit{MaxPool2d}).
+    \item Las divergencias estructurales respecto a redes densamente conectadas.
+    \item El campo receptivo y la evolución representacional entre capas tempranas y profundas.
+    \item Las diferencias funcionales entre tareas de clasificación y detección de objetos.
+\end{itemize}
+
+Dado su enfoque pedagógico, la propuesta se apoya en composiciones visuales limpias, transiciones fluidas y 
+fondos de contraste oscuro, facilitando la identificación inmediata de los elementos volumétricos analizados. 
+De forma complementaria, el componente visual se sincroniza con una locución en voz en \textit{off} para guiar 
+la exposición, con una duración estimada de entre $1$ y $1.5$ minutos.
+
+\section{Guión y Storyboard}
+\centering
+\small
+\begin{xltabular}{\textwidth}{m{4.5cm} X X}
+        % --- Encabezado en la primera página ---
+    \caption{Guion técnico y correspondencia gráfica de la animación didáctica.} \label{tab:guion_tecnico_animacion} \\
+    \toprule
+    \textbf{Storyboard} & \textbf{Acción / Visual} & \textbf{Locución (Audio)} \\
+    \midrule
+    \endhead
+
+    % --- Encabezado repetido en las páginas siguientes ---
+    \toprule
+    \textbf{Storyboard} & \textbf{Acción / Visual} & \textbf{Locución (Audio)} \\
+    \midrule
+    \endhead
+
+    % --- Pie de tabla en páginas intermedias (indica que continúa) ---
+    \midrule
+    \multicolumn{3}{r}{\footnotesize\textit{Continúa en la siguiente página\dots}} \\
+    \endfoot
+
+    % --- Pie de tabla definitivo en la última página ---
+    \bottomrule
+    \endlastfoot
+
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/1.png} 
+        & Vista frontal de la imagen de entrada. Se resalta el sujeto de la escena y se proyecta su caja 
+        delimitadora de predicción. Transición hacia la vista tridimensional mientras se extruye la arquitectura de la red. 
+        & Las redes neuronales convolucionales son arquitecturas especializadas, diseñadas para el análisis, 
+        la clasificación y la detección de objetos en imágenes.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/2.png}
+        & Vista tridimensional en rotación continua del modelo Tiny YOLOv2.
+        & Aunque comparten principios fundamentales con los perceptrones multicapa tradicionales, su principal 
+        ventaja radica en la integración de capas especializadas capaces de procesar tensores volumétricos mediante 
+        operaciones de convolución.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/3.png}
+        & Aparece una matriz de datos bidimensional sobre la cual se desplaza una ventana de cálculo. Se incorporan 
+        dinámicamente elementos y filas para ilustrar el recorrido de la convolución discreta en dos dimensiones.
+        & La convolución puede interpretarse como una ventana deslizante sobre un arreglo estructurado de datos, 
+        como la cuadrícula de píxeles de una imagen digital.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/4.png}
+        & Alejamiento de cámara (\textit{zoom-out}): las celdas del arreglo reducen su escala relativa hasta 
+        transformarse en los píxeles de una imagen, revelando finalmente la imagen completa.
+        & Esta ventana, conocida como núcleo o \textit{kernel}, recorre la superficie realizando sumas ponderadas 
+        con los valores del vecindario local, sintetizando un único valor representativo en cada posición espacial.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/5.png}
+        & Composición frontal con la imagen de entrada, el núcleo de convolución y el mapa de características resultante. 
+        El núcleo y la salida rotan secuencialmente a modo de carrusel.
+        & En el procesamiento digital clásico, estas transformaciones se emplean para suavizar señales, atenuar ruido o 
+        resaltar características morfológicas clave, como los bordes de una figura.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/6.png}
+        & La imagen de entrada y el mapa de salida se segmentan en regiones independientes, cada una evaluada por su 
+        respectivo núcleo de convolución en paralelo.
+        & Además, al constituir evaluaciones locales e independientes por región, la convolución es una operación 
+        intrínsecamente paralelizable y de alta eficiencia computacional.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/7.png}
+        & La imagen de salida transiciona al espacio tridimensional y se descompone en dos retículas de vóxeles que 
+        representan los elementos de entrada y salida. Se trazan aristas de interconexión densa entre cada par de elementos.
+        & Intentar procesar imágenes de alta resolución mediante capas totalmente conectadas presenta un obstáculo 
+        crítico: vincular cada par de neuronas entre etapas sucesivas incrementa drásticamente el número de parámetros y la complejidad computacional.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/8.png}
+        & Acercamiento de cámara (\textit{zoom-in}) hacia el volumen de la capa convolucional, enfocando el 
+        prisma alámbrico del núcleo.
+        & Las redes convolucionales resuelven este problema mediante la compartición de pesos en sus núcleos: un
+        mismo conjunto de parámetros se reutiliza a lo largo de toda la superficie de la capa, aprendiendo a 
+        identificar patrones espaciales específicos con independencia de su posición en el encuadre.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/9.png}
+        & Visualización de la operación de reducción (\textit{pooling}). Se delimita una vecindad de cuatro píxeles 
+        adyacentes y se descartan tres; el proceso se repite sobre toda la cuadrícula y las activaciones retenidas se compactan en una nueva retícula.
+        & Otra operación fundamental en estas arquitecturas es el agrupamiento o \textit{pooling}, cuyo propósito es 
+        reducir la dimensionalidad espacial de las representaciones intermedias. Su variante más común, el 
+        \textit{max-pooling}, reduce las dimensiones transversales a la mitad reteniendo únicamente la activación máxima de cada vecindad.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/10.png}
+        & Vista frontal del grafo. Las capas intermedias se ocultan progresivamente para evidenciar la reducción de 
+        resolución espacial. Se proyecta un indicador cuadrangular sobre un vóxel profundo; luego, las capas 
+        reaparecen en orden inverso mientras el recuadro se expande progresivamente hacia la entrada para ilustrar la cobertura del campo receptivo.
+        & Este mecanismo de compresión alivia la carga de cómputo en las etapas subsiguientes y expande 
+        progresivamente el campo receptivo de la red.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/11.png}
+        & Despliegue comparativo en paralelo de los mapas de activación correspondientes a distintas profundidades de la red.
+        & De este modo, las capas iniciales responden a rasgos locales primitivos, como bordes, transiciones de 
+        contraste y texturas elementales, mientras que las capas más profundas sintetizan estas respuestas para 
+        reconocer estructuras semánticas complejas y de mayor escala.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/12.png}
+        & Retorno a la perspectiva global de la arquitectura tridimensional; se iluminan sucesivamente 
+        los bloques de capas a medida que se enuncian en la locución.
+        & En términos generales, una red convolucional intercala secuencias de convolución, normalización 
+        por lotes, activaciones no lineales y agrupamiento espacial para estructurar una jerarquía progresiva de representaciones visuales.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/13.png}
+        & Visualización del plano de salida junto a un listado de clases ordenadas descendentemente según 
+        su probabilidad predicha.
+        & La topología final del modelo se adapta a la tarea asignada: en problemas de clasificación pura, 
+        la red genera una distribución categórica de probabilidades que asocia la totalidad de la imagen a una única etiqueta representativa.\\
+    \midrule
+        \includegraphics[width=\linewidth, height=2.6cm, keepaspectratio]{storyboard/15.png}
+        & Presentación de la matriz estructurada de predicciones. Los vectores se trasladan hacia el plano 
+        de salida y se resaltan individualmente, proyectando sus respectivas cajas y etiquetas tridimensionales en la escena.
+        & En detección de objetos, arquitecturas más avanzadas identifican múltiples instancias concurrentes, generando 
+        como salida un conjunto de vectores donde cada registro codifica las coordenadas espaciales y dimensiones 
+        de la caja delimitadora, la puntuación de objetualidad (\textit{objectness}), la distribución de 
+        probabilidad condicional y el identificador de clase.\\
+\end{xltabular}

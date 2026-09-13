@@ -1,0 +1,38 @@
+\section{Discusión técnica}
+A partir de los resultados obtenidos en las pruebas de rendimiento y de la experiencia derivada del desarrollo de las herramientas, 
+es posible sintetizar diversos hallazgos clave sobre la viabilidad y alcance del sistema.
+\medskip
+
+En primer término, se demuestra que \textit{OpenVDB} constituye una alternativa sumamente ventajosa para la representación de tensores 
+en entornos de computación gráfica. Su principal fortaleza radica en su naturaleza volumétrica unificada, la cual permite encapsular las 
+activaciones completas de un tensor multidimensional en un único archivo físico en disco. Este enfoque optimiza sustancialmente el flujo 
+de trabajo al mitigar el cuello de botella en las operaciones de entrada/salida (I/O) y reducir drásticamente el volumen de archivos 
+generados frente a las secuencias de imágenes convencionales. Asimismo, su esquema de serialización preserva la precisión numérica de 
+punto flotante nativa (\texttt{float32}) de las activaciones, eliminando la degradación introducida por la cuantización.
+\medskip
+
+En segundo término, la integración nativa de estos volúmenes dentro de Blender habilita un entorno de inspección visual ágil y altamente 
+interactivo. La disponibilidad de grupos de nodos procedurales orientados a la generación, transformación y muestreo de densidades 
+volumétricas permite explorar las activaciones en el espacio tridimensional y evaluar modificaciones de visualización en tiempo real. 
+Debido a restricciones arquitectónicas de Blender, implementar un esquema análogo fundamentado en secuencias de imágenes 2D demandaría 
+una sobrecarga sustancial de configuración manual o el desarrollo de \textit{scripts} auxiliares complejos, lo cual ralentizaría sensiblemente 
+la iteración y el análisis.
+\medskip
+
+De este modo, la extensión desarrollada consolida a Blender no solo como un motor de renderizado técnico y generación de material didáctico o 
+demostrativo, sino como un entorno de exploración analítica e interpretabilidad (XAI) para modelos de aprendizaje profundo.
+\medskip
+
+No obstante, la solución actual presenta ciertas limitaciones técnicas que delimitan su alcance:
+\begin{itemize}
+    \item \textbf{Rendimiento en el \textit{viewport}:} la fluidez de navegación interactiva se degrada proporcionalmente a la cantidad de datos 
+    volumétricos densos evaluados de manera simultánea, experimentando caídas considerables en la tasa de cuadros por segundo (\textit{framerate}) 
+    cuando se renderiza la totalidad de la red en modos con sombreado activo.
+    \item \textbf{Acoplamiento topológico:} si bien el módulo de extracción en PyTorch goza de una alta modularidad que facilita su extensión 
+    a otros modelos, el componente de visualización en Blender se diseñó específicamente para la topología de Tiny YOLOv2. Adaptar este 
+    subsistema a modelos más diversos demandaría reestructuraciones estructurales de mayor escala.
+    \item \textbf{Soporte para arquitecturas no lineales:} la canalización actual asume un flujo computacional estrictamente secuencial. 
+    La incorporación de modelos modernos con bifurcaciones, conexiones residuales (\textit{skip connections}) o mecanismos de atención 
+    requeriría ampliar los algoritmos de disposición geométrica procedural para representar grafos acíclicos dirigidos (DAG) 
+    complejos sin inducir saturación visual ni desbordamiento de memoria gráfica.
+\end{itemize}

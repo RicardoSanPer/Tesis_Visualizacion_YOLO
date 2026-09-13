@@ -1,0 +1,132 @@
+\chapter[Compilación de OpenVDB]{Instrucciones de compilación de OpenVDB para Python}
+\label{anx:compilacion_openvdb}
+Este anexo presenta las instrucciones de compilación de la biblioteca OpenVDB para Python en 
+Windows 11.
+
+\section{Requisitos}
+\begin{itemize}
+    \item CMake
+    \item Visual Studio 2022 con los siguientes componentes:
+    \begin{itemize}
+        \item Carga de trabajo <<Desarrollo para el escritorio con C++>>
+        \item Herramientas de compilación de C++ de MSVC v143-VS 2022 para x64/x86 
+        (más recientes)
+        \item SDK de Windows 11
+        \item Herramientas de CMake en C++ para Windows
+        \item ATL de C++ para las herramientas de compilación v143 más recientes (x86 y x64)
+    \end{itemize}
+    \item Python
+    \item Git
+\end{itemize}
+Los componentes de Visual Studio se pueden instalar mediante Visual Studio Installer, 
+seleccionando la opción \textit{Modificar} en la versión del programa instalada. En la 
+ventana emergente se debe marcar la carga de trabajo 
+\textit{Desarrollo para el escritorio con C++}, y en el panel lateral derecho seleccionar 
+los componentes opcionales requeridos. Adicionalmente, estos pueden localizarse de forma 
+individual en la pestaña \textit{Componentes individuales}.
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/anexos/compilacion-openvdb/vs-componentes.png}
+    \caption[Instalación de componentes de Visual Studio]{Instalación de componentes de Visual 
+    Studio.}
+    \label{fig:vs_components}
+\end{figure}
+
+\section{Instrucciones}
+La compilación de OpenVDB se realiza a través de la consola de comandos de Windows 
+(CMD o PowerShell). En la terminal, ejecute los siguientes comandos para clonar y preparar el 
+gestor de paquetes \textit{vcpkg} en el directorio raíz \texttt{C:\textbackslash}:
+
+\begin{verbatim}
+    cd C:\
+    git clone https://github.com/microsoft/vcpkg.git
+    cd vcpkg
+    .\bootstrap-vcpkg.bat
+\end{verbatim}
+
+\textit{vcpkg} es un gestor de paquetes para C/C++ que compila e instala las dependencias 
+necesarias para la biblioteca. Instale dichas dependencias mediante el siguiente comando:
+
+\begin{verbatim}
+    .\vcpkg install tbb blosc boost-iostreams boost-system boost-any 
+    boost-algorithm openexr imath zlib nanobind boost-interprocess 
+    boost-headers:x64-windows
+\end{verbatim}
+El proceso de descarga y compilación de dependencias puede demorar entre 15 y 20 minutos.
+\medskip
+
+Posteriormente, clone el código fuente de OpenVDB en el directorio raíz y cree el subdirectorio 
+de compilación (\texttt{build}):
+
+\begin{verbatim}
+    cd C:\
+    git clone https://github.com/AcademySoftwareFoundation/openvdb.git
+    cd openvdb
+    mkdir build
+    cd build
+\end{verbatim}
+
+Configure el proyecto de compilación utilizando CMake con la siguiente instrucción (una sola linea):
+
+\begin{verbatim}
+    cmake .. -G "Visual Studio 17 2022" -A x64 ^
+     -DCMAKE_PREFIX_PATH="C:/vcpkg/installed/x64-windows" ^
+     -DOPENVDB_BUILD_CORE=ON -DOPENVDB_BUILD_PYTHON_MODULE=ON ^
+     -DPython_EXECUTABLE="C:/path/a/instalacion/de/python/python.exe" ^
+     -DUSE_BLOSC=ON -DUSE_TBB=ON
+\end{verbatim}
+Reemplace el valor asignado a \texttt{-DPython\_EXECUTABLE} por la ruta absoluta al ejecutable 
+de Python (\texttt{python.exe}) correspondiente a la versión específica para la cual se 
+compilará OpenVDB. Se recomienda utilizar la instalación nativa del sistema 
+(y no el intérprete de un entorno virtual) para prevenir fallos en la resolución de bibliotecas 
+dinámicas. La ruta estándar suele ubicarse en:
+
+\begin{verbatim}
+    C:\Users\<usuario>\AppData\Local\Programs\Python\Python3XX\python.exe
+\end{verbatim}
+
+Inicie el proceso de compilación ejecutando:
+
+\begin{verbatim}
+    cmake --build . --config Release --target openvdb_python
+\end{verbatim}
+
+Una vez finalizada la compilación, el módulo compilado se localizará en:
+
+\begin{verbatim}
+    C:\openvdb\build\openvdb\openvdb\python\Release\
+\end{verbatim}
+con el nombre de archivo \texttt{openvdb.cp3XX-win\_amd64.pyd} 
+(donde \texttt{XX} corresponde a la versión menor de Python instalada).
+
+\section{Instalación}
+Para habilitar el módulo compilado en un entorno de Python, copie los siguientes archivos 
+generados:
+
+\begin{verbatim}
+    Desde C:\openvdb\build\openvdb\openvdb\python\Release:
+    - openvdb.cp3XX-win_amd64.pyd
+
+    Desde C:\openvdb\build\openvdb\openvdb\Release:
+    - openvdb.dll
+
+    Desde C:\vcpkg\installed\x64-windows\bin:
+    - tbb12.dll
+    - zlib1.dll o z.dll
+    - zstd.dll
+    - blosc.dll
+    - lz4.dll
+\end{verbatim}
+al directorio \texttt{Lib/site-packages} del entorno virtual (\texttt{.venv}) de destino, 
+o al directorio análogo de la instalación global de Python.
+\medskip
+
+Para comprobar que el módulo fue enlazado correctamente, abra una sesión del intérprete 
+interactivo de Python e importe el paquete:
+
+\begin{verbatim}
+    import openvdb
+\end{verbatim}
+Si la instrucción finaliza sin arrojar excepciones de tipo \texttt{ImportError} o 
+fallos de enlace de librerías dinámicas DLL, la instalación habrá concluido de forma exitosa.

@@ -1,0 +1,34 @@
+\section{Animación procedural}
+La dinámica principal del sistema reside en la animación del flujo de datos entre capas consecutivas, 
+representada mediante la ejecución procedural de la operación de convolución.
+\medskip
+
+La animación de la convolución se implementa en el grupo de nodos \textit{Volume Connection}, modelando 
+la iteración espacial del núcleo sobre las celdas de una cuadrícula bidimensional. Este nodo recibe como 
+parámetros de entrada las referencias a dos objetos volumétricos (instancias del grupo de nodos 
+\textit{Volume Viewer}), los cuales fungen como capas de entrada y salida respectivamente. Para cada una de estas 
+capas, el árbol de nodos ejecuta de forma desacoplada la siguiente secuencia de pasos:
+\begin{enumerate}
+    \item \textbf{Cálculo de parámetros espaciales iniciales:} a partir de la resolución del mapa de activación y sus 
+    dimensiones físicas en el espacio 3D, determina el tamaño geométrico del \textit{kernel}, las dimensiones 
+    de cada celda sobre el plano de la rebanada y la coordenada de origen de la iteración (esquina superior izquierda).
+    \item \textbf{Determinación de la cuadrícula de muestreo:} computa el número total de celdas sobre las 
+    cuales itera el \textit{kernel}. En el caso particular de la capa de entrada, el cómputo integra además 
+    los valores de paso (\textit{stride}) y el modo de redondeo (\textit{Ceiling Mode}) para definir la 
+    grilla discreta de convolución.
+    \item \textbf{Muestreo temporal del índice activo:} mediante el parámetro escalar $T \in [0, 1]$, que 
+    gobierna el progreso temporal de la animación, calcula el índice secuencial de la celda activa en el 
+    instante actual. Para $T = 0$, el índice apunta a la celda inicial (esquina superior izquierda), mientras 
+    que para $T = 1$ corresponde a la celda final (esquina inferior derecha).
+    \item \textbf{Conversión a coordenadas bidimensionales de grilla:} con base en el índice lineal obtenido y 
+    la resolución espacial de la capa, calcula las coordenadas discretas $(X, Y)$ de la celda activa dentro de 
+    la cuadrícula de iteración.
+    \item \textbf{Transformación y traslación geométrica en el espacio 3D:} utilizando las dimensiones físicas 
+    de las celdas obtenidas en el primer paso, evalúa el vector de desfase respecto a la posición de origen y 
+    traslada la geometría del \textit{kernel} a su ubicación tridimensional definitiva en la escena.
+\end{enumerate}
+\medskip
+
+Este procedimiento algorítmico constituye el núcleo de la animación procedural. Dado que el factor $T$ 
+se encuentra expuesto como un atributo en la interfaz del grupo de nodos, la convolución puede interpolarse, 
+sincronizarse o controlarse directamente mediante fotogramas clave (\textit{keyframes}) en la línea de tiempo de Blender.

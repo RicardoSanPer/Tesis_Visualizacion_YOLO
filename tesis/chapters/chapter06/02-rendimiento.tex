@@ -1,0 +1,151 @@
+\section{Pruebas de rendimiento y estabilidad}
+Para evaluar el rendimiento computacional, la estabilidad del sistema y la fidelidad de los datos extraídos, se 
+implementaron \textit{scripts} automatizados de validación y referencia (\textit{benchmarking}).
+
+\subsection{Componente de extracción}
+El \textit{script} de pruebas del módulo de extracción ejecuta el ciclo completo de inferencia, captura de 
+activaciones y serialización a disco 100 veces consecutivas para cuatro formatos de salida distintos:
+\begin{itemize}
+    \item \textbf{Volúmenes \textit{OpenVDB}} (precisión de punto flotante de 32 bits, \texttt{float32}).
+    \item \textbf{Secuencia de imágenes JPEG} (profundidad de 8 bits). Formato con compresión con pérdida 
+    (\textit{lossy}) que minimiza la huella de almacenamiento.
+    \item \textbf{Secuencia de imágenes PNG} (profundidad de 16 bits). Formato con compresión sin pérdida 
+    (\textit{lossless}) que ofrece una mayor fidelidad dinámica en comparación con JPEG.
+    \item \textbf{Secuencia de imágenes TIFF} (profundidad de 32 bits, \texttt{float32}). Formato de alta 
+    precisión utilizado para preservar el rango dinámico completo a costa de una mayor sobrecarga de almacenamiento.
+\end{itemize}
+
+Para llevar a cabo esta comparativa, se extendió el módulo de exportación con el fin de posibilitar la generación 
+de estos formatos rasterizados adicionales y simular un flujo de trabajo alternativo basado en secuencias de 
+imágenes bidimensionales.
+\medskip
+
+El entorno de pruebas registra diversas métricas de ejecución, entre las cuales destacan:
+\begin{itemize}
+    \item \textbf{Tiempo de ejecución total:} lapso acumulado de procesamiento para la totalidad de las muestras, 
+    considerando exclusivamente la inferencia del modelo, la captura de tensores mediante \textit{hooks} y su 
+    escritura en disco.
+    \item \textbf{Tiempo promedio:} duración media de procesamiento y exportación por cada inferencia individual.
+    \item \textbf{Archivos producidos:} cantidad total de archivos generados por inferencia (excluyendo la imagen 
+    de entrada, la reconstrucción visual de salida y los registros de cajas).
+    \item \textbf{Tamaño en disco:} promedio de almacenamiento ocupado por la totalidad del \textit{payload} 
+    generado en cada inferencia.
+    \item \textbf{MAE total (\textit{Mean Absolute Error}):} error absoluto medio acumulado a través de todas 
+    las capas y muestras evaluadas, cuantificando la pérdida de precisión numérica frente a los tensores nativos 
+    de PyTorch.
+\end{itemize}
+
+Para la evaluación experimental se emplearon las primeras 100 imágenes del conjunto de prueba de PASCAL VOC 
+2007 \parencite{pascal_voc_2007}, extrayendo únicamente las activaciones correspondientes a las capas 
+convolucionales (\textit{Conv2d}). Los resultados consolidados se presentan en la Tabla~\ref{tab:benchmark_extraccion}.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparativa de rendimiento y fidelidad entre formatos de exportación (100 muestras).}
+\label{tab:benchmark_extraccion}
+\small
+\begin{tabular}{lccccc}
+\hline
+\textbf{Formato} & \textbf{Tiempo Total} & \textbf{Tiempo Promedio} & \textbf{Archivos / Inf.} & \textbf{Tamaño / Inf.} & \textbf{MAE Total} \\ \hline
+\textit{OpenVDB} & 112.4\,s & 1.1\,s & 9    & 21.9\,MiB & 0.000 \\
+JPEG             & 349.5\,s & 3.5\,s & 3181 & 3.7\,MiB  & 1.442 \\
+PNG              & 326.3\,s & 3.3\,s & 3181 & 3.8\,MiB  & 1.442 \\
+TIFF             & 342.5\,s & 3.4\,s & 3181 & 22.6\,MiB & 0.000 \\ \hline
+\end{tabular}
+\end{table}
+
+A partir de los datos obtenidos, se desprenden las siguientes observaciones:
+\begin{itemize}
+    \item \textbf{Eficiencia en I/O y tiempo de cómputo:} el pipeline basado en volúmenes \textit{OpenVDB} 
+    se ejecutó aproximadamente $3\times$ más rápido que los formatos rasterizados. Esta discrepancia obedece a 
+    la sobrecarga del sistema de archivos al gestionar miles de operaciones individuales de apertura, 
+    codificación y cierre de archivos por inferencia (3181 imágenes frente a 9 contenedores VDB).
+    \item \textbf{Fidelidad e integridad de datos:} las implementaciones en \textit{OpenVDB} y TIFF obtuvieron un 
+    $\text{MAE} = 0.000$, lo cual confirma una preservación exacta y sin pérdidas de los valores de activación 
+    respecto a los tensores originales en \texttt{float32}.
+    \item \textbf{Pérdida por cuantización:} los formatos JPEG y PNG arrojaron un $\text{MAE} > 0$, 
+    derivado del truncamiento y escalamiento de los valores reales continuos a rangos discretos enteros de 8 y 16 
+    bits, sumado a los artefactos propios de la compresión espacial.
+    \item \textbf{Sobrecarga de metadatos:} aunque \textit{OpenVDB} y TIFF almacenan representaciones en 32 
+    bits de punto flotante, TIFF presentó un consumo en disco ligeramente superior (22.6\,MiB frente a 21.9\,MiB), 
+    atribuible a las cabeceras individuales y metadatos redundantes generados por el elevado número de archivos de 
+    imagen.
+    \item \textbf{Consistencia visual:} en todos los casos evaluados se corroboró cualitativamente la coherencia 
+    estructural de las representaciones espaciales generadas.
+\end{itemize}
+
+\subsection{Componente de visualización}
+Para evaluar el módulo de visualización, se diseñó un \textit{script} de automatización que gestiona la inicialización de Blender, 
+la importación de las cuadrículas volumétricas \textit{OpenVDB} y la renderización de un fotograma de prueba. A lo largo del experimento 
+se registraron los tiempos de importación, generación procedimental de mallas y renderizado, evaluando asimismo la estabilidad del proceso 
+a través de múltiples ejecuciones consecutivas.
+\medskip
+
+Con este propósito, se cuantificó el tiempo de ejecución en cada etapa crítica del flujo de trabajo, específicamente la lectura y análisis 
+del archivo de manifiesto (\textit{manifest.json}), la instanciación de la geometría procedural mediante \textit{Geometry Nodes} y 
+el cálculo del fotograma final bajo cinco niveles crecientes de granularidad estructural:
+\begin{itemize}
+    \item \textbf{Cajas delimitadoras volumétricas simplificadas:} renderizado de la estructura esquemática de la red sin volumetría densa.
+    \item \textbf{Capas convolucionales (\textit{Conv2d}):} visualización exclusiva de los tensores de convolución.
+    \item \textbf{Capas convolucionales y de agrupamiento (\textit{Conv2d} y \textit{MaxPool2d}):} visualización combinada de 
+    convoluciones y agrupaciones.
+    \item \textbf{Capas convolucionales, agrupamiento y normalización (\textit{Conv2d}, \textit{MaxPool2d} y \textit{BatchNorm2d}):} 
+    incorporación de las transformaciones de normalización por lotes.
+    \item \textbf{Visualización completa (\textit{Conv2d}, \textit{MaxPool2d}, \textit{BatchNorm2d} y \textit{LeakyReLU}):} reconstrucción 
+    volumétrica integral de la totalidad de las etapas de la arquitectura.
+\end{itemize}
+
+Los tensores representados corresponden a las primeras 100 imágenes del conjunto de prueba de PASCAL VOC 2007 \parencite{pascal_voc_2007}, y 
+los resultados consolidados se reportan en la Tabla~\ref{tab:benchmark_visualizacion}. Las sesiones de prueba se ejecutaron en modo 
+desatendido y sin interfaz gráfica (\textit{headless}), mitigando la sobrecarga computacional del gestor de ventanas y del entorno de 
+usuario de Blender con el fin de asegurar la reproducibilidad y consistencia de las métricas temporales.
+\medskip
+
+Para el cálculo del renderizado final, la cámara virtual se configuró en una perspectiva global que encuadra la arquitectura completa de la 
+red, evaluando la carga de sombreado bajo el escenario visual más demandante. Cada ejecución computó un único fotograma a una resolución 
+fija ($1920\times1080$) mediante el motor de renderizado en tiempo real EEVEE.
+
+\begin{table}[htbp]
+\centering
+\caption{Rendimiento de la visualización (100 muestras).}
+\label{tab:benchmark_visualizacion}
+\small
+\begin{tabular}{lc}
+\hline
+    \textbf{Operación}      & \textbf{Tiempo Promedio} \\ \hline
+    Importación             & 0.008\,s \\
+    Generación              & 0.577\,s \\
+    Renderizado Simple      & 0.715\,s \\
+    Renderizado (Una capa)  & 1.911\,s \\
+    Renderizado (Dos capas) & 2.093\,s \\
+    Renderizado (Tres capas) & 7.905\,s \\
+    Renderizado Completo & 20.780\,s \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{images/render_output.png}
+    \caption[Muestra de renderizado.]{Muestra del resultado de renderizado de la visualización completa. Como parte de la evaluación 
+    del rendimiento la cámara se posiciona en un ángulo que abarca la red entera.}
+    \label{fig:render_sample}
+\end{figure}
+
+A partir de los datos obtenidos, se desprenden las siguientes observaciones:
+\begin{itemize}
+    \item \textbf{Eficiencia de importación:} la carga del manifesto e instanciación de los volúmenes \textit{OpenVDB} requirió un tiempo promedio 
+    en conjunto de 0.585\,s, lo cual evidencia una sobrecarga prácticamente despreciable en las operaciones de entrada/salida (I/O) y en el 
+    analizador de estructuras de Blender.
+    \item \textbf{Escalabilidad del tiempo de renderizado:} el tiempo medio de cómputo por fotograma se incrementa progresivamente conforme 
+    se incorporan capas adicionales a la escena, alcanzando un valor pico de 20.780\,s en el modo de visualización completa debido a la 
+    las operaciones de muestreo de los volúmenes e instanciación de la geometría adicional.
+    \item \textbf{Robustez del proceso:} no se registraron fallos de asignación de memoria, cierres inesperados ni discrepancias en los 
+    resultados a lo largo de las 100 ejecuciones consecutivas, confirmando la estabilidad del módulo automatizado bajo condiciones de carga 
+    sostenida.
+    \item \textbf{Rendimiento interactivo en el \textit{viewport}:} de manera complementaria, se constató empíricamente que la densidad de 
+    capas volumétricas activas incide de forma directa en la fluidez de navegación y manipulación de la cámara en el entorno tridimensional. 
+    Conforme aumenta el número de volúmenes densos evaluados, se reduce la tasa de cuadros por segundo (\textit{frames per second}, FPS). 
+    No obstante, esta degradación se limita a los modos de previsualización de materiales (\textit{Material Preview}) y renderizado interactivo 
+    (EEVEE), mientras que el modo de visualización sólida (\textit{Solid View}) conserva una tasa de refresco óptima al omitir las operaciones
+    de asignación de colores al material de visualización de las rebanadas.
+\end{itemize}

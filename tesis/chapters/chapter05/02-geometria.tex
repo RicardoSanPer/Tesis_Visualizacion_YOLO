@@ -1,0 +1,182 @@
+\section{Creación de geometría}
+La generación de la geometría se ejecuta mediante grupos de nodos de geometría 
+(\textit{Geometry Nodes}), construidos a través del editor de nodos de Blender. 
+Cada grupo expone un conjunto de parámetros configurables que controlan proceduralmente 
+la construcción geométrica, convirtiéndolos en propiedades animables dentro de la línea de tiempo. 
+En consecuencia, estos grupos operan tanto como generadores de malla como controladores para la 
+animación de la escena.
+
+\subsection{Visualización de volúmenes}
+La representación de los volúmenes de activación se realiza mediante el grupo de nodos personalizado 
+\textit{Volume Viewer}. Dado que las salidas de las capas se encuentran codificadas en formato 
+\textit{OpenVDB}, su despliegue visual consiste en el muestreo espacial de los valores almacenados 
+en la cuadrícula tridimensional (\textit{grid}).
+\medskip
+
+El grupo de nodos recibe como parámetros de entrada:
+\begin{itemize}
+    \item \textit{Volume File}: el archivo \textit{OpenVDB} que contiene las activaciones capturadas 
+    de la capa.
+    \item \textit{Type}: el tipo de capa u operación.
+    \item \textit{View Type}: indica si visualizar texto con el tipo de capa sobre el objeto.
+    \item \textit{Simplified Volume}: indica si visualizar el objeto como un objeto sólido.
+    \item \textit{Color}: color del objeto simplificado.
+    \item \textit{World Size}: las dimensiones físicas $(X, Y, Z)$ que adoptará el objeto dentro 
+    del espacio de la escena en Blender (ancho, alto y profundidad).
+    \item \textit{Resolution}: la resolución espacial $(X, Y)$ de cada rebanada del volúmen de activación. 
+    Se asume que las rebanadas presentan una topología cuadrada.
+    \item \textit{Slice Count}: la profundidad o número total de rebanadas en el volúmen de activación, equivalente 
+    al número de canales de activación generados.
+    \item \textit{Slice Selection}: el índice numérico de la rebanada activa. La visualización 
+    oculta dinámicamente las rebanadas posteriores al índice seleccionado.
+    \item \textit{Single Slice}: indicador booleano para aislar la rebanada seleccionada, 
+    ocultando la totalidad de las rebanadas restantes.
+\end{itemize}
+
+El árbol de nodos genera e instancia un conjunto de planos (\textit{grid meshes}) que actúan como 
+las superficies de proyección para cada rebanada. Las dimensiones geométricas de cada plano están 
+delimitadas por la escala definida en \textit{World Size} y su malla es subdividida según la 
+resolución especificada en \textit{Resolution}. Se instancia un plano por cada canal/rebanada 
+presente en el volumen, asignándole un índice de identificación secuencial.
+\medskip
+
+A continuación, combinando el mapa de coordenadas UV autogenerado para cada plano con su respectivo 
+índice de rebanada, el sistema muestrea las coordenadas tridimensionales dentro del volumen 
+\textit{OpenVDB} para extraer el valor de cada \textit{póxel/vóxel}. El escalar resultante, 
+correspondiente a la magnitud de activación, se almacena como un atributo geométrico que se 
+pasa al material asignado a los planos, mapeando dicho valor a una rampa de color por cada 
+subdivisión de la malla.
+\medskip
+
+Mediante lógica nodal adicional, el sistema genera un volumen delimitador (\textit{bounding box}) 
+para señalar los límites físicos de la capa y gestionar el ocultamiento selectivo de rebanadas. 
+Finalmente, el nodo almacena en la geometría atributos personalizados que contienen las dimensiones 
+físicas, la resolución del mapa de activación y el índice de la rebanada seleccionada para su consulta desde 
+otros módulos o controladores.
+
+\subsection{Visualización de conexiones}
+La representación de las conexiones se implementa mediante el grupo de nodos 
+\textit{Volume Connection}, el cual cumple dos funciones principales: desplegar la vinculación 
+topológica entre capas y animar el flujo de datos resultante del proceso de convolución.
+\medskip
+
+El grupo de nodos recibe como parámetros de entrada:
+\begin{itemize}
+    \item \textit{Input Layer, Output Layer}: referencias a las instancias de los objetos de 
+    visualización volumétrica correspondientes a las capas de entrada y salida.
+    \item \textit{View Convolution}: parámetro booleano para habilitar la animación procedural de 
+    la convolución, mostrando el recorrido del \textit{kernel} sobre las capas conectadas.
+    \item \textit{T}: factor escalar de progreso ($T \in [0, 1]$) que controla la animación 
+    interpolada de la convolución.
+    \item \textit{Kernel Size}: dimensión del núcleo de la operación (\textit{kernel}).
+    \item \textit{Stride}: paso o desplazamiento del \textit{kernel} a lo largo del mapa de 
+    características.
+    \item \textit{Ceiling Mode}: modo de redondeo para calcular las dimensiones de salida cuando 
+    la resolución de la activación se reduce debido al \textit{stride}. Por defecto aplica la función techo 
+    (\textit{ceiling}), contando con la función suelo (\textit{floor}) como opción alternativa.
+    \item \textit{Operation Mode}: selector del modo operativo de la convolución, cuyos valores 
+    posibles son \textit{One to One}, \textit{Many to One} y \textit{Many to Many}.
+\end{itemize}
+
+Para la representación topológica, el árbol de nodos genera cuatro aristas que unen las esquinas 
+correspondientes de los volúmenes delimitadores, consultando los atributos de dimensión física 
+previamente almacenados por el nodo de visualización volumétrica en las capas de entrada y salida.
+\medskip
+
+Para la animación del flujo de datos, los nodos generan una representación geométrica de la celda 
+que la capa de entrada está evaluando en un instante dado, así como de la celda resultante en la 
+capa de salida. A partir de los atributos de dimensión física y resolución de la activación, el sistema 
+calcula el tamaño de las celdas en el plano de la rebanada y determina la coordenada de origen 
+(esquina superior izquierda). En la capa de entrada se genera, además, una malla auxiliar que delimita 
+la vecindad o región focal del \textit{kernel}.
+\medskip
+
+La variable \textit{T} gobierna la progresión espacial del \textit{kernel} (de izquierda a derecha y 
+de arriba a abajo) sobre las celdas de la rebanada, donde $T = 0$ corresponde a la posición inicial 
+y $T = 1$ a la posición final (esquina inferior derecha). Utilizando la resolución de la capa y 
+el valor de \textit{stride}, el sistema construye la cuadrícula discreta de iteración; posteriormente, 
+con el tamaño físico de la celda, calcula el vector de desplazamiento necesario para trasladar 
+la geometría del \textit{kernel}. Cabe destacar que los cálculos de iteración para las capas de 
+entrada y salida se ejecutan de manera independiente, asumiendo que las dimensiones de las activaciones 
+son compatibles con los parámetros de \textit{stride} y \textit{Ceiling Mode} configurados.
+\medskip
+
+Adicionalmente, las estructuras del \textit{kernel} pueden configurarse para abarcar la totalidad de 
+los canales (para operaciones inter-canal como la convolución estándar) o restringirse 
+exclusivamente a la rebanada seleccionada (para operaciones por canal como \textit{Max-Pooling}). 
+A partir de este comportamiento, se definieron tres modos de visualización:
+\begin{itemize}
+    \item \textit{One to One}: diseñado para operaciones canal a canal, donde cada mapa de entrada 
+    genera de forma directa un único mapa de salida (e.g., capas de \textit{Max-Pooling}).
+    \item \textit{Many to One}: aplica la operación sobre la totalidad de los canales de entrada 
+    para producir un único canal de salida, representando la dinámica de las capas convolucionales 
+    estándar.
+    \item \textit{Many to Many}: abstrae la complejidad interna del flujo de datos entre canales 
+    para simplificar la representación global entre los volúmenes de entrada y salida.
+\end{itemize}
+
+Finalmente, la herramienta genera una geometría proyectada o "fantasma" (\textit{ghosting}), la cual 
+consiste en una réplica del \textit{kernel} posicionada directamente sobre la rebanada activa para 
+facilitar la inspección visual de las activaciones locales siendo evaluadas.
+
+\subsection{Visualización de entrada y salida}
+El grupo de nodos \textit{Input Viewer} se utiliza para visualizar la imagen de entrada
+y los canales RGB de la misma. Toma como parámetros de entrada:
+\begin{itemize}
+    \item \textit{World Size}: las dimensiones físicas del objeto en la escena.
+    \item \textit{View Channels}: indica si se deben mostrar los canales RGB de la entrada.
+\end{itemize}
+
+El grupo de nodos \textit{Box Viewer} se utiliza para representar las cajas de predicción 
+(\textit{bounding boxes}) generadas a la salida de la red. Este grupo de nodos de geometría 
+recibe como parámetros de entrada:
+\begin{itemize}
+    \item \textit{Box File}: el archivo \textit{OpenVDB} que contiene los datos codificados de 
+    las cajas delimitadoras.
+    \item \textit{World Size}: el tamaño del objeto de la visualización en la escena.
+    \item \textit{Class List}: la cadena de texto con la lista de etiquetas de clases de la red, 
+    delimitadas por comas.
+    \item \textit{Box Count}: el número total de cajas de predicción ($N$) producidas por el 
+    modelo durante la inferencia.
+    \item \textit{Box Selection}: selector de modo para desplegar las cajas de forma individual o 
+    bajo criterios de filtrado.
+    \item \textit{Confidence}: filtro de discriminación para la visualización de cajas con base en 
+    su puntuación de presencia de objeto (\textit{objectness}).
+    \item \textit{Class Probability}: filtro de discriminación con base en la probabilidad 
+    condicional de la clase detectada.
+\end{itemize}
+
+Para la generación de la geometría, el sistema crea primero un catálogo de mallas de texto 3D 
+(\textit{Text Objects}) con las etiquetas de las clases a partir de la cadena proporcionada en 
+\textit{Class List}. A continuación, se instancian marcos planos que representan cada una de 
+las cajas, asignándoles un índice secuencial de identificación. Mediante este índice, el nodo 
+consulta la cuadrícula volumétrica de \textit{OpenVDB} para extraer los atributos codificados 
+de cada caja $(x, y, w, h, \text{confidence}, \text{class\_prob}, \text{class\_id})$. Con estos 
+datos, se aplican las transformaciones geométricas de traslación y escala requeridas para posicionar 
+y dimensionar las cajas sobre el plano de proyección. 
+\medskip
+
+Haciendo uso del identificador de clase (\textit{class\_id}), se instancia la malla de texto con la 
+etiqueta correspondiente sobre el borde superior de cada caja, asignando un color distintivo al 
+conjunto (caja y etiqueta) para facilitar la clasificación visual por categorías. Asimismo, 
+se almacenan como atributos de la geometría los valores de confianza y probabilidad de 
+clase asociados a cada par. Finalmente, el nodo instancia una malla plana con la imagen de entrada 
+de la red, sobre la cual se superponen las cajas delimitadoras y sus etiquetas para conformar la 
+escena final de salida.
+\medskip
+
+El parámetro \textit{Box Selection} ofrece tres modos operativos para gestionar la visualización 
+de las cajas:
+\begin{itemize}
+    \item \textit{-1}: despliega la totalidad de las cajas de salida, aplicando de manera rigurosa 
+    los filtros de umbral definidos en \textit{Confidence} y \textit{Class Probability}.
+    \item \textit{$0$ a $N-1$}: aísla y muestra de forma exclusiva la caja correspondiente al índice 
+    seleccionado, dentro de la cuenta total de $N$ cajas generadas, ignorando los umbrales
+    de \textit{Confidence} y \textit{Class Probability}.
+    \item \textit{$N$}: muestra la totalidad de las $N$ cajas sin aplicar ningún filtro de 
+    discriminación, ignorando los umbrales de \textit{Confidence} y \textit{Class Probability}.
+\end{itemize}
+
+Ambos grupos de nodos \textit{Input Viewer} y \textit{Box Viewer} almacenan como atributos de los
+objetos las dimensiones de la entrada y salida, similar a \textit{Volume Viewer}, para correctamente
+mapear las conexiones físicas entre las capas.

@@ -1,0 +1,52 @@
+\section{Automatización e integración en Blender}
+Para automatizar la generación de la escena tridimensional se desarrolló una extensión 
+personalizada para Blender. Con este propósito, los grupos de nodos de geometría 
+(\textit{Geometry Nodes}) y los sombreadores de material se catalogaron como activos (\textit{assets}) 
+y se empaquetaron dentro de un archivo \textit{.blend} centralizado, el cual funge 
+como biblioteca de referencia para el complemento.
+\medskip
+
+La extensión registra tres estructuras de propiedades personalizadas (\textit{PropertyGroups}) 
+a nivel de escena:
+\begin{itemize}
+    \item \textit{Yolo Settings}: almacena la ruta absoluta hacia el archivo de manifiesto 
+    (\textit{manifest.json}) generado por el componente de extracción, así como su contenido 
+    deserializado en memoria.
+    \item \textit{Yolo Graph}: estructura de datos en grafo que representa cada capa de la red como 
+    un nodo lógico, construida a partir de la información importada por \textit{Yolo Settings}. 
+    Su función principal es mantener la vinculación bidireccional entre los metadatos de la capa 
+    y la instancia del objeto 3D asignado en la escena.
+    \item \textit{Yolo Visualization Settings}: administra los parámetros globales de la visualización 
+    (escala de los objetos, espaciado inter-capa, paleta de colores, entre otros). Su objetivo es 
+    posibilitar el control coordinado de múltiples elementos de la escena de forma simultánea.
+\end{itemize}
+
+El complemento permite importar a Blender el archivo de manifiesto en formato JSON, transfiriendo su 
+contenido a la propiedad \textit{Yolo Settings}. Asimismo, despliega un panel de interfaz de usuario 
+en la barra lateral del espacio de trabajo (\textit{N-Panel}) para configurar los atributos de 
+\textit{Yolo Visualization Settings} y ejecutar el operador de construcción geométrica.
+\medskip
+
+Los controles principales provistos en la interfaz son:
+\begin{itemize}
+    \item \textit{Escala}: factor multiplicador para la escala global de la visualización.
+    \item \textit{Escala de profundidad}: multiplicador específico para regular la dimensión en el eje 
+    de profundidad ($Z$) de las capas.
+    \item \textit{Espaciado}: distancia física de separación entre capas consecutivas.
+    \item \textit{Profundidad máxima}: cota superior para la profundidad de los volúmenes volumétricos.
+    \item \textit{Color, Simple y Texto}: selectores por categoría de capa para personalizar el esquema 
+    cromático, alternar la representación hacia un volumen sólido simplificado y conmutar la visibilidad 
+    de las etiquetas tipográficas informativas.
+    \item \textit{Generar geometría}: operador de ejecución que dispara el ensamblado procedimental de 
+    la red.
+\end{itemize}
+
+Al accionar el operador de generación, la extensión construye los nodos de \textit{Yolo Graph} asignados 
+a cada capa, poblándolos con los hiperparámetros y metadatos consignados en el manifiesto. Con base en 
+esta topología, el sistema instancia los grupos de nodos de geometría correspondientes a cada volumen, 
+configura las conexiones y flujos de datos inter-capa, y organiza jerárquicamente los objetos creados 
+dentro de colecciones de Blender (\textit{Collections}) clasificadas por tipo de capa u operación.
+\medskip
+
+Se provee un manual de uso detallado en el Anexo~\ref{anx:manual_extension_blender}, y la documentación del
+mismo en el Anexo~\ref{anx:doc_visualizacion}.

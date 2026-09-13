@@ -1,0 +1,40 @@
+\section{Procesamiento de datos}
+El módulo de formato e intercambio se implementa mediante la clase \textit{ModelExporter}. 
+Recibiendo como parámetro en su constructor una instancia del componente de extracción, su propósito es 
+transformar los datos procesados a un formato intermedio y exportarlos como archivos en el disco.
+\medskip
+
+Para la transformación de los tensores, el módulo convierte cada tensor extraído en un arreglo 
+tridimensional de \textit{NumPy} con precisión de punto flotante de 32 bits (\textit{float32}), 
+eliminando las dimensiones adicionales que suelen incorporar los tensores de PyTorch (e.g., la 
+dimensión de lote o \textit{batch}). Posteriormente, se genera una cuadrícula volumétrica de OpenVDB 
+a partir de dicho arreglo, aplicando las transformaciones lineales para ajustar el volumen, 
+y exportando finalmente la cuadrícula como un archivo con extensión \textit{.vdb} nombrado según la capa correspondiente.
+\medskip
+
+Por su parte, los metadatos estructurales de las capas y la red se exportan en formato JSON bajo el nombre 
+de archivo \textit{manifest.json}. Asimismo, las imágenes de entrada y salida del modelo se almacenan en 
+formato PNG bajo la denominación \textit{input.png} y \textit{output.png}, respectivamente.
+\medskip
+
+Finalmente, el modelo produce como salida un arreglo de cajas delimitadoras, donde cada caja se representa 
+mediante la tupla:
+\begin{equation}\label{eq:cajas_salida}
+    (x, y, w, h, \text{confidence}, \text{class\_probability}, \text{class\_id})
+\end{equation}
+donde:
+\begin{itemize}
+    \item $x, y$ representan las coordenadas del centro de la caja delimitadora.
+    \item $w, h$ corresponden al ancho y alto de la caja.
+    \item $\text{confidence}$ denota la puntuación de confianza sobre la presencia de un objeto dentro de 
+    la caja.
+    \item $\text{class\_probability}$ indica la probabilidad condicional de que el objeto pertenezca a la 
+    clase detectada.
+    \item $\text{class\_id}$ es el identificador numérico de la clase asignada.
+\end{itemize}
+
+Este conjunto de cajas se codifica como una cuadrícula tridimensional de OpenVDB configurada como una 
+"rebanada" volumétrica única. En esta estructura, cada columna corresponde al registro completo de una 
+caja, mientras que cada celda almacena secuencialmente los elementos descritos en la ecuación 
+\eqref{eq:cajas_salida}. De este modo, los datos geométricos y de clasificación de las cajas pueden ser 
+indexados eficientemente dentro de Blender para su posterior visualización.

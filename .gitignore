@@ -565,6 +565,14 @@ modelos/preentrenados/*.pt
 tesis/notas.md
 tesis/images
 tesis/main.pdf
+data/weights
+data/images
+data/output
+src/componente-extraccion/TinyYoloV2
+src/componente-visualizacion/TinyYoloV2Viewer/assets
+tesis/anexos
+blender_scenes
+video
 
 # Graficas
 *.bkp
@@ -572,3 +580,5 @@ tesis/main.pdf
 *.pdf
 *.png
 *.jpg
+*.blend
+*.blend1

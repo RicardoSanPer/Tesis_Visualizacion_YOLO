@@ -1,0 +1,35 @@
+import bpy
+from .manifest_properties import ManifestDataSettings
+from .graph_properties import StringItem, ConnectionItem, LayerItem, GraphProperty
+from .visualization_properties import VisualizationDataProperties, LayerTypeProperty
+from ..utils import utils
+
+CLASSES = [StringItem, ConnectionItem, LayerItem, GraphProperty, LayerTypeProperty, ManifestDataSettings, VisualizationDataProperties]
+
+def register_properties():
+    utils.register_classes(CLASSES)
+
+    bpy.types.Scene.yolo_settings = bpy.props.PointerProperty(
+        type=ManifestDataSettings
+    )
+
+    bpy.types.Scene.yolo_graph = bpy.props.PointerProperty(
+        type = GraphProperty
+    )
+
+    bpy.types.Scene.yolo_visualization_settings = bpy.props.PointerProperty(
+        type = VisualizationDataProperties
+    )
+
+def unregister_properties():
+    if hasattr(bpy.types.Scene, "yolo_visualization_settings"):
+                del bpy.types.Scene.yolo_visualization_settings
+
+    if hasattr(bpy.types.Scene, "yolo_graph"):
+        del bpy.types.Scene.yolo_graph
+
+    if hasattr(bpy.types.Scene, "yolo_settings"):
+            del bpy.types.Scene.yolo_settings
+
+    utils.unregister_classes(CLASSES)
+    
