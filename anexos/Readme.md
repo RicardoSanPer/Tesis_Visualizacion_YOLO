@@ -2,7 +2,7 @@
 Este directorio contiene archivos suplementales.
 
 ## Casos
-Contiene los archivos producidos por el componente de extracción para los tres estudios de casos, excluyendo los archivos vdb. Los archivos .blend son omitidos en el repositorio.
+Contiene los archivos producidos por el componente de extracción para los tres estudios de casos, excluyendo los archivos vdb. Los archivos .blend y .vdb son incluidos en *Releases*. Los archivos de blender pueden requerir una re-importación de los manifestos.
 
 ## Pruebas_Rendimiento
 Contienen las métricas capturadas por las pruebas de rendimiento de los componentes, compiladas en formato JSON. 
@@ -15,3 +15,6 @@ Los resultados están organizados en el archivo JSON por el archivo de entrada d
 
 ## Renders
 Renders de ejemplo del componente de visualización.
+
+## TinyYoloV2Viewer.zip
+Add-on de Blender para la visualización de la red convolucional. Incluido en *Releases*.
