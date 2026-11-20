@@ -1,0 +1,3 @@
+# Ignorar implementacion de YoloV2
+componente-extraccion/TinyYoloV2
+componente-visualizacion/TinyYoloV2Viewer/assets

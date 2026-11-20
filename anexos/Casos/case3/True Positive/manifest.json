@@ -1,0 +1,540 @@
+{
+    "confidence": 0.55,
+    "nms": 0.55,
+    "n_boxes": 3,
+    "classes": "aeroplane,bicycle,bird,boat,bottle,bus,car,cat,chair,cow,diningtable,dog,horse,motorbike,person,pottedplant,sheep,sofa,train,TVmonitor",
+    "layers_data": {
+        "input": {
+            "type": "Input",
+            "data": false,
+            "connections": [
+                "cnn.conv1"
+            ]
+        },
+        "cnn.conv1": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn1"
+            ],
+            "data": true,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                16,
+                416,
+                416
+            ]
+        },
+        "cnn.bn1": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky1"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                16,
+                416,
+                416
+            ]
+        },
+        "cnn.leaky1": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.pool1"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                16,
+                416,
+                416
+            ]
+        },
+        "cnn.pool1": {
+            "type": "MaxPool2d",
+            "connections": [
+                "cnn.conv2"
+            ],
+            "data": false,
+            "kernel_size": 2,
+            "stride": 2,
+            "padding": 0,
+            "ceiling": false,
+            "dimensions": [
+                1,
+                16,
+                208,
+                208
+            ]
+        },
+        "cnn.conv2": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn2"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                32,
+                208,
+                208
+            ]
+        },
+        "cnn.bn2": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky2"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                32,
+                208,
+                208
+            ]
+        },
+        "cnn.leaky2": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.pool2"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                32,
+                208,
+                208
+            ]
+        },
+        "cnn.pool2": {
+            "type": "MaxPool2d",
+            "connections": [
+                "cnn.conv3"
+            ],
+            "data": false,
+            "kernel_size": 2,
+            "stride": 2,
+            "padding": 0,
+            "ceiling": false,
+            "dimensions": [
+                1,
+                32,
+                104,
+                104
+            ]
+        },
+        "cnn.conv3": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn3"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                64,
+                104,
+                104
+            ]
+        },
+        "cnn.bn3": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky3"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                64,
+                104,
+                104
+            ]
+        },
+        "cnn.leaky3": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.pool3"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                64,
+                104,
+                104
+            ]
+        },
+        "cnn.pool3": {
+            "type": "MaxPool2d",
+            "connections": [
+                "cnn.conv4"
+            ],
+            "data": false,
+            "kernel_size": 2,
+            "stride": 2,
+            "padding": 0,
+            "ceiling": false,
+            "dimensions": [
+                1,
+                64,
+                52,
+                52
+            ]
+        },
+        "cnn.conv4": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn4"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                128,
+                52,
+                52
+            ]
+        },
+        "cnn.bn4": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky4"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                128,
+                52,
+                52
+            ]
+        },
+        "cnn.leaky4": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.pool4"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                128,
+                52,
+                52
+            ]
+        },
+        "cnn.pool4": {
+            "type": "MaxPool2d",
+            "connections": [
+                "cnn.conv5"
+            ],
+            "data": false,
+            "kernel_size": 2,
+            "stride": 2,
+            "padding": 0,
+            "ceiling": false,
+            "dimensions": [
+                1,
+                128,
+                26,
+                26
+            ]
+        },
+        "cnn.conv5": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn5"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                256,
+                26,
+                26
+            ]
+        },
+        "cnn.bn5": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky5"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                256,
+                26,
+                26
+            ]
+        },
+        "cnn.leaky5": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.pool5"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                256,
+                26,
+                26
+            ]
+        },
+        "cnn.pool5": {
+            "type": "MaxPool2d",
+            "connections": [
+                "cnn.conv6"
+            ],
+            "data": false,
+            "kernel_size": 2,
+            "stride": 2,
+            "padding": 0,
+            "ceiling": false,
+            "dimensions": [
+                1,
+                256,
+                13,
+                13
+            ]
+        },
+        "cnn.conv6": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn6"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                512,
+                13,
+                13
+            ]
+        },
+        "cnn.bn6": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky6"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                512,
+                13,
+                13
+            ]
+        },
+        "cnn.leaky6": {
+            "type": "LeakyReLU",
+            "connections": [],
+            "data": false,
+            "dimensions": [
+                1,
+                512,
+                13,
+                13
+            ]
+        },
+        "cnn.pool6": {
+            "type": "MaxPoolStride1",
+            "connections": [],
+            "data": false,
+            "dimensions": [
+                1,
+                512,
+                13,
+                13
+            ]
+        },
+        "cnn.conv7": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn7"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                1024,
+                13,
+                13
+            ]
+        },
+        "cnn.bn7": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky7"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                1024,
+                13,
+                13
+            ]
+        },
+        "cnn.leaky7": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.conv8"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                1024,
+                13,
+                13
+            ]
+        },
+        "cnn.conv8": {
+            "type": "Conv2d",
+            "connections": [
+                "cnn.bn8"
+            ],
+            "data": false,
+            "kernel_size": [
+                3,
+                3
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                1,
+                1
+            ],
+            "dimensions": [
+                1,
+                1024,
+                13,
+                13
+            ]
+        },
+        "cnn.bn8": {
+            "type": "BatchNorm2d",
+            "connections": [
+                "cnn.leaky8"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                1024,
+                13,
+                13
+            ]
+        },
+        "cnn.leaky8": {
+            "type": "LeakyReLU",
+            "connections": [
+                "cnn.output"
+            ],
+            "data": false,
+            "dimensions": [
+                1,
+                1024,
+                13,
+                13
+            ]
+        },
+        "cnn.output": {
+            "type": "Conv2d",
+            "connections": [],
+            "data": false,
+            "kernel_size": [
+                1,
+                1
+            ],
+            "stride": [
+                1,
+                1
+            ],
+            "padding": [
+                0,
+                0
+            ],
+            "dimensions": [
+                1,
+                125,
+                13,
+                13
+            ]
+        }
+    }
+}

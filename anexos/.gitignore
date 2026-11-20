@@ -1,0 +1,9 @@
+openvdb-lib/libs
+openvdb-lib/licencias
+
+*.blend1
+*.blend
+*.vdb
+*.docx
+*.pdf
+*.zip

@@ -1,0 +1,5215 @@
+{
+    "Runs": 100,
+    "Min Runtime": 0.364212000000407,
+    "Max Runtime": 1.8603689999945345,
+    "Avg Runtime": 1.124063983000451,
+    "Total Runtime": 112.40639830004511,
+    "Total Filesize": 2298406180,
+    "Total Filecount": 900,
+    "Avg Filesize": 22984061.8,
+    "MEA": {
+        "vdb": 0.0
+    },
+    "items": {
+        "000001.jpg": {
+            "Input File": "data\\images\\VOC2007\\000001.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000001",
+            "Runtime": 0.4191782999987481,
+            "Total Filesize": 23101845,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23101845,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10778523,
+                    "cnn.conv2.vdb": 5414371,
+                    "cnn.conv3.vdb": 2728591,
+                    "cnn.conv4.vdb": 1419184,
+                    "cnn.conv5.vdb": 745209,
+                    "cnn.conv6.vdb": 387316,
+                    "cnn.conv7.vdb": 763638,
+                    "cnn.conv8.vdb": 764756,
+                    "cnn.output.vdb": 100257
+                }
+            }
+        },
+        "000002.jpg": {
+            "Input File": "data\\images\\VOC2007\\000002.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000002",
+            "Runtime": 0.37010060000466183,
+            "Total Filesize": 23292510,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23292510,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10805536,
+                    "cnn.conv2.vdb": 5546614,
+                    "cnn.conv3.vdb": 2754099,
+                    "cnn.conv4.vdb": 1427604,
+                    "cnn.conv5.vdb": 744592,
+                    "cnn.conv6.vdb": 386364,
+                    "cnn.conv7.vdb": 762919,
+                    "cnn.conv8.vdb": 764464,
+                    "cnn.output.vdb": 100318
+                }
+            }
+        },
+        "000003.jpg": {
+            "Input File": "data\\images\\VOC2007\\000003.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000003",
+            "Runtime": 0.364212000000407,
+            "Total Filesize": 23411751,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23411751,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10880828,
+                    "cnn.conv2.vdb": 5580058,
+                    "cnn.conv3.vdb": 2768327,
+                    "cnn.conv4.vdb": 1426819,
+                    "cnn.conv5.vdb": 744696,
+                    "cnn.conv6.vdb": 384710,
+                    "cnn.conv7.vdb": 760720,
+                    "cnn.conv8.vdb": 765169,
+                    "cnn.output.vdb": 100424
+                }
+            }
+        },
+        "000004.jpg": {
+            "Input File": "data\\images\\VOC2007\\000004.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000004",
+            "Runtime": 0.3866487999985111,
+            "Total Filesize": 23033130,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23033130,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10683570,
+                    "cnn.conv2.vdb": 5455996,
+                    "cnn.conv3.vdb": 2737599,
+                    "cnn.conv4.vdb": 1415684,
+                    "cnn.conv5.vdb": 742789,
+                    "cnn.conv6.vdb": 384458,
+                    "cnn.conv7.vdb": 756470,
+                    "cnn.conv8.vdb": 757101,
+                    "cnn.output.vdb": 99463
+                }
+            }
+        },
+        "000006.jpg": {
+            "Input File": "data\\images\\VOC2007\\000006.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000006",
+            "Runtime": 0.395574400004989,
+            "Total Filesize": 21833941,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 21833941,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 9873272,
+                    "cnn.conv2.vdb": 5149520,
+                    "cnn.conv3.vdb": 2653055,
+                    "cnn.conv4.vdb": 1402229,
+                    "cnn.conv5.vdb": 742951,
+                    "cnn.conv6.vdb": 386283,
+                    "cnn.conv7.vdb": 762211,
+                    "cnn.conv8.vdb": 764366,
+                    "cnn.output.vdb": 100054
+                }
+            }
+        },
+        "000008.jpg": {
+            "Input File": "data\\images\\VOC2007\\000008.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000008",
+            "Runtime": 0.45658410000032745,
+            "Total Filesize": 23123059,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23123059,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10755504,
+                    "cnn.conv2.vdb": 5454916,
+                    "cnn.conv3.vdb": 2734153,
+                    "cnn.conv4.vdb": 1421878,
+                    "cnn.conv5.vdb": 744904,
+                    "cnn.conv6.vdb": 385806,
+                    "cnn.conv7.vdb": 762080,
+                    "cnn.conv8.vdb": 764137,
+                    "cnn.output.vdb": 99681
+                }
+            }
+        },
+        "000010.jpg": {
+            "Input File": "data\\images\\VOC2007\\000010.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000010",
+            "Runtime": 0.5473050000000512,
+            "Total Filesize": 23314992,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23314992,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10799668,
+                    "cnn.conv2.vdb": 5567944,
+                    "cnn.conv3.vdb": 2764173,
+                    "cnn.conv4.vdb": 1426861,
+                    "cnn.conv5.vdb": 744932,
+                    "cnn.conv6.vdb": 385367,
+                    "cnn.conv7.vdb": 759740,
+                    "cnn.conv8.vdb": 765480,
+                    "cnn.output.vdb": 100827
+                }
+            }
+        },
+        "000011.jpg": {
+            "Input File": "data\\images\\VOC2007\\000011.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000011",
+            "Runtime": 0.4404467999993358,
+            "Total Filesize": 23409021,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23409021,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10898716,
+                    "cnn.conv2.vdb": 5551431,
+                    "cnn.conv3.vdb": 2767803,
+                    "cnn.conv4.vdb": 1433725,
+                    "cnn.conv5.vdb": 744890,
+                    "cnn.conv6.vdb": 388599,
+                    "cnn.conv7.vdb": 761588,
+                    "cnn.conv8.vdb": 762634,
+                    "cnn.output.vdb": 99635
+                }
+            }
+        },
+        "000013.jpg": {
+            "Input File": "data\\images\\VOC2007\\000013.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000013",
+            "Runtime": 0.4449862999972538,
+            "Total Filesize": 23526535,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23526535,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10955401,
+                    "cnn.conv2.vdb": 5618340,
+                    "cnn.conv3.vdb": 2760587,
+                    "cnn.conv4.vdb": 1433489,
+                    "cnn.conv5.vdb": 743019,
+                    "cnn.conv6.vdb": 386941,
+                    "cnn.conv7.vdb": 763176,
+                    "cnn.conv8.vdb": 765438,
+                    "cnn.output.vdb": 100144
+                }
+            }
+        },
+        "000014.jpg": {
+            "Input File": "data\\images\\VOC2007\\000014.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000014",
+            "Runtime": 0.5002767000041786,
+            "Total Filesize": 23098273,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23098273,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10656581,
+                    "cnn.conv2.vdb": 5500270,
+                    "cnn.conv3.vdb": 2763475,
+                    "cnn.conv4.vdb": 1422149,
+                    "cnn.conv5.vdb": 744537,
+                    "cnn.conv6.vdb": 386012,
+                    "cnn.conv7.vdb": 761207,
+                    "cnn.conv8.vdb": 764184,
+                    "cnn.output.vdb": 99858
+                }
+            }
+        },
+        "000015.jpg": {
+            "Input File": "data\\images\\VOC2007\\000015.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000015",
+            "Runtime": 0.5540746999977273,
+            "Total Filesize": 23019132,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23019132,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10683126,
+                    "cnn.conv2.vdb": 5447444,
+                    "cnn.conv3.vdb": 2721766,
+                    "cnn.conv4.vdb": 1409652,
+                    "cnn.conv5.vdb": 740987,
+                    "cnn.conv6.vdb": 385582,
+                    "cnn.conv7.vdb": 763681,
+                    "cnn.conv8.vdb": 766387,
+                    "cnn.output.vdb": 100507
+                }
+            }
+        },
+        "000018.jpg": {
+            "Input File": "data\\images\\VOC2007\\000018.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000018",
+            "Runtime": 0.4966275000042515,
+            "Total Filesize": 23349321,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23349321,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10803271,
+                    "cnn.conv2.vdb": 5579363,
+                    "cnn.conv3.vdb": 2771751,
+                    "cnn.conv4.vdb": 1434334,
+                    "cnn.conv5.vdb": 748514,
+                    "cnn.conv6.vdb": 386596,
+                    "cnn.conv7.vdb": 762930,
+                    "cnn.conv8.vdb": 762876,
+                    "cnn.output.vdb": 99686
+                }
+            }
+        },
+        "000022.jpg": {
+            "Input File": "data\\images\\VOC2007\\000022.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000022",
+            "Runtime": 0.5050789000015357,
+            "Total Filesize": 23657687,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23657687,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11075577,
+                    "cnn.conv2.vdb": 5621112,
+                    "cnn.conv3.vdb": 2763561,
+                    "cnn.conv4.vdb": 1431377,
+                    "cnn.conv5.vdb": 743217,
+                    "cnn.conv6.vdb": 388063,
+                    "cnn.conv7.vdb": 765518,
+                    "cnn.conv8.vdb": 768676,
+                    "cnn.output.vdb": 100586
+                }
+            }
+        },
+        "000025.jpg": {
+            "Input File": "data\\images\\VOC2007\\000025.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000025",
+            "Runtime": 0.5291782999993302,
+            "Total Filesize": 23514265,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23514265,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10972701,
+                    "cnn.conv2.vdb": 5559676,
+                    "cnn.conv3.vdb": 2791354,
+                    "cnn.conv4.vdb": 1435127,
+                    "cnn.conv5.vdb": 749948,
+                    "cnn.conv6.vdb": 386838,
+                    "cnn.conv7.vdb": 760006,
+                    "cnn.conv8.vdb": 758455,
+                    "cnn.output.vdb": 100160
+                }
+            }
+        },
+        "000027.jpg": {
+            "Input File": "data\\images\\VOC2007\\000027.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000027",
+            "Runtime": 0.5568916999982321,
+            "Total Filesize": 23250274,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23250274,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10765264,
+                    "cnn.conv2.vdb": 5537077,
+                    "cnn.conv3.vdb": 2759205,
+                    "cnn.conv4.vdb": 1427232,
+                    "cnn.conv5.vdb": 742522,
+                    "cnn.conv6.vdb": 386620,
+                    "cnn.conv7.vdb": 764327,
+                    "cnn.conv8.vdb": 767045,
+                    "cnn.output.vdb": 100982
+                }
+            }
+        },
+        "000028.jpg": {
+            "Input File": "data\\images\\VOC2007\\000028.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000028",
+            "Runtime": 0.599383000000671,
+            "Total Filesize": 22796726,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22796726,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10420077,
+                    "cnn.conv2.vdb": 5448254,
+                    "cnn.conv3.vdb": 2744585,
+                    "cnn.conv4.vdb": 1425576,
+                    "cnn.conv5.vdb": 746786,
+                    "cnn.conv6.vdb": 386120,
+                    "cnn.conv7.vdb": 762147,
+                    "cnn.conv8.vdb": 762763,
+                    "cnn.output.vdb": 100418
+                }
+            }
+        },
+        "000029.jpg": {
+            "Input File": "data\\images\\VOC2007\\000029.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000029",
+            "Runtime": 0.5906401999964146,
+            "Total Filesize": 23629832,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23629832,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11091612,
+                    "cnn.conv2.vdb": 5604414,
+                    "cnn.conv3.vdb": 2756314,
+                    "cnn.conv4.vdb": 1428671,
+                    "cnn.conv5.vdb": 739814,
+                    "cnn.conv6.vdb": 387303,
+                    "cnn.conv7.vdb": 759019,
+                    "cnn.conv8.vdb": 762628,
+                    "cnn.output.vdb": 100057
+                }
+            }
+        },
+        "000031.jpg": {
+            "Input File": "data\\images\\VOC2007\\000031.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000031",
+            "Runtime": 0.6555852000019513,
+            "Total Filesize": 23363008,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23363008,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10915471,
+                    "cnn.conv2.vdb": 5541152,
+                    "cnn.conv3.vdb": 2759291,
+                    "cnn.conv4.vdb": 1414587,
+                    "cnn.conv5.vdb": 737460,
+                    "cnn.conv6.vdb": 382197,
+                    "cnn.conv7.vdb": 755488,
+                    "cnn.conv8.vdb": 757768,
+                    "cnn.output.vdb": 99594
+                }
+            }
+        },
+        "000037.jpg": {
+            "Input File": "data\\images\\VOC2007\\000037.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000037",
+            "Runtime": 0.6404693000004045,
+            "Total Filesize": 23412528,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23412528,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10895150,
+                    "cnn.conv2.vdb": 5567582,
+                    "cnn.conv3.vdb": 2763098,
+                    "cnn.conv4.vdb": 1430594,
+                    "cnn.conv5.vdb": 745380,
+                    "cnn.conv6.vdb": 386559,
+                    "cnn.conv7.vdb": 761532,
+                    "cnn.conv8.vdb": 762680,
+                    "cnn.output.vdb": 99953
+                }
+            }
+        },
+        "000038.jpg": {
+            "Input File": "data\\images\\VOC2007\\000038.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000038",
+            "Runtime": 0.6630248000001302,
+            "Total Filesize": 22994143,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22994143,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10646762,
+                    "cnn.conv2.vdb": 5453135,
+                    "cnn.conv3.vdb": 2726822,
+                    "cnn.conv4.vdb": 1413795,
+                    "cnn.conv5.vdb": 741037,
+                    "cnn.conv6.vdb": 386314,
+                    "cnn.conv7.vdb": 760399,
+                    "cnn.conv8.vdb": 765390,
+                    "cnn.output.vdb": 100489
+                }
+            }
+        },
+        "000040.jpg": {
+            "Input File": "data\\images\\VOC2007\\000040.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000040",
+            "Runtime": 0.6426756000000751,
+            "Total Filesize": 23141816,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23141816,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10704925,
+                    "cnn.conv2.vdb": 5478788,
+                    "cnn.conv3.vdb": 2762263,
+                    "cnn.conv4.vdb": 1429613,
+                    "cnn.conv5.vdb": 750090,
+                    "cnn.conv6.vdb": 387444,
+                    "cnn.conv7.vdb": 764025,
+                    "cnn.conv8.vdb": 764712,
+                    "cnn.output.vdb": 99956
+                }
+            }
+        },
+        "000043.jpg": {
+            "Input File": "data\\images\\VOC2007\\000043.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000043",
+            "Runtime": 0.6380659000060405,
+            "Total Filesize": 22932977,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22932977,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10568440,
+                    "cnn.conv2.vdb": 5448614,
+                    "cnn.conv3.vdb": 2738124,
+                    "cnn.conv4.vdb": 1421544,
+                    "cnn.conv5.vdb": 746422,
+                    "cnn.conv6.vdb": 386716,
+                    "cnn.conv7.vdb": 761548,
+                    "cnn.conv8.vdb": 761817,
+                    "cnn.output.vdb": 99752
+                }
+            }
+        },
+        "000045.jpg": {
+            "Input File": "data\\images\\VOC2007\\000045.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000045",
+            "Runtime": 0.6857964000009815,
+            "Total Filesize": 22457294,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22457294,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10544465,
+                    "cnn.conv2.vdb": 5179075,
+                    "cnn.conv3.vdb": 2617232,
+                    "cnn.conv4.vdb": 1374494,
+                    "cnn.conv5.vdb": 731129,
+                    "cnn.conv6.vdb": 385359,
+                    "cnn.conv7.vdb": 760732,
+                    "cnn.conv8.vdb": 764346,
+                    "cnn.output.vdb": 100462
+                }
+            }
+        },
+        "000049.jpg": {
+            "Input File": "data\\images\\VOC2007\\000049.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000049",
+            "Runtime": 0.6849784000005457,
+            "Total Filesize": 23134561,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23134561,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10753949,
+                    "cnn.conv2.vdb": 5477278,
+                    "cnn.conv3.vdb": 2742101,
+                    "cnn.conv4.vdb": 1416504,
+                    "cnn.conv5.vdb": 734801,
+                    "cnn.conv6.vdb": 384835,
+                    "cnn.conv7.vdb": 760299,
+                    "cnn.conv8.vdb": 764307,
+                    "cnn.output.vdb": 100487
+                }
+            }
+        },
+        "000053.jpg": {
+            "Input File": "data\\images\\VOC2007\\000053.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000053",
+            "Runtime": 0.7033850000007078,
+            "Total Filesize": 23056879,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23056879,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10751063,
+                    "cnn.conv2.vdb": 5412541,
+                    "cnn.conv3.vdb": 2713192,
+                    "cnn.conv4.vdb": 1416752,
+                    "cnn.conv5.vdb": 745241,
+                    "cnn.conv6.vdb": 387059,
+                    "cnn.conv7.vdb": 765177,
+                    "cnn.conv8.vdb": 765564,
+                    "cnn.output.vdb": 100290
+                }
+            }
+        },
+        "000054.jpg": {
+            "Input File": "data\\images\\VOC2007\\000054.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000054",
+            "Runtime": 0.7483582999993814,
+            "Total Filesize": 23072733,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23072733,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10767456,
+                    "cnn.conv2.vdb": 5438448,
+                    "cnn.conv3.vdb": 2718809,
+                    "cnn.conv4.vdb": 1406899,
+                    "cnn.conv5.vdb": 737735,
+                    "cnn.conv6.vdb": 384054,
+                    "cnn.conv7.vdb": 758128,
+                    "cnn.conv8.vdb": 761297,
+                    "cnn.output.vdb": 99907
+                }
+            }
+        },
+        "000055.jpg": {
+            "Input File": "data\\images\\VOC2007\\000055.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000055",
+            "Runtime": 0.7117829999988317,
+            "Total Filesize": 23400557,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23400557,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10889744,
+                    "cnn.conv2.vdb": 5545937,
+                    "cnn.conv3.vdb": 2770302,
+                    "cnn.conv4.vdb": 1429161,
+                    "cnn.conv5.vdb": 748429,
+                    "cnn.conv6.vdb": 387116,
+                    "cnn.conv7.vdb": 763055,
+                    "cnn.conv8.vdb": 766562,
+                    "cnn.output.vdb": 100251
+                }
+            }
+        },
+        "000056.jpg": {
+            "Input File": "data\\images\\VOC2007\\000056.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000056",
+            "Runtime": 0.7661542999994708,
+            "Total Filesize": 22769465,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22769465,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10505894,
+                    "cnn.conv2.vdb": 5383199,
+                    "cnn.conv3.vdb": 2708627,
+                    "cnn.conv4.vdb": 1412803,
+                    "cnn.conv5.vdb": 744578,
+                    "cnn.conv6.vdb": 386554,
+                    "cnn.conv7.vdb": 762010,
+                    "cnn.conv8.vdb": 765275,
+                    "cnn.output.vdb": 100525
+                }
+            }
+        },
+        "000057.jpg": {
+            "Input File": "data\\images\\VOC2007\\000057.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000057",
+            "Runtime": 0.8273423999999068,
+            "Total Filesize": 23756627,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23756627,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11174878,
+                    "cnn.conv2.vdb": 5620425,
+                    "cnn.conv3.vdb": 2765457,
+                    "cnn.conv4.vdb": 1426491,
+                    "cnn.conv5.vdb": 748075,
+                    "cnn.conv6.vdb": 386547,
+                    "cnn.conv7.vdb": 766403,
+                    "cnn.conv8.vdb": 767771,
+                    "cnn.output.vdb": 100580
+                }
+            }
+        },
+        "000058.jpg": {
+            "Input File": "data\\images\\VOC2007\\000058.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000058",
+            "Runtime": 0.821128100003989,
+            "Total Filesize": 23506747,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23506747,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10914080,
+                    "cnn.conv2.vdb": 5606299,
+                    "cnn.conv3.vdb": 2792631,
+                    "cnn.conv4.vdb": 1435825,
+                    "cnn.conv5.vdb": 749246,
+                    "cnn.conv6.vdb": 387219,
+                    "cnn.conv7.vdb": 760380,
+                    "cnn.conv8.vdb": 761227,
+                    "cnn.output.vdb": 99840
+                }
+            }
+        },
+        "000059.jpg": {
+            "Input File": "data\\images\\VOC2007\\000059.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000059",
+            "Runtime": 1.2840355000007548,
+            "Total Filesize": 23307482,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23307482,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10919253,
+                    "cnn.conv2.vdb": 5445927,
+                    "cnn.conv3.vdb": 2753097,
+                    "cnn.conv4.vdb": 1428974,
+                    "cnn.conv5.vdb": 749091,
+                    "cnn.conv6.vdb": 387177,
+                    "cnn.conv7.vdb": 761403,
+                    "cnn.conv8.vdb": 762612,
+                    "cnn.output.vdb": 99948
+                }
+            }
+        },
+        "000062.jpg": {
+            "Input File": "data\\images\\VOC2007\\000062.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000062",
+            "Runtime": 1.384708600002341,
+            "Total Filesize": 23221143,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23221143,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10818063,
+                    "cnn.conv2.vdb": 5499532,
+                    "cnn.conv3.vdb": 2740692,
+                    "cnn.conv4.vdb": 1419798,
+                    "cnn.conv5.vdb": 740936,
+                    "cnn.conv6.vdb": 384274,
+                    "cnn.conv7.vdb": 759465,
+                    "cnn.conv8.vdb": 758796,
+                    "cnn.output.vdb": 99587
+                }
+            }
+        },
+        "000067.jpg": {
+            "Input File": "data\\images\\VOC2007\\000067.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000067",
+            "Runtime": 1.3218764000048395,
+            "Total Filesize": 22805908,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22805908,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10551439,
+                    "cnn.conv2.vdb": 5407607,
+                    "cnn.conv3.vdb": 2702802,
+                    "cnn.conv4.vdb": 1404990,
+                    "cnn.conv5.vdb": 736565,
+                    "cnn.conv6.vdb": 383808,
+                    "cnn.conv7.vdb": 756996,
+                    "cnn.conv8.vdb": 761483,
+                    "cnn.output.vdb": 100218
+                }
+            }
+        },
+        "000068.jpg": {
+            "Input File": "data\\images\\VOC2007\\000068.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000068",
+            "Runtime": 1.3895742000022437,
+            "Total Filesize": 23451112,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23451112,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10940299,
+                    "cnn.conv2.vdb": 5572556,
+                    "cnn.conv3.vdb": 2754192,
+                    "cnn.conv4.vdb": 1431311,
+                    "cnn.conv5.vdb": 741803,
+                    "cnn.conv6.vdb": 386575,
+                    "cnn.conv7.vdb": 760080,
+                    "cnn.conv8.vdb": 763879,
+                    "cnn.output.vdb": 100417
+                }
+            }
+        },
+        "000069.jpg": {
+            "Input File": "data\\images\\VOC2007\\000069.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000069",
+            "Runtime": 1.3351094000026933,
+            "Total Filesize": 22834917,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22834917,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10576946,
+                    "cnn.conv2.vdb": 5399257,
+                    "cnn.conv3.vdb": 2702998,
+                    "cnn.conv4.vdb": 1405901,
+                    "cnn.conv5.vdb": 741153,
+                    "cnn.conv6.vdb": 384017,
+                    "cnn.conv7.vdb": 760788,
+                    "cnn.conv8.vdb": 763736,
+                    "cnn.output.vdb": 100121
+                }
+            }
+        },
+        "000070.jpg": {
+            "Input File": "data\\images\\VOC2007\\000070.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000070",
+            "Runtime": 1.258774900001299,
+            "Total Filesize": 22492288,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22492288,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10268308,
+                    "cnn.conv2.vdb": 5333671,
+                    "cnn.conv3.vdb": 2713191,
+                    "cnn.conv4.vdb": 1421153,
+                    "cnn.conv5.vdb": 745634,
+                    "cnn.conv6.vdb": 386023,
+                    "cnn.conv7.vdb": 761235,
+                    "cnn.conv8.vdb": 763198,
+                    "cnn.output.vdb": 99875
+                }
+            }
+        },
+        "000071.jpg": {
+            "Input File": "data\\images\\VOC2007\\000071.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000071",
+            "Runtime": 1.2660355000043637,
+            "Total Filesize": 23261345,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23261345,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10867506,
+                    "cnn.conv2.vdb": 5492230,
+                    "cnn.conv3.vdb": 2741602,
+                    "cnn.conv4.vdb": 1413065,
+                    "cnn.conv5.vdb": 738760,
+                    "cnn.conv6.vdb": 386406,
+                    "cnn.conv7.vdb": 758233,
+                    "cnn.conv8.vdb": 763533,
+                    "cnn.output.vdb": 100010
+                }
+            }
+        },
+        "000074.jpg": {
+            "Input File": "data\\images\\VOC2007\\000074.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000074",
+            "Runtime": 1.4103044000003138,
+            "Total Filesize": 22822766,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22822766,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10481865,
+                    "cnn.conv2.vdb": 5424285,
+                    "cnn.conv3.vdb": 2734429,
+                    "cnn.conv4.vdb": 1420720,
+                    "cnn.conv5.vdb": 745419,
+                    "cnn.conv6.vdb": 386491,
+                    "cnn.conv7.vdb": 762992,
+                    "cnn.conv8.vdb": 765756,
+                    "cnn.output.vdb": 100809
+                }
+            }
+        },
+        "000075.jpg": {
+            "Input File": "data\\images\\VOC2007\\000075.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000075",
+            "Runtime": 1.414403000002494,
+            "Total Filesize": 23192286,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23192286,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10712751,
+                    "cnn.conv2.vdb": 5537667,
+                    "cnn.conv3.vdb": 2760243,
+                    "cnn.conv4.vdb": 1428475,
+                    "cnn.conv5.vdb": 743812,
+                    "cnn.conv6.vdb": 387320,
+                    "cnn.conv7.vdb": 760548,
+                    "cnn.conv8.vdb": 761611,
+                    "cnn.output.vdb": 99859
+                }
+            }
+        },
+        "000076.jpg": {
+            "Input File": "data\\images\\VOC2007\\000076.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000076",
+            "Runtime": 0.8745070000004489,
+            "Total Filesize": 22505211,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22505211,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10290295,
+                    "cnn.conv2.vdb": 5335262,
+                    "cnn.conv3.vdb": 2707777,
+                    "cnn.conv4.vdb": 1418579,
+                    "cnn.conv5.vdb": 745041,
+                    "cnn.conv6.vdb": 385886,
+                    "cnn.conv7.vdb": 758877,
+                    "cnn.conv8.vdb": 763044,
+                    "cnn.output.vdb": 100450
+                }
+            }
+        },
+        "000079.jpg": {
+            "Input File": "data\\images\\VOC2007\\000079.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000079",
+            "Runtime": 0.9120524000027217,
+            "Total Filesize": 22728756,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22728756,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10454394,
+                    "cnn.conv2.vdb": 5389235,
+                    "cnn.conv3.vdb": 2709891,
+                    "cnn.conv4.vdb": 1412750,
+                    "cnn.conv5.vdb": 745317,
+                    "cnn.conv6.vdb": 387493,
+                    "cnn.conv7.vdb": 764989,
+                    "cnn.conv8.vdb": 764461,
+                    "cnn.output.vdb": 100226
+                }
+            }
+        },
+        "000080.jpg": {
+            "Input File": "data\\images\\VOC2007\\000080.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000080",
+            "Runtime": 0.9216524000003119,
+            "Total Filesize": 22634929,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22634929,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10491673,
+                    "cnn.conv2.vdb": 5344535,
+                    "cnn.conv3.vdb": 2671363,
+                    "cnn.conv4.vdb": 1397031,
+                    "cnn.conv5.vdb": 734356,
+                    "cnn.conv6.vdb": 383934,
+                    "cnn.conv7.vdb": 755410,
+                    "cnn.conv8.vdb": 756569,
+                    "cnn.output.vdb": 100058
+                }
+            }
+        },
+        "000082.jpg": {
+            "Input File": "data\\images\\VOC2007\\000082.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000082",
+            "Runtime": 0.9490619999996852,
+            "Total Filesize": 23193143,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23193143,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10840975,
+                    "cnn.conv2.vdb": 5439747,
+                    "cnn.conv3.vdb": 2742819,
+                    "cnn.conv4.vdb": 1417777,
+                    "cnn.conv5.vdb": 743007,
+                    "cnn.conv6.vdb": 385541,
+                    "cnn.conv7.vdb": 759516,
+                    "cnn.conv8.vdb": 763819,
+                    "cnn.output.vdb": 99942
+                }
+            }
+        },
+        "000084.jpg": {
+            "Input File": "data\\images\\VOC2007\\000084.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000084",
+            "Runtime": 0.9728815000053146,
+            "Total Filesize": 22993722,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22993722,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10643601,
+                    "cnn.conv2.vdb": 5438361,
+                    "cnn.conv3.vdb": 2737308,
+                    "cnn.conv4.vdb": 1419776,
+                    "cnn.conv5.vdb": 744175,
+                    "cnn.conv6.vdb": 386150,
+                    "cnn.conv7.vdb": 760715,
+                    "cnn.conv8.vdb": 763279,
+                    "cnn.output.vdb": 100357
+                }
+            }
+        },
+        "000085.jpg": {
+            "Input File": "data\\images\\VOC2007\\000085.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000085",
+            "Runtime": 0.9717636999994284,
+            "Total Filesize": 23101360,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23101360,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10659701,
+                    "cnn.conv2.vdb": 5492890,
+                    "cnn.conv3.vdb": 2747578,
+                    "cnn.conv4.vdb": 1428230,
+                    "cnn.conv5.vdb": 750010,
+                    "cnn.conv6.vdb": 387307,
+                    "cnn.conv7.vdb": 765405,
+                    "cnn.conv8.vdb": 769382,
+                    "cnn.output.vdb": 100857
+                }
+            }
+        },
+        "000086.jpg": {
+            "Input File": "data\\images\\VOC2007\\000086.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000086",
+            "Runtime": 1.0093466999969678,
+            "Total Filesize": 23194027,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23194027,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10770574,
+                    "cnn.conv2.vdb": 5521194,
+                    "cnn.conv3.vdb": 2753540,
+                    "cnn.conv4.vdb": 1421506,
+                    "cnn.conv5.vdb": 732986,
+                    "cnn.conv6.vdb": 384710,
+                    "cnn.conv7.vdb": 751733,
+                    "cnn.conv8.vdb": 757981,
+                    "cnn.output.vdb": 99803
+                }
+            }
+        },
+        "000087.jpg": {
+            "Input File": "data\\images\\VOC2007\\000087.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000087",
+            "Runtime": 1.0237167999948724,
+            "Total Filesize": 22641298,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22641298,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10368783,
+                    "cnn.conv2.vdb": 5388287,
+                    "cnn.conv3.vdb": 2712229,
+                    "cnn.conv4.vdb": 1418949,
+                    "cnn.conv5.vdb": 742663,
+                    "cnn.conv6.vdb": 384841,
+                    "cnn.conv7.vdb": 761167,
+                    "cnn.conv8.vdb": 763971,
+                    "cnn.output.vdb": 100408
+                }
+            }
+        },
+        "000088.jpg": {
+            "Input File": "data\\images\\VOC2007\\000088.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000088",
+            "Runtime": 1.0829415999978664,
+            "Total Filesize": 23043145,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23043145,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10742371,
+                    "cnn.conv2.vdb": 5410710,
+                    "cnn.conv3.vdb": 2719149,
+                    "cnn.conv4.vdb": 1409290,
+                    "cnn.conv5.vdb": 742822,
+                    "cnn.conv6.vdb": 386207,
+                    "cnn.conv7.vdb": 764908,
+                    "cnn.conv8.vdb": 766885,
+                    "cnn.output.vdb": 100803
+                }
+            }
+        },
+        "000090.jpg": {
+            "Input File": "data\\images\\VOC2007\\000090.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000090",
+            "Runtime": 1.0238828000001376,
+            "Total Filesize": 22819524,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22819524,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10592924,
+                    "cnn.conv2.vdb": 5359945,
+                    "cnn.conv3.vdb": 2711554,
+                    "cnn.conv4.vdb": 1402525,
+                    "cnn.conv5.vdb": 741131,
+                    "cnn.conv6.vdb": 385176,
+                    "cnn.conv7.vdb": 761312,
+                    "cnn.conv8.vdb": 765206,
+                    "cnn.output.vdb": 99751
+                }
+            }
+        },
+        "000092.jpg": {
+            "Input File": "data\\images\\VOC2007\\000092.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000092",
+            "Runtime": 1.0577523000029032,
+            "Total Filesize": 21014439,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 21014439,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 9421112,
+                    "cnn.conv2.vdb": 4918688,
+                    "cnn.conv3.vdb": 2539240,
+                    "cnn.conv4.vdb": 1374849,
+                    "cnn.conv5.vdb": 742859,
+                    "cnn.conv6.vdb": 386221,
+                    "cnn.conv7.vdb": 764454,
+                    "cnn.conv8.vdb": 766326,
+                    "cnn.output.vdb": 100690
+                }
+            }
+        },
+        "000094.jpg": {
+            "Input File": "data\\images\\VOC2007\\000094.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000094",
+            "Runtime": 1.0494705000019167,
+            "Total Filesize": 23574519,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23574519,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11011184,
+                    "cnn.conv2.vdb": 5585766,
+                    "cnn.conv3.vdb": 2797294,
+                    "cnn.conv4.vdb": 1430908,
+                    "cnn.conv5.vdb": 749231,
+                    "cnn.conv6.vdb": 386884,
+                    "cnn.conv7.vdb": 756673,
+                    "cnn.conv8.vdb": 757579,
+                    "cnn.output.vdb": 99000
+                }
+            }
+        },
+        "000096.jpg": {
+            "Input File": "data\\images\\VOC2007\\000096.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000096",
+            "Runtime": 1.0536652999944636,
+            "Total Filesize": 23170635,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23170635,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10877276,
+                    "cnn.conv2.vdb": 5411497,
+                    "cnn.conv3.vdb": 2726077,
+                    "cnn.conv4.vdb": 1413118,
+                    "cnn.conv5.vdb": 743911,
+                    "cnn.conv6.vdb": 385583,
+                    "cnn.conv7.vdb": 756220,
+                    "cnn.conv8.vdb": 757219,
+                    "cnn.output.vdb": 99734
+                }
+            }
+        },
+        "000097.jpg": {
+            "Input File": "data\\images\\VOC2007\\000097.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000097",
+            "Runtime": 1.1139565000048606,
+            "Total Filesize": 22974543,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22974543,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10688347,
+                    "cnn.conv2.vdb": 5409953,
+                    "cnn.conv3.vdb": 2714623,
+                    "cnn.conv4.vdb": 1409120,
+                    "cnn.conv5.vdb": 742157,
+                    "cnn.conv6.vdb": 386548,
+                    "cnn.conv7.vdb": 762225,
+                    "cnn.conv8.vdb": 762101,
+                    "cnn.output.vdb": 99469
+                }
+            }
+        },
+        "000098.jpg": {
+            "Input File": "data\\images\\VOC2007\\000098.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000098",
+            "Runtime": 1.1412379000030342,
+            "Total Filesize": 23002432,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23002432,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10652646,
+                    "cnn.conv2.vdb": 5445549,
+                    "cnn.conv3.vdb": 2741034,
+                    "cnn.conv4.vdb": 1414874,
+                    "cnn.conv5.vdb": 738004,
+                    "cnn.conv6.vdb": 386803,
+                    "cnn.conv7.vdb": 760521,
+                    "cnn.conv8.vdb": 762869,
+                    "cnn.output.vdb": 100132
+                }
+            }
+        },
+        "000100.jpg": {
+            "Input File": "data\\images\\VOC2007\\000100.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000100",
+            "Runtime": 1.1491317999971216,
+            "Total Filesize": 21325499,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 21325499,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 9285990,
+                    "cnn.conv2.vdb": 5181503,
+                    "cnn.conv3.vdb": 2706788,
+                    "cnn.conv4.vdb": 1406717,
+                    "cnn.conv5.vdb": 741363,
+                    "cnn.conv6.vdb": 383365,
+                    "cnn.conv7.vdb": 757926,
+                    "cnn.conv8.vdb": 761476,
+                    "cnn.output.vdb": 100371
+                }
+            }
+        },
+        "000103.jpg": {
+            "Input File": "data\\images\\VOC2007\\000103.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000103",
+            "Runtime": 1.1584321000045747,
+            "Total Filesize": 22783733,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22783733,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10546206,
+                    "cnn.conv2.vdb": 5386026,
+                    "cnn.conv3.vdb": 2692882,
+                    "cnn.conv4.vdb": 1408466,
+                    "cnn.conv5.vdb": 740161,
+                    "cnn.conv6.vdb": 385942,
+                    "cnn.conv7.vdb": 760327,
+                    "cnn.conv8.vdb": 763592,
+                    "cnn.output.vdb": 100131
+                }
+            }
+        },
+        "000105.jpg": {
+            "Input File": "data\\images\\VOC2007\\000105.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000105",
+            "Runtime": 1.1415797000008752,
+            "Total Filesize": 23413110,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23413110,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10931243,
+                    "cnn.conv2.vdb": 5543568,
+                    "cnn.conv3.vdb": 2754332,
+                    "cnn.conv4.vdb": 1427513,
+                    "cnn.conv5.vdb": 744817,
+                    "cnn.conv6.vdb": 386060,
+                    "cnn.conv7.vdb": 761914,
+                    "cnn.conv8.vdb": 763678,
+                    "cnn.output.vdb": 99985
+                }
+            }
+        },
+        "000106.jpg": {
+            "Input File": "data\\images\\VOC2007\\000106.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000106",
+            "Runtime": 1.1452629000050365,
+            "Total Filesize": 23078770,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23078770,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10650656,
+                    "cnn.conv2.vdb": 5477018,
+                    "cnn.conv3.vdb": 2767181,
+                    "cnn.conv4.vdb": 1427977,
+                    "cnn.conv5.vdb": 747880,
+                    "cnn.conv6.vdb": 387446,
+                    "cnn.conv7.vdb": 760208,
+                    "cnn.conv8.vdb": 760476,
+                    "cnn.output.vdb": 99928
+                }
+            }
+        },
+        "000108.jpg": {
+            "Input File": "data\\images\\VOC2007\\000108.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000108",
+            "Runtime": 1.1756356000041706,
+            "Total Filesize": 22952876,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22952876,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10629727,
+                    "cnn.conv2.vdb": 5424339,
+                    "cnn.conv3.vdb": 2723745,
+                    "cnn.conv4.vdb": 1416810,
+                    "cnn.conv5.vdb": 747714,
+                    "cnn.conv6.vdb": 386434,
+                    "cnn.conv7.vdb": 760568,
+                    "cnn.conv8.vdb": 763632,
+                    "cnn.output.vdb": 99907
+                }
+            }
+        },
+        "000111.jpg": {
+            "Input File": "data\\images\\VOC2007\\000111.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000111",
+            "Runtime": 1.1923208000007435,
+            "Total Filesize": 22775965,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22775965,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10649792,
+                    "cnn.conv2.vdb": 5358106,
+                    "cnn.conv3.vdb": 2669639,
+                    "cnn.conv4.vdb": 1378062,
+                    "cnn.conv5.vdb": 723493,
+                    "cnn.conv6.vdb": 382280,
+                    "cnn.conv7.vdb": 756141,
+                    "cnn.conv8.vdb": 758509,
+                    "cnn.output.vdb": 99943
+                }
+            }
+        },
+        "000114.jpg": {
+            "Input File": "data\\images\\VOC2007\\000114.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000114",
+            "Runtime": 1.2505777999977,
+            "Total Filesize": 23192807,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23192807,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10771130,
+                    "cnn.conv2.vdb": 5479022,
+                    "cnn.conv3.vdb": 2752719,
+                    "cnn.conv4.vdb": 1426720,
+                    "cnn.conv5.vdb": 747940,
+                    "cnn.conv6.vdb": 388196,
+                    "cnn.conv7.vdb": 762544,
+                    "cnn.conv8.vdb": 764775,
+                    "cnn.output.vdb": 99761
+                }
+            }
+        },
+        "000115.jpg": {
+            "Input File": "data\\images\\VOC2007\\000115.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000115",
+            "Runtime": 1.2779949000032502,
+            "Total Filesize": 23360531,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23360531,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10938106,
+                    "cnn.conv2.vdb": 5507214,
+                    "cnn.conv3.vdb": 2738900,
+                    "cnn.conv4.vdb": 1415663,
+                    "cnn.conv5.vdb": 747420,
+                    "cnn.conv6.vdb": 386752,
+                    "cnn.conv7.vdb": 761793,
+                    "cnn.conv8.vdb": 764241,
+                    "cnn.output.vdb": 100442
+                }
+            }
+        },
+        "000116.jpg": {
+            "Input File": "data\\images\\VOC2007\\000116.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000116",
+            "Runtime": 1.3115055000016582,
+            "Total Filesize": 22080086,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22080086,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10045533,
+                    "cnn.conv2.vdb": 5218190,
+                    "cnn.conv3.vdb": 2649601,
+                    "cnn.conv4.vdb": 1407183,
+                    "cnn.conv5.vdb": 744663,
+                    "cnn.conv6.vdb": 387451,
+                    "cnn.conv7.vdb": 763657,
+                    "cnn.conv8.vdb": 763760,
+                    "cnn.output.vdb": 100048
+                }
+            }
+        },
+        "000119.jpg": {
+            "Input File": "data\\images\\VOC2007\\000119.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000119",
+            "Runtime": 1.3444455999997444,
+            "Total Filesize": 23299257,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23299257,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10832757,
+                    "cnn.conv2.vdb": 5532963,
+                    "cnn.conv3.vdb": 2748578,
+                    "cnn.conv4.vdb": 1426235,
+                    "cnn.conv5.vdb": 744343,
+                    "cnn.conv6.vdb": 386367,
+                    "cnn.conv7.vdb": 762500,
+                    "cnn.conv8.vdb": 765508,
+                    "cnn.output.vdb": 100006
+                }
+            }
+        },
+        "000124.jpg": {
+            "Input File": "data\\images\\VOC2007\\000124.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000124",
+            "Runtime": 1.2716534999999567,
+            "Total Filesize": 23226757,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23226757,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10785657,
+                    "cnn.conv2.vdb": 5487286,
+                    "cnn.conv3.vdb": 2766918,
+                    "cnn.conv4.vdb": 1430061,
+                    "cnn.conv5.vdb": 746962,
+                    "cnn.conv6.vdb": 386218,
+                    "cnn.conv7.vdb": 761541,
+                    "cnn.conv8.vdb": 762423,
+                    "cnn.output.vdb": 99691
+                }
+            }
+        },
+        "000126.jpg": {
+            "Input File": "data\\images\\VOC2007\\000126.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000126",
+            "Runtime": 1.266115099999297,
+            "Total Filesize": 23096006,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23096006,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10807550,
+                    "cnn.conv2.vdb": 5399390,
+                    "cnn.conv3.vdb": 2726184,
+                    "cnn.conv4.vdb": 1414895,
+                    "cnn.conv5.vdb": 745775,
+                    "cnn.conv6.vdb": 385267,
+                    "cnn.conv7.vdb": 757208,
+                    "cnn.conv8.vdb": 759649,
+                    "cnn.output.vdb": 100088
+                }
+            }
+        },
+        "000127.jpg": {
+            "Input File": "data\\images\\VOC2007\\000127.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000127",
+            "Runtime": 1.2828468000006978,
+            "Total Filesize": 23438078,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23438078,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10880605,
+                    "cnn.conv2.vdb": 5576473,
+                    "cnn.conv3.vdb": 2780544,
+                    "cnn.conv4.vdb": 1432962,
+                    "cnn.conv5.vdb": 749530,
+                    "cnn.conv6.vdb": 388317,
+                    "cnn.conv7.vdb": 764224,
+                    "cnn.conv8.vdb": 764985,
+                    "cnn.output.vdb": 100438
+                }
+            }
+        },
+        "000128.jpg": {
+            "Input File": "data\\images\\VOC2007\\000128.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000128",
+            "Runtime": 1.3267774999985704,
+            "Total Filesize": 23181971,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23181971,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10758260,
+                    "cnn.conv2.vdb": 5502661,
+                    "cnn.conv3.vdb": 2758074,
+                    "cnn.conv4.vdb": 1422462,
+                    "cnn.conv5.vdb": 742938,
+                    "cnn.conv6.vdb": 383420,
+                    "cnn.conv7.vdb": 755397,
+                    "cnn.conv8.vdb": 759323,
+                    "cnn.output.vdb": 99436
+                }
+            }
+        },
+        "000135.jpg": {
+            "Input File": "data\\images\\VOC2007\\000135.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000135",
+            "Runtime": 1.3451965999993263,
+            "Total Filesize": 23138251,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23138251,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10790637,
+                    "cnn.conv2.vdb": 5475884,
+                    "cnn.conv3.vdb": 2728514,
+                    "cnn.conv4.vdb": 1404648,
+                    "cnn.conv5.vdb": 734313,
+                    "cnn.conv6.vdb": 383414,
+                    "cnn.conv7.vdb": 759055,
+                    "cnn.conv8.vdb": 762218,
+                    "cnn.output.vdb": 99568
+                }
+            }
+        },
+        "000136.jpg": {
+            "Input File": "data\\images\\VOC2007\\000136.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000136",
+            "Runtime": 1.3913174999979674,
+            "Total Filesize": 22810505,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22810505,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10600785,
+                    "cnn.conv2.vdb": 5369604,
+                    "cnn.conv3.vdb": 2694062,
+                    "cnn.conv4.vdb": 1397743,
+                    "cnn.conv5.vdb": 737281,
+                    "cnn.conv6.vdb": 385388,
+                    "cnn.conv7.vdb": 761994,
+                    "cnn.conv8.vdb": 763699,
+                    "cnn.output.vdb": 99949
+                }
+            }
+        },
+        "000137.jpg": {
+            "Input File": "data\\images\\VOC2007\\000137.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000137",
+            "Runtime": 1.367985500000941,
+            "Total Filesize": 23047510,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23047510,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10623309,
+                    "cnn.conv2.vdb": 5503638,
+                    "cnn.conv3.vdb": 2739603,
+                    "cnn.conv4.vdb": 1424200,
+                    "cnn.conv5.vdb": 747062,
+                    "cnn.conv6.vdb": 385255,
+                    "cnn.conv7.vdb": 761286,
+                    "cnn.conv8.vdb": 763012,
+                    "cnn.output.vdb": 100145
+                }
+            }
+        },
+        "000139.jpg": {
+            "Input File": "data\\images\\VOC2007\\000139.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000139",
+            "Runtime": 1.3383207000006223,
+            "Total Filesize": 23023424,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23023424,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10731165,
+                    "cnn.conv2.vdb": 5440435,
+                    "cnn.conv3.vdb": 2691970,
+                    "cnn.conv4.vdb": 1404631,
+                    "cnn.conv5.vdb": 740613,
+                    "cnn.conv6.vdb": 387082,
+                    "cnn.conv7.vdb": 761291,
+                    "cnn.conv8.vdb": 765471,
+                    "cnn.output.vdb": 100766
+                }
+            }
+        },
+        "000144.jpg": {
+            "Input File": "data\\images\\VOC2007\\000144.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000144",
+            "Runtime": 1.3792973999952665,
+            "Total Filesize": 23329829,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23329829,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10863857,
+                    "cnn.conv2.vdb": 5503691,
+                    "cnn.conv3.vdb": 2772211,
+                    "cnn.conv4.vdb": 1427400,
+                    "cnn.conv5.vdb": 746499,
+                    "cnn.conv6.vdb": 388397,
+                    "cnn.conv7.vdb": 763327,
+                    "cnn.conv8.vdb": 764455,
+                    "cnn.output.vdb": 99992
+                }
+            }
+        },
+        "000145.jpg": {
+            "Input File": "data\\images\\VOC2007\\000145.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000145",
+            "Runtime": 1.366354500001762,
+            "Total Filesize": 17508599,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 17508599,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 7264460,
+                    "cnn.conv2.vdb": 3991448,
+                    "cnn.conv3.vdb": 2207641,
+                    "cnn.conv4.vdb": 1297416,
+                    "cnn.conv5.vdb": 731999,
+                    "cnn.conv6.vdb": 385043,
+                    "cnn.conv7.vdb": 763163,
+                    "cnn.conv8.vdb": 766869,
+                    "cnn.output.vdb": 100560
+                }
+            }
+        },
+        "000148.jpg": {
+            "Input File": "data\\images\\VOC2007\\000148.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000148",
+            "Runtime": 1.4175494000010076,
+            "Total Filesize": 22938714,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22938714,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10743903,
+                    "cnn.conv2.vdb": 5376754,
+                    "cnn.conv3.vdb": 2683462,
+                    "cnn.conv4.vdb": 1391789,
+                    "cnn.conv5.vdb": 734349,
+                    "cnn.conv6.vdb": 384739,
+                    "cnn.conv7.vdb": 760241,
+                    "cnn.conv8.vdb": 763202,
+                    "cnn.output.vdb": 100275
+                }
+            }
+        },
+        "000149.jpg": {
+            "Input File": "data\\images\\VOC2007\\000149.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000149",
+            "Runtime": 1.4383536000023014,
+            "Total Filesize": 22447729,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22447729,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10292908,
+                    "cnn.conv2.vdb": 5307533,
+                    "cnn.conv3.vdb": 2676419,
+                    "cnn.conv4.vdb": 1410671,
+                    "cnn.conv5.vdb": 744547,
+                    "cnn.conv6.vdb": 386979,
+                    "cnn.conv7.vdb": 762717,
+                    "cnn.conv8.vdb": 765759,
+                    "cnn.output.vdb": 100196
+                }
+            }
+        },
+        "000151.jpg": {
+            "Input File": "data\\images\\VOC2007\\000151.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000151",
+            "Runtime": 1.457407300003979,
+            "Total Filesize": 23327277,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23327277,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10844299,
+                    "cnn.conv2.vdb": 5519311,
+                    "cnn.conv3.vdb": 2768945,
+                    "cnn.conv4.vdb": 1429422,
+                    "cnn.conv5.vdb": 751317,
+                    "cnn.conv6.vdb": 387623,
+                    "cnn.conv7.vdb": 761083,
+                    "cnn.conv8.vdb": 764991,
+                    "cnn.output.vdb": 100286
+                }
+            }
+        },
+        "000152.jpg": {
+            "Input File": "data\\images\\VOC2007\\000152.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000152",
+            "Runtime": 1.4513797999970848,
+            "Total Filesize": 23625647,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23625647,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11053371,
+                    "cnn.conv2.vdb": 5601776,
+                    "cnn.conv3.vdb": 2777747,
+                    "cnn.conv4.vdb": 1431712,
+                    "cnn.conv5.vdb": 747477,
+                    "cnn.conv6.vdb": 387499,
+                    "cnn.conv7.vdb": 760891,
+                    "cnn.conv8.vdb": 764696,
+                    "cnn.output.vdb": 100478
+                }
+            }
+        },
+        "000155.jpg": {
+            "Input File": "data\\images\\VOC2007\\000155.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000155",
+            "Runtime": 1.4569556999995257,
+            "Total Filesize": 23398500,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23398500,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10957693,
+                    "cnn.conv2.vdb": 5540673,
+                    "cnn.conv3.vdb": 2755989,
+                    "cnn.conv4.vdb": 1419414,
+                    "cnn.conv5.vdb": 736463,
+                    "cnn.conv6.vdb": 380938,
+                    "cnn.conv7.vdb": 753742,
+                    "cnn.conv8.vdb": 754384,
+                    "cnn.output.vdb": 99204
+                }
+            }
+        },
+        "000157.jpg": {
+            "Input File": "data\\images\\VOC2007\\000157.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000157",
+            "Runtime": 1.4817137999998522,
+            "Total Filesize": 22778085,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22778085,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10523299,
+                    "cnn.conv2.vdb": 5365121,
+                    "cnn.conv3.vdb": 2717303,
+                    "cnn.conv4.vdb": 1412586,
+                    "cnn.conv5.vdb": 745448,
+                    "cnn.conv6.vdb": 386239,
+                    "cnn.conv7.vdb": 763210,
+                    "cnn.conv8.vdb": 765000,
+                    "cnn.output.vdb": 99879
+                }
+            }
+        },
+        "000160.jpg": {
+            "Input File": "data\\images\\VOC2007\\000160.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000160",
+            "Runtime": 1.541490600000543,
+            "Total Filesize": 22699502,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22699502,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10503563,
+                    "cnn.conv2.vdb": 5328105,
+                    "cnn.conv3.vdb": 2704193,
+                    "cnn.conv4.vdb": 1412127,
+                    "cnn.conv5.vdb": 743006,
+                    "cnn.conv6.vdb": 386133,
+                    "cnn.conv7.vdb": 761159,
+                    "cnn.conv8.vdb": 762071,
+                    "cnn.output.vdb": 99145
+                }
+            }
+        },
+        "000166.jpg": {
+            "Input File": "data\\images\\VOC2007\\000166.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000166",
+            "Runtime": 1.5833459999994375,
+            "Total Filesize": 22314346,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22314346,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10104240,
+                    "cnn.conv2.vdb": 5323552,
+                    "cnn.conv3.vdb": 2708855,
+                    "cnn.conv4.vdb": 1418770,
+                    "cnn.conv5.vdb": 745617,
+                    "cnn.conv6.vdb": 386443,
+                    "cnn.conv7.vdb": 762434,
+                    "cnn.conv8.vdb": 763851,
+                    "cnn.output.vdb": 100584
+                }
+            }
+        },
+        "000167.jpg": {
+            "Input File": "data\\images\\VOC2007\\000167.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000167",
+            "Runtime": 1.5703377000027103,
+            "Total Filesize": 23551710,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23551710,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11092037,
+                    "cnn.conv2.vdb": 5519275,
+                    "cnn.conv3.vdb": 2763360,
+                    "cnn.conv4.vdb": 1427006,
+                    "cnn.conv5.vdb": 745945,
+                    "cnn.conv6.vdb": 385171,
+                    "cnn.conv7.vdb": 759589,
+                    "cnn.conv8.vdb": 759479,
+                    "cnn.output.vdb": 99848
+                }
+            }
+        },
+        "000168.jpg": {
+            "Input File": "data\\images\\VOC2007\\000168.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000168",
+            "Runtime": 1.587136099995405,
+            "Total Filesize": 22446473,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22446473,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10333495,
+                    "cnn.conv2.vdb": 5326369,
+                    "cnn.conv3.vdb": 2661350,
+                    "cnn.conv4.vdb": 1378357,
+                    "cnn.conv5.vdb": 729920,
+                    "cnn.conv6.vdb": 385449,
+                    "cnn.conv7.vdb": 763723,
+                    "cnn.conv8.vdb": 766990,
+                    "cnn.output.vdb": 100820
+                }
+            }
+        },
+        "000172.jpg": {
+            "Input File": "data\\images\\VOC2007\\000172.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000172",
+            "Runtime": 1.5535511000052793,
+            "Total Filesize": 23628460,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23628460,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11190311,
+                    "cnn.conv2.vdb": 5512351,
+                    "cnn.conv3.vdb": 2763282,
+                    "cnn.conv4.vdb": 1415586,
+                    "cnn.conv5.vdb": 741778,
+                    "cnn.conv6.vdb": 384243,
+                    "cnn.conv7.vdb": 759381,
+                    "cnn.conv8.vdb": 761961,
+                    "cnn.output.vdb": 99567
+                }
+            }
+        },
+        "000175.jpg": {
+            "Input File": "data\\images\\VOC2007\\000175.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000175",
+            "Runtime": 1.5896548999953666,
+            "Total Filesize": 23646959,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23646959,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 11055709,
+                    "cnn.conv2.vdb": 5629936,
+                    "cnn.conv3.vdb": 2777637,
+                    "cnn.conv4.vdb": 1433383,
+                    "cnn.conv5.vdb": 748601,
+                    "cnn.conv6.vdb": 385584,
+                    "cnn.conv7.vdb": 758939,
+                    "cnn.conv8.vdb": 757604,
+                    "cnn.output.vdb": 99566
+                }
+            }
+        },
+        "000176.jpg": {
+            "Input File": "data\\images\\VOC2007\\000176.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000176",
+            "Runtime": 1.6237264000010327,
+            "Total Filesize": 23128879,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23128879,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10700312,
+                    "cnn.conv2.vdb": 5510989,
+                    "cnn.conv3.vdb": 2747258,
+                    "cnn.conv4.vdb": 1423647,
+                    "cnn.conv5.vdb": 742449,
+                    "cnn.conv6.vdb": 384564,
+                    "cnn.conv7.vdb": 759335,
+                    "cnn.conv8.vdb": 760749,
+                    "cnn.output.vdb": 99576
+                }
+            }
+        },
+        "000178.jpg": {
+            "Input File": "data\\images\\VOC2007\\000178.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000178",
+            "Runtime": 1.6744785999981104,
+            "Total Filesize": 23496861,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23496861,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10967071,
+                    "cnn.conv2.vdb": 5561331,
+                    "cnn.conv3.vdb": 2777670,
+                    "cnn.conv4.vdb": 1432469,
+                    "cnn.conv5.vdb": 749846,
+                    "cnn.conv6.vdb": 387314,
+                    "cnn.conv7.vdb": 759191,
+                    "cnn.conv8.vdb": 762076,
+                    "cnn.output.vdb": 99893
+                }
+            }
+        },
+        "000179.jpg": {
+            "Input File": "data\\images\\VOC2007\\000179.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000179",
+            "Runtime": 1.6795132999977795,
+            "Total Filesize": 22637776,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22637776,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10569608,
+                    "cnn.conv2.vdb": 5304141,
+                    "cnn.conv3.vdb": 2654286,
+                    "cnn.conv4.vdb": 1385325,
+                    "cnn.conv5.vdb": 731673,
+                    "cnn.conv6.vdb": 384622,
+                    "cnn.conv7.vdb": 751471,
+                    "cnn.conv8.vdb": 757094,
+                    "cnn.output.vdb": 99556
+                }
+            }
+        },
+        "000181.jpg": {
+            "Input File": "data\\images\\VOC2007\\000181.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000181",
+            "Runtime": 1.69965499999671,
+            "Total Filesize": 23311051,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23311051,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10859193,
+                    "cnn.conv2.vdb": 5503612,
+                    "cnn.conv3.vdb": 2752779,
+                    "cnn.conv4.vdb": 1431646,
+                    "cnn.conv5.vdb": 750072,
+                    "cnn.conv6.vdb": 387221,
+                    "cnn.conv7.vdb": 762206,
+                    "cnn.conv8.vdb": 764389,
+                    "cnn.output.vdb": 99933
+                }
+            }
+        },
+        "000182.jpg": {
+            "Input File": "data\\images\\VOC2007\\000182.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000182",
+            "Runtime": 1.6597122000021045,
+            "Total Filesize": 22940942,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22940942,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10583985,
+                    "cnn.conv2.vdb": 5444969,
+                    "cnn.conv3.vdb": 2734459,
+                    "cnn.conv4.vdb": 1415850,
+                    "cnn.conv5.vdb": 743454,
+                    "cnn.conv6.vdb": 388681,
+                    "cnn.conv7.vdb": 762983,
+                    "cnn.conv8.vdb": 766452,
+                    "cnn.output.vdb": 100109
+                }
+            }
+        },
+        "000183.jpg": {
+            "Input File": "data\\images\\VOC2007\\000183.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000183",
+            "Runtime": 1.6605338000008487,
+            "Total Filesize": 23351283,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23351283,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10873370,
+                    "cnn.conv2.vdb": 5535308,
+                    "cnn.conv3.vdb": 2762385,
+                    "cnn.conv4.vdb": 1426513,
+                    "cnn.conv5.vdb": 747622,
+                    "cnn.conv6.vdb": 386370,
+                    "cnn.conv7.vdb": 761334,
+                    "cnn.conv8.vdb": 758588,
+                    "cnn.output.vdb": 99793
+                }
+            }
+        },
+        "000185.jpg": {
+            "Input File": "data\\images\\VOC2007\\000185.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000185",
+            "Runtime": 1.7265746999983094,
+            "Total Filesize": 22741424,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22741424,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10561597,
+                    "cnn.conv2.vdb": 5345998,
+                    "cnn.conv3.vdb": 2685731,
+                    "cnn.conv4.vdb": 1394575,
+                    "cnn.conv5.vdb": 737661,
+                    "cnn.conv6.vdb": 385042,
+                    "cnn.conv7.vdb": 764718,
+                    "cnn.conv8.vdb": 765759,
+                    "cnn.output.vdb": 100343
+                }
+            }
+        },
+        "000186.jpg": {
+            "Input File": "data\\images\\VOC2007\\000186.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000186",
+            "Runtime": 1.7875456000037957,
+            "Total Filesize": 22245230,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22245230,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10388347,
+                    "cnn.conv2.vdb": 5193635,
+                    "cnn.conv3.vdb": 2601544,
+                    "cnn.conv4.vdb": 1351761,
+                    "cnn.conv5.vdb": 719233,
+                    "cnn.conv6.vdb": 381453,
+                    "cnn.conv7.vdb": 749140,
+                    "cnn.conv8.vdb": 760323,
+                    "cnn.output.vdb": 99794
+                }
+            }
+        },
+        "000188.jpg": {
+            "Input File": "data\\images\\VOC2007\\000188.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000188",
+            "Runtime": 1.758914799997001,
+            "Total Filesize": 23454418,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23454418,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10990644,
+                    "cnn.conv2.vdb": 5534777,
+                    "cnn.conv3.vdb": 2761659,
+                    "cnn.conv4.vdb": 1426920,
+                    "cnn.conv5.vdb": 741164,
+                    "cnn.conv6.vdb": 384343,
+                    "cnn.conv7.vdb": 754549,
+                    "cnn.conv8.vdb": 760604,
+                    "cnn.output.vdb": 99758
+                }
+            }
+        },
+        "000191.jpg": {
+            "Input File": "data\\images\\VOC2007\\000191.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000191",
+            "Runtime": 1.7364578999986406,
+            "Total Filesize": 22855073,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22855073,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10536676,
+                    "cnn.conv2.vdb": 5427690,
+                    "cnn.conv3.vdb": 2716327,
+                    "cnn.conv4.vdb": 1416485,
+                    "cnn.conv5.vdb": 746497,
+                    "cnn.conv6.vdb": 385594,
+                    "cnn.conv7.vdb": 761603,
+                    "cnn.conv8.vdb": 763717,
+                    "cnn.output.vdb": 100484
+                }
+            }
+        },
+        "000195.jpg": {
+            "Input File": "data\\images\\VOC2007\\000195.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000195",
+            "Runtime": 1.7466662000006181,
+            "Total Filesize": 23031238,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23031238,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10677520,
+                    "cnn.conv2.vdb": 5439028,
+                    "cnn.conv3.vdb": 2734190,
+                    "cnn.conv4.vdb": 1421496,
+                    "cnn.conv5.vdb": 744815,
+                    "cnn.conv6.vdb": 385553,
+                    "cnn.conv7.vdb": 763065,
+                    "cnn.conv8.vdb": 765252,
+                    "cnn.output.vdb": 100319
+                }
+            }
+        },
+        "000196.jpg": {
+            "Input File": "data\\images\\VOC2007\\000196.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000196",
+            "Runtime": 1.7679187999965507,
+            "Total Filesize": 23115221,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23115221,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10693339,
+                    "cnn.conv2.vdb": 5472924,
+                    "cnn.conv3.vdb": 2768204,
+                    "cnn.conv4.vdb": 1430763,
+                    "cnn.conv5.vdb": 748305,
+                    "cnn.conv6.vdb": 386789,
+                    "cnn.conv7.vdb": 758237,
+                    "cnn.conv8.vdb": 757397,
+                    "cnn.output.vdb": 99263
+                }
+            }
+        },
+        "000197.jpg": {
+            "Input File": "data\\images\\VOC2007\\000197.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000197",
+            "Runtime": 1.8440589000019827,
+            "Total Filesize": 23130082,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 23130082,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10697777,
+                    "cnn.conv2.vdb": 5501040,
+                    "cnn.conv3.vdb": 2751273,
+                    "cnn.conv4.vdb": 1422885,
+                    "cnn.conv5.vdb": 745370,
+                    "cnn.conv6.vdb": 386897,
+                    "cnn.conv7.vdb": 761777,
+                    "cnn.conv8.vdb": 763068,
+                    "cnn.output.vdb": 99995
+                }
+            }
+        },
+        "000199.jpg": {
+            "Input File": "data\\images\\VOC2007\\000199.jpg",
+            "Output Directory": "data\\output\\benchmark\\batch_vdb\\000199",
+            "Runtime": 1.8603689999945345,
+            "Total Filesize": 22757177,
+            "Total Filecount": 9,
+            "Run parameters": {
+                "nms": 0.55,
+                "confidence": 0.55,
+                "layers": [
+                    "Conv2d"
+                ],
+                "include": [],
+                "exclude": [],
+                "formats": [
+                    "vdb"
+                ]
+            },
+            "Presicion Error": {
+                "vdb": {
+                    "Avg": 0.0,
+                    "Min": 0.0,
+                    "Max": 0,
+                    "Layers": {
+                        "cnn.conv1": 0.0,
+                        "cnn.conv2": 0.0,
+                        "cnn.conv3": 0.0,
+                        "cnn.conv4": 0.0,
+                        "cnn.conv5": 0.0,
+                        "cnn.conv6": 0.0,
+                        "cnn.conv7": 0.0,
+                        "cnn.conv8": 0.0,
+                        "cnn.output": 0.0
+                    }
+                }
+            },
+            "Files": {
+                "vdb": {
+                    "Total Size": 22757177,
+                    "File Count": 9,
+                    "cnn.conv1.vdb": 10495014,
+                    "cnn.conv2.vdb": 5403072,
+                    "cnn.conv3.vdb": 2711677,
+                    "cnn.conv4.vdb": 1410904,
+                    "cnn.conv5.vdb": 739896,
+                    "cnn.conv6.vdb": 381565,
+                    "cnn.conv7.vdb": 758547,
+                    "cnn.conv8.vdb": 757207,
+                    "cnn.output.vdb": 99295
+                }
+            }
+        }
+    }
+}
