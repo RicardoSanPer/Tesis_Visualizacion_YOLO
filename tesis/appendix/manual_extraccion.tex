@@ -55,12 +55,12 @@ Para iniciar el flujo de extracción se ejecuta el \textit{script} \texttt{main.
 los argumentos requeridos y parámetros de configuración opcionales a través de la interfaz de línea de comandos:
 
 \begin{verbatim}
-    python main.py input="ruta/a/imagen/de/entrada.png" [parámetros]
+    python main.py --input="ruta/a/imagen/de/entrada.png" [parámetros]
 \end{verbatim}
 
 Por ejemplo:
 \begin{verbatim}
-    python main.py input="my_image.png" output="./output"
+    python main.py --input="my_image.png" --output="./output"
 \end{verbatim}
 procesa la imagen \texttt{my\_image.png} ubicada en el directorio de trabajo actual y almacena las activaciones volumétricas 
 resultantes en el subdirectorio \texttt{output/}.
