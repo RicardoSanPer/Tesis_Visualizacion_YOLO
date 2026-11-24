@@ -14,5 +14,8 @@ El repositorio esta estructurado de la siguiente forma:
 - ```tesis``` Contiene los archivos para el trabajo escrito de tesis.
 - ```anexos``` Contiene archivos complementarios como métricas y estudios de casos. Algunos archivos son omitidos del repositorio, pero incluidos en *Releases*.
 
+## Releases
+Contiene el add-on de Blender, librerías compiladas de OpenVDB y los estudios de casos con los archivos generados (OpenVDB, manifesto JSON y escenas de Blender).
+
 ## Video
 Se desarrolló un video introductorio a las redes neuronales convolucionales utilizando las herramientas. Disponible en Youtube: https://youtu.be/Qev6kNyxNaw
