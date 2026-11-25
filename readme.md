@@ -1,11 +1,13 @@
-# Sistema Automatizado de Visualización Tridimensional de YOLOv8
+# Sistema Automatizado de Visualización Tridimensional de YOLOv2
 **Por Ricardo Sánchez Pérez**
 
 Este repositorio es el espacio de trabajo para el desarrollo de la tesis con titulo provisional:
 
-> *Sistema Automatizado de Visualización Tridimensional Interactiva para la Interpretación de Redes Neuronales Convolucionales utilizando Python y Blender aplicado al Modelo YOLOv2*
+> *Sistema Automatizado de Visualización Tridimensional Interactiva para la Interpretación de Redes Neuronales Convolucionales utilizando Python y Blender aplicado al Modelo YOLOv2.*
 
 Adicionalmente contiene los archivos anexos de librerías compiladas requeridas, estudios de caso y pruebas de rendimiento.
+
+Este proyecto produjo como resultado scripts de Python para la extración de los datos intermedios de la red convolucional YOLOv2, una extensión de Blender para su importación y visualización, y un video que demuestra su aplicación para el desarrollo de material didáctico.
 
 ## Estructura del proyecto
 El repositorio esta estructurado de la siguiente forma:
