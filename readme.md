@@ -74,8 +74,17 @@ Finalmente presionar ```Generar Geometría``` para generar la geometría o actua
 
 Adicionalmente, los parámetros individuales de cada capa se pueden modificar en los modificadores de objeto.
 
-## Video
-Introducción a las redes neuronales convolucionales, animado con ayuda de los componentes desarrollados en este proyecto: https://youtu.be/Qev6kNyxNaw
+## Imágenes
+![Caso 1](anexos/Renders/case1.png)
 
-## Documentación
-La documentación y manuales de uso detallados se encuentran disponibles como anexos en el archivo de tesis.
+![Caso 2](anexos/Renders/case2.png)
+
+![Caso 3](anexos/Renders/case3.png)
+
+![Convolucion](anexos/Renders/conexion.png)
+
+
+## Video
+Introducción a las redes neuronales convolucionales, animado con ayuda de los componentes desarrollados en este proyecto:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Qev6kNyxNaw?si=-3NTOTIHiukjizoh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
