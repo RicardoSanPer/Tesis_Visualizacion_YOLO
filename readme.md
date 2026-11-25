@@ -85,6 +85,4 @@ Adicionalmente, los parámetros individuales de cada capa se pueden modificar en
 
 
 ## Video
-Introducción a las redes neuronales convolucionales, animado con ayuda de los componentes desarrollados en este proyecto:
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Qev6kNyxNaw?si=-3NTOTIHiukjizoh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+Introducción a las redes neuronales convolucionales, animado con ayuda de los componentes desarrollados en este proyecto: https://youtu.be/Qev6kNyxNaw
